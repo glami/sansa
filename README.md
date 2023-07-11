@@ -9,6 +9,8 @@ Unless required by applicable law or agreed to in writing, software distributed 
 -->
 # Scalable Approximate NonSymmetric Autoencoder (SANSA)
 
+This repository accompanies the paper "Scalable Approximate NonSymmetric Autoencoder for Collaborative Filtering" by Spišák et al., accepted at the 17th ACM Conference on Recommender Systems (ACM RecSys 2023), Singapore. It contains the official implementation of SANSA along with the codes used in experiments and complete experimental results.
+
 ### Abstract
 In the field of recommender systems, shallow autoencoders have recently gained significant attention. One of the most highly acclaimed shallow autoencoders is EASE, favored for its competitive recommendation accuracy and simultaneous simplicity. However, the poor scalability of EASE (both in time and especially in memory) severely restricts its use in production environments with vast item sets.
 
@@ -76,3 +78,26 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+## Cite us
+Please consider citing our paper:
+(TEMPORARY CITATION)
+```
+@inproceedings{sansa, 
+    author = {Spišák, Martin and Bartyzal, Radek and Hoskovec, Antonín and Peška, Ladislav and Tůma, Miroslav}, 
+    title = {Scalable Approximate NonSymmetric Autoencoder for Collaborative Filtering}, 
+    year = {2023}, 
+    publisher = {Association for Computing Machinery}, 
+    address = {New York, NY, USA}, 
+    abstract = {In the field of recommender systems, shallow autoencoders have recently gained significant attention. One of the most highly acclaimed shallow autoencoders is EASE, favored for its competitive recommendation accuracy and simultaneous simplicity. However, the poor scalability of EASE (both in time and especially in memory) severely restricts its use in production environments with vast item sets.
+    In this paper, we propose a hyperefficient factorization technique for sparse approximate inversion of the data-Gram matrix used in EASE. The resulting autoencoder, SANSA, is an end-to-end sparse solution with prescribable density and almost arbitrarily low memory requirements (even for training). As such, SANSA allows us to effortlessly scale the concept of EASE to millions of items and beyond.}, 
+    booktitle = {Proceedings of the 17th ACM Conference on Recommender Systems}, 
+    note = {To appear}, 
+    keywords = {Sparse autoencoders, 
+                Numerical approximation, 
+                Sparse approximate inverse, 
+                Algorithm scalability}, 
+    location = {Singapore}, 
+    series = {RecSys '23} 
+}
+```
