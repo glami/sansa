@@ -1,0 +1,923 @@
+(sansa) ➜  recsys-paper (dev) python experiments/accuracy/movielens20/run_experiment.py                                                                                                      ✭ ✱
+2023-05-07 16:35:29,296 : PIPELINE START : Starting evaluation pipeline.
+2023-05-07 16:35:29,296 : [1/3] DATASET : Loading processed dataset datasets/data/movielens20/dataset.parquet.
+2023-05-07 16:35:30,122 : [1/3] DATASET : Execution of _load_dataset_from_config took at 0.826 seconds.
+2023-05-07 16:35:30,211 : [1/3] DATASET : Dataset info | Dataset name: movielens20, Number of users: 136677, Number of items: 20720, Number of interactions: 9990682, Interaction density: 0.3528%
+2023-05-07 16:35:32,168 : [1/3] DATASET : Loaded dataset splits from datasets/data/movielens20/n_val_users=10000_n_test_users=10000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-07 16:35:32,172 : [1/3] DATASET : Execution of _create_dataset_splits took at 2.876 seconds.
+2023-05-07 16:35:32,174 : [2/3] TRAINING : Training EASE with L2=600...
+2023-05-07 16:35:32,174 : [2/3] TRAINING : Matrix size: shape = (20720,20720)
+2023-05-07 16:35:32,754 : [2/3] TRAINING : Constructing weights:
+2023-05-07 16:35:32,754 : [2/3] TRAINING : Creating item-item matrix...
+2023-05-07 16:35:34,123 : [2/3] TRAINING : nnz of G: 91246810, density: 0.21253878240485383, size: 1095.045 MB
+2023-05-07 16:35:34,123 : [2/3] TRAINING : Converting to dense matrix...
+2023-05-07 16:35:35,708 : [2/3] TRAINING : Inverting matrix...
+2023-05-07 16:36:15,134 : [2/3] TRAINING : Constructing weight matrix...
+2023-05-07 16:36:16,179 : [2/3] TRAINING : Done.
+2023-05-07 16:36:16,271 : [2/3] TRAINING : Execution of _construct_weights took at 43.517 seconds.
+2023-05-07 16:36:16,272 : [2/3] TRAINING : Model: EASE, number of weights: 429318400, weights size: 3275.439 MB
+2023-05-07 16:36:16,272 : [2/3] TRAINING : Execution of _get_model took at 44.100 seconds.
+2023-05-07 16:36:16,272 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-07 16:36:19,190 : [3/3] EVALUATION : Execution of _predict took at 2.829 seconds.
+2023-05-07 16:36:20,318 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-07 16:36:23,238 : [3/3] EVALUATION : Execution of _predict took at 2.836 seconds.
+2023-05-07 16:36:24,363 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-07 16:36:27,273 : [3/3] EVALUATION : Execution of _predict took at 2.827 seconds.
+2023-05-07 16:36:28,396 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-07 16:36:31,313 : [3/3] EVALUATION : Execution of _predict took at 2.833 seconds.
+2023-05-07 16:36:32,437 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-07 16:36:35,353 : [3/3] EVALUATION : Execution of _predict took at 2.830 seconds.
+2023-05-07 16:36:36,510 : [3/3] EVALUATION : Execution of _evaluate_model took at 20.238 seconds.
+2023-05-07 16:36:36,510 : PIPELINE END : Execution of run took at 67.215 seconds.
+2023-05-07 16:36:36,529 : PIPELINE START : Starting evaluation pipeline.
+2023-05-07 16:36:36,529 : [1/3] DATASET : Loading processed dataset datasets/data/movielens20/dataset.parquet.
+2023-05-07 16:36:36,923 : [1/3] DATASET : Execution of _load_dataset_from_config took at 0.394 seconds.
+2023-05-07 16:36:37,009 : [1/3] DATASET : Dataset info | Dataset name: movielens20, Number of users: 136677, Number of items: 20720, Number of interactions: 9990682, Interaction density: 0.3528%
+2023-05-07 16:36:37,164 : [1/3] DATASET : Loaded dataset splits from datasets/data/movielens20/n_val_users=10000_n_test_users=10000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-07 16:36:37,168 : [1/3] DATASET : Execution of _create_dataset_splits took at 0.639 seconds.
+2023-05-07 16:36:37,168 : [2/3] TRAINING : Train user-item matrix info | n_users = 116677, n_items = 20720, n_ratings = 8516174, sparsity = 99.65%
+2023-05-07 16:36:37,168 : [2/3] TRAINING : Item-item matrix info | shape = (20720,20720)
+2023-05-07 16:36:37,168 : [2/3] TRAINING : Training MRF with L2=1.0, alpha=0.75, threshold=0.458, maxInColumn=1000, rr=0.5
+2023-05-07 16:36:37,168 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-07 16:36:37,741 : [2/3] TRAINING : Constructing weights:
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:234: RuntimeWarning: invalid value encountered in multiply
+  XtX = scaling[:, None] * XtX * scaling
+2023-05-07 16:36:46,318 : [2/3] TRAINING : Training the sparse model:
+2023-05-07 16:36:46,318 : [2/3] TRAINING : sparsifying the data-matrix (section 3.1 in the paper) ...
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:55: RuntimeWarning: invalid value encountered in greater
+  ix = np.where(np.abs(XtX) > threshold)
+2023-05-07 16:36:48,424 : [2/3] TRAINING : number of items with more than 1000 entries in column: 516
+2023-05-07 16:36:48,697 : [2/3] TRAINING : resulting density of AA: 0.005013894116814001
+2023-05-07 16:36:48,697 : [2/3] TRAINING : Execution of calculate_sparsity_pattern took at 2.379 seconds.
+2023-05-07 16:36:48,698 : [2/3] TRAINING : iterating through steps 1,2, and 4 in section 3.2 of the paper ...
+2023-05-07 16:36:50,107 : [2/3] TRAINING : now step 3 in section 3.2 of the paper: iterating ...
+2023-05-07 16:36:52,359 : [2/3] TRAINING : final step: obtaining the sparse matrix BB by averaging the solutions regarding the various sets D ...
+/home/ubuntu/anaconda3/envs/sansa/lib/python3.10/site-packages/scipy/sparse/_index.py:125: SparseEfficiencyWarning: Changing the sparsity structure of a csc_matrix is expensive. lil_matrix is more efficient.
+  self._set_arrayXarray(i, j, x)
+2023-05-07 16:36:58,139 : [2/3] TRAINING : forcing the sparsity pattern of AA onto BB ...
+2023-05-07 16:36:58,513 : [2/3] TRAINING : resulting sparsity of learned BB: 0.005013894116814001
+2023-05-07 16:36:58,763 : [2/3] TRAINING : Execution of sparse_parameter_estimation took at 10.065 seconds.
+2023-05-07 16:36:58,763 : [2/3] TRAINING : Execution of sparse_solution took at 12.446 seconds.
+2023-05-07 16:36:58,808 : [2/3] TRAINING : Re-scaling BB back to the original item-popularities ...
+2023-05-07 16:36:58,882 : [2/3] TRAINING : Execution of _construct_weights took at 21.141 seconds.
+2023-05-07 16:36:58,883 : [2/3] TRAINING : Model: MRF, number of weights: 1883603, weights size: 21.635 MB
+2023-05-07 16:36:58,883 : [2/3] TRAINING : Execution of _get_model took at 21.714 seconds.
+2023-05-07 16:36:58,883 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-07 16:36:58,972 : [3/3] EVALUATION : Execution of _matmat took at 0.046 seconds.
+2023-05-07 16:36:59,139 : [3/3] EVALUATION : Execution of _predict took at 0.214 seconds.
+2023-05-07 16:37:00,133 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-07 16:37:00,222 : [3/3] EVALUATION : Execution of _matmat took at 0.046 seconds.
+2023-05-07 16:37:00,386 : [3/3] EVALUATION : Execution of _predict took at 0.210 seconds.
+2023-05-07 16:37:01,397 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-07 16:37:01,490 : [3/3] EVALUATION : Execution of _matmat took at 0.049 seconds.
+2023-05-07 16:37:01,658 : [3/3] EVALUATION : Execution of _predict took at 0.218 seconds.
+2023-05-07 16:37:02,653 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-07 16:37:02,748 : [3/3] EVALUATION : Execution of _matmat took at 0.052 seconds.
+2023-05-07 16:37:02,912 : [3/3] EVALUATION : Execution of _predict took at 0.215 seconds.
+2023-05-07 16:37:03,921 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-07 16:37:04,011 : [3/3] EVALUATION : Execution of _matmat took at 0.047 seconds.
+2023-05-07 16:37:04,171 : [3/3] EVALUATION : Execution of _predict took at 0.206 seconds.
+2023-05-07 16:37:05,226 : [3/3] EVALUATION : Execution of _evaluate_model took at 6.343 seconds.
+2023-05-07 16:37:05,226 : PIPELINE END : Execution of run took at 28.697 seconds.
+2023-05-07 16:37:05,239 : PIPELINE START : Starting evaluation pipeline.
+2023-05-07 16:37:05,239 : [1/3] DATASET : Loading processed dataset datasets/data/movielens20/dataset.parquet.
+2023-05-07 16:37:05,627 : [1/3] DATASET : Execution of _load_dataset_from_config took at 0.388 seconds.
+2023-05-07 16:37:05,713 : [1/3] DATASET : Dataset info | Dataset name: movielens20, Number of users: 136677, Number of items: 20720, Number of interactions: 9990682, Interaction density: 0.3528%
+2023-05-07 16:37:05,860 : [1/3] DATASET : Loaded dataset splits from datasets/data/movielens20/n_val_users=10000_n_test_users=10000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-07 16:37:05,864 : [1/3] DATASET : Execution of _create_dataset_splits took at 0.625 seconds.
+2023-05-07 16:37:05,864 : [2/3] TRAINING : Train user-item matrix info | n_users = 116677, n_items = 20720, n_ratings = 8516174, sparsity = 99.65%
+2023-05-07 16:37:05,864 : [2/3] TRAINING : Item-item matrix info | shape = (20720,20720)
+2023-05-07 16:37:05,864 : [2/3] TRAINING : Training MRF with L2=1.0, alpha=0.75, threshold=0.458, maxInColumn=1000, rr=0.1
+2023-05-07 16:37:05,864 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-07 16:37:06,432 : [2/3] TRAINING : Constructing weights:
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:234: RuntimeWarning: invalid value encountered in multiply
+  XtX = scaling[:, None] * XtX * scaling
+2023-05-07 16:37:14,836 : [2/3] TRAINING : Training the sparse model:
+2023-05-07 16:37:14,836 : [2/3] TRAINING : sparsifying the data-matrix (section 3.1 in the paper) ...
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:55: RuntimeWarning: invalid value encountered in greater
+  ix = np.where(np.abs(XtX) > threshold)
+2023-05-07 16:37:16,948 : [2/3] TRAINING : number of items with more than 1000 entries in column: 516
+2023-05-07 16:37:17,222 : [2/3] TRAINING : resulting density of AA: 0.005013894116814001
+2023-05-07 16:37:17,222 : [2/3] TRAINING : Execution of calculate_sparsity_pattern took at 2.385 seconds.
+2023-05-07 16:37:17,223 : [2/3] TRAINING : iterating through steps 1,2, and 4 in section 3.2 of the paper ...
+2023-05-07 16:37:19,193 : [2/3] TRAINING : now step 3 in section 3.2 of the paper: iterating ...
+2023-05-07 16:37:23,324 : [2/3] TRAINING : final step: obtaining the sparse matrix BB by averaging the solutions regarding the various sets D ...
+/home/ubuntu/anaconda3/envs/sansa/lib/python3.10/site-packages/scipy/sparse/_index.py:125: SparseEfficiencyWarning: Changing the sparsity structure of a csc_matrix is expensive. lil_matrix is more efficient.
+  self._set_arrayXarray(i, j, x)
+2023-05-07 16:37:27,879 : [2/3] TRAINING : forcing the sparsity pattern of AA onto BB ...
+2023-05-07 16:37:28,253 : [2/3] TRAINING : resulting sparsity of learned BB: 0.005013894116814001
+2023-05-07 16:37:28,455 : [2/3] TRAINING : Execution of sparse_parameter_estimation took at 11.233 seconds.
+2023-05-07 16:37:28,456 : [2/3] TRAINING : Execution of sparse_solution took at 13.619 seconds.
+2023-05-07 16:37:28,497 : [2/3] TRAINING : Re-scaling BB back to the original item-popularities ...
+2023-05-07 16:37:28,567 : [2/3] TRAINING : Execution of _construct_weights took at 22.135 seconds.
+2023-05-07 16:37:28,568 : [2/3] TRAINING : Model: MRF, number of weights: 1784994, weights size: 20.507 MB
+2023-05-07 16:37:28,568 : [2/3] TRAINING : Execution of _get_model took at 22.704 seconds.
+2023-05-07 16:37:28,568 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-07 16:37:28,665 : [3/3] EVALUATION : Execution of _matmat took at 0.051 seconds.
+2023-05-07 16:37:28,833 : [3/3] EVALUATION : Execution of _predict took at 0.220 seconds.
+2023-05-07 16:37:29,831 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-07 16:37:29,920 : [3/3] EVALUATION : Execution of _matmat took at 0.046 seconds.
+2023-05-07 16:37:30,087 : [3/3] EVALUATION : Execution of _predict took at 0.212 seconds.
+2023-05-07 16:37:31,095 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-07 16:37:31,184 : [3/3] EVALUATION : Execution of _matmat took at 0.045 seconds.
+2023-05-07 16:37:31,349 : [3/3] EVALUATION : Execution of _predict took at 0.210 seconds.
+2023-05-07 16:37:32,352 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-07 16:37:32,447 : [3/3] EVALUATION : Execution of _matmat took at 0.052 seconds.
+2023-05-07 16:37:32,610 : [3/3] EVALUATION : Execution of _predict took at 0.215 seconds.
+2023-05-07 16:37:33,609 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-07 16:37:33,696 : [3/3] EVALUATION : Execution of _matmat took at 0.044 seconds.
+2023-05-07 16:37:33,860 : [3/3] EVALUATION : Execution of _predict took at 0.208 seconds.
+2023-05-07 16:37:34,915 : [3/3] EVALUATION : Execution of _evaluate_model took at 6.347 seconds.
+2023-05-07 16:37:34,915 : PIPELINE END : Execution of run took at 29.676 seconds.
+2023-05-07 16:37:34,928 : PIPELINE START : Starting evaluation pipeline.
+2023-05-07 16:37:34,928 : [1/3] DATASET : Loading processed dataset datasets/data/movielens20/dataset.parquet.
+2023-05-07 16:37:35,310 : [1/3] DATASET : Execution of _load_dataset_from_config took at 0.383 seconds.
+2023-05-07 16:37:35,393 : [1/3] DATASET : Dataset info | Dataset name: movielens20, Number of users: 136677, Number of items: 20720, Number of interactions: 9990682, Interaction density: 0.3528%
+2023-05-07 16:37:35,537 : [1/3] DATASET : Loaded dataset splits from datasets/data/movielens20/n_val_users=10000_n_test_users=10000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-07 16:37:35,541 : [1/3] DATASET : Execution of _create_dataset_splits took at 0.613 seconds.
+2023-05-07 16:37:35,541 : [2/3] TRAINING : Train user-item matrix info | n_users = 116677, n_items = 20720, n_ratings = 8516174, sparsity = 99.65%
+2023-05-07 16:37:35,541 : [2/3] TRAINING : Item-item matrix info | shape = (20720,20720)
+2023-05-07 16:37:35,541 : [2/3] TRAINING : Training MRF with L2=1.0, alpha=0.75, threshold=0.458, maxInColumn=1000, rr=0
+2023-05-07 16:37:35,541 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-07 16:37:36,105 : [2/3] TRAINING : Constructing weights:
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:234: RuntimeWarning: invalid value encountered in multiply
+  XtX = scaling[:, None] * XtX * scaling
+2023-05-07 16:37:44,616 : [2/3] TRAINING : Training the sparse model:
+2023-05-07 16:37:44,617 : [2/3] TRAINING : sparsifying the data-matrix (section 3.1 in the paper) ...
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:55: RuntimeWarning: invalid value encountered in greater
+  ix = np.where(np.abs(XtX) > threshold)
+2023-05-07 16:37:46,719 : [2/3] TRAINING : number of items with more than 1000 entries in column: 516
+2023-05-07 16:37:46,994 : [2/3] TRAINING : resulting density of AA: 0.005013894116814001
+2023-05-07 16:37:46,994 : [2/3] TRAINING : Execution of calculate_sparsity_pattern took at 2.378 seconds.
+2023-05-07 16:37:46,995 : [2/3] TRAINING : iterating through steps 1,2, and 4 in section 3.2 of the paper ...
+2023-05-07 16:37:49,839 : [2/3] TRAINING : now step 3 in section 3.2 of the paper: iterating ...
+2023-05-07 16:38:23,230 : [2/3] TRAINING : final step: obtaining the sparse matrix BB by averaging the solutions regarding the various sets D ...
+/home/ubuntu/anaconda3/envs/sansa/lib/python3.10/site-packages/scipy/sparse/_index.py:125: SparseEfficiencyWarning: Changing the sparsity structure of a csc_matrix is expensive. lil_matrix is more efficient.
+  self._set_arrayXarray(i, j, x)
+2023-05-07 16:38:24,493 : [2/3] TRAINING : forcing the sparsity pattern of AA onto BB ...
+2023-05-07 16:38:24,839 : [2/3] TRAINING : resulting sparsity of learned BB: 0.005013894116814001
+2023-05-07 16:38:24,892 : [2/3] TRAINING : Execution of sparse_parameter_estimation took at 37.897 seconds.
+2023-05-07 16:38:24,892 : [2/3] TRAINING : Execution of sparse_solution took at 40.276 seconds.
+2023-05-07 16:38:24,933 : [2/3] TRAINING : Re-scaling BB back to the original item-popularities ...
+2023-05-07 16:38:25,004 : [2/3] TRAINING : Execution of _construct_weights took at 48.899 seconds.
+2023-05-07 16:38:25,005 : [2/3] TRAINING : Model: MRF, number of weights: 1949933, weights size: 22.394 MB
+2023-05-07 16:38:25,005 : [2/3] TRAINING : Execution of _get_model took at 49.464 seconds.
+2023-05-07 16:38:25,005 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-07 16:38:25,097 : [3/3] EVALUATION : Execution of _matmat took at 0.049 seconds.
+2023-05-07 16:38:25,269 : [3/3] EVALUATION : Execution of _predict took at 0.220 seconds.
+2023-05-07 16:38:26,272 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-07 16:38:26,364 : [3/3] EVALUATION : Execution of _matmat took at 0.048 seconds.
+2023-05-07 16:38:26,535 : [3/3] EVALUATION : Execution of _predict took at 0.219 seconds.
+2023-05-07 16:38:27,535 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-07 16:38:27,628 : [3/3] EVALUATION : Execution of _matmat took at 0.049 seconds.
+2023-05-07 16:38:27,797 : [3/3] EVALUATION : Execution of _predict took at 0.219 seconds.
+2023-05-07 16:38:28,799 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-07 16:38:28,891 : [3/3] EVALUATION : Execution of _matmat took at 0.049 seconds.
+2023-05-07 16:38:29,057 : [3/3] EVALUATION : Execution of _predict took at 0.215 seconds.
+2023-05-07 16:38:30,060 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-07 16:38:30,152 : [3/3] EVALUATION : Execution of _matmat took at 0.048 seconds.
+2023-05-07 16:38:30,317 : [3/3] EVALUATION : Execution of _predict took at 0.213 seconds.
+2023-05-07 16:38:31,375 : [3/3] EVALUATION : Execution of _evaluate_model took at 6.370 seconds.
+2023-05-07 16:38:31,375 : PIPELINE END : Execution of run took at 56.447 seconds.
+2023-05-07 16:38:31,388 : PIPELINE START : Starting evaluation pipeline.
+2023-05-07 16:38:31,388 : [1/3] DATASET : Loading processed dataset datasets/data/movielens20/dataset.parquet.
+2023-05-07 16:38:31,753 : [1/3] DATASET : Execution of _load_dataset_from_config took at 0.365 seconds.
+2023-05-07 16:38:31,839 : [1/3] DATASET : Dataset info | Dataset name: movielens20, Number of users: 136677, Number of items: 20720, Number of interactions: 9990682, Interaction density: 0.3528%
+2023-05-07 16:38:31,984 : [1/3] DATASET : Loaded dataset splits from datasets/data/movielens20/n_val_users=10000_n_test_users=10000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-07 16:38:31,989 : [1/3] DATASET : Execution of _create_dataset_splits took at 0.600 seconds.
+2023-05-07 16:38:31,989 : [2/3] TRAINING : Train user-item matrix info | n_users = 116677, n_items = 20720, n_ratings = 8516174, sparsity = 99.65%
+2023-05-07 16:38:31,989 : [2/3] TRAINING : Item-item matrix info | shape = (20720,20720)
+2023-05-07 16:38:31,989 : [2/3] TRAINING : Training MRF with L2=1.0, alpha=0.75, threshold=0.3, maxInColumn=1000, rr=0.5
+2023-05-07 16:38:31,989 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-07 16:38:32,559 : [2/3] TRAINING : Constructing weights:
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:234: RuntimeWarning: invalid value encountered in multiply
+  XtX = scaling[:, None] * XtX * scaling
+2023-05-07 16:38:41,003 : [2/3] TRAINING : Training the sparse model:
+2023-05-07 16:38:41,003 : [2/3] TRAINING : sparsifying the data-matrix (section 3.1 in the paper) ...
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:55: RuntimeWarning: invalid value encountered in greater
+  ix = np.where(np.abs(XtX) > threshold)
+2023-05-07 16:38:43,307 : [2/3] TRAINING : number of items with more than 1000 entries in column: 1641
+2023-05-07 16:38:44,634 : [2/3] TRAINING : resulting density of AA: 0.010038013744577452
+2023-05-07 16:38:44,635 : [2/3] TRAINING : Execution of calculate_sparsity_pattern took at 3.632 seconds.
+2023-05-07 16:38:44,636 : [2/3] TRAINING : iterating through steps 1,2, and 4 in section 3.2 of the paper ...
+2023-05-07 16:38:45,463 : [2/3] TRAINING : now step 3 in section 3.2 of the paper: iterating ...
+2023-05-07 16:38:49,631 : [2/3] TRAINING : final step: obtaining the sparse matrix BB by averaging the solutions regarding the various sets D ...
+/home/ubuntu/anaconda3/envs/sansa/lib/python3.10/site-packages/scipy/sparse/_index.py:125: SparseEfficiencyWarning: Changing the sparsity structure of a csc_matrix is expensive. lil_matrix is more efficient.
+  self._set_arrayXarray(i, j, x)
+2023-05-07 16:39:03,343 : [2/3] TRAINING : forcing the sparsity pattern of AA onto BB ...
+2023-05-07 16:39:04,250 : [2/3] TRAINING : resulting sparsity of learned BB: 0.010038013744577452
+2023-05-07 16:39:04,782 : [2/3] TRAINING : Execution of sparse_parameter_estimation took at 20.146 seconds.
+2023-05-07 16:39:04,782 : [2/3] TRAINING : Execution of sparse_solution took at 23.779 seconds.
+2023-05-07 16:39:04,830 : [2/3] TRAINING : Re-scaling BB back to the original item-popularities ...
+2023-05-07 16:39:04,938 : [2/3] TRAINING : Execution of _construct_weights took at 32.379 seconds.
+2023-05-07 16:39:04,938 : [2/3] TRAINING : Model: MRF, number of weights: 3626454, weights size: 41.581 MB
+2023-05-07 16:39:04,938 : [2/3] TRAINING : Execution of _get_model took at 32.950 seconds.
+2023-05-07 16:39:04,938 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-07 16:39:05,059 : [3/3] EVALUATION : Execution of _matmat took at 0.077 seconds.
+2023-05-07 16:39:05,286 : [3/3] EVALUATION : Execution of _predict took at 0.304 seconds.
+2023-05-07 16:39:06,307 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-07 16:39:06,428 : [3/3] EVALUATION : Execution of _matmat took at 0.077 seconds.
+2023-05-07 16:39:06,656 : [3/3] EVALUATION : Execution of _predict took at 0.305 seconds.
+2023-05-07 16:39:07,675 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-07 16:39:07,795 : [3/3] EVALUATION : Execution of _matmat took at 0.076 seconds.
+2023-05-07 16:39:08,022 : [3/3] EVALUATION : Execution of _predict took at 0.303 seconds.
+2023-05-07 16:39:09,035 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-07 16:39:09,155 : [3/3] EVALUATION : Execution of _matmat took at 0.077 seconds.
+2023-05-07 16:39:09,376 : [3/3] EVALUATION : Execution of _predict took at 0.298 seconds.
+2023-05-07 16:39:10,394 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-07 16:39:10,513 : [3/3] EVALUATION : Execution of _matmat took at 0.075 seconds.
+2023-05-07 16:39:10,734 : [3/3] EVALUATION : Execution of _predict took at 0.296 seconds.
+2023-05-07 16:39:11,795 : [3/3] EVALUATION : Execution of _evaluate_model took at 6.857 seconds.
+2023-05-07 16:39:11,796 : PIPELINE END : Execution of run took at 40.408 seconds.
+2023-05-07 16:39:11,810 : PIPELINE START : Starting evaluation pipeline.
+2023-05-07 16:39:11,810 : [1/3] DATASET : Loading processed dataset datasets/data/movielens20/dataset.parquet.
+2023-05-07 16:39:12,204 : [1/3] DATASET : Execution of _load_dataset_from_config took at 0.395 seconds.
+2023-05-07 16:39:12,291 : [1/3] DATASET : Dataset info | Dataset name: movielens20, Number of users: 136677, Number of items: 20720, Number of interactions: 9990682, Interaction density: 0.3528%
+2023-05-07 16:39:12,436 : [1/3] DATASET : Loaded dataset splits from datasets/data/movielens20/n_val_users=10000_n_test_users=10000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-07 16:39:12,440 : [1/3] DATASET : Execution of _create_dataset_splits took at 0.630 seconds.
+2023-05-07 16:39:12,440 : [2/3] TRAINING : Train user-item matrix info | n_users = 116677, n_items = 20720, n_ratings = 8516174, sparsity = 99.65%
+2023-05-07 16:39:12,440 : [2/3] TRAINING : Item-item matrix info | shape = (20720,20720)
+2023-05-07 16:39:12,440 : [2/3] TRAINING : Training MRF with L2=1.0, alpha=0.75, threshold=0.3, maxInColumn=1000, rr=0.1
+2023-05-07 16:39:12,440 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-07 16:39:13,016 : [2/3] TRAINING : Constructing weights:
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:234: RuntimeWarning: invalid value encountered in multiply
+  XtX = scaling[:, None] * XtX * scaling
+2023-05-07 16:39:21,461 : [2/3] TRAINING : Training the sparse model:
+2023-05-07 16:39:21,462 : [2/3] TRAINING : sparsifying the data-matrix (section 3.1 in the paper) ...
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:55: RuntimeWarning: invalid value encountered in greater
+  ix = np.where(np.abs(XtX) > threshold)
+2023-05-07 16:39:23,756 : [2/3] TRAINING : number of items with more than 1000 entries in column: 1641
+2023-05-07 16:39:25,081 : [2/3] TRAINING : resulting density of AA: 0.010038013744577452
+2023-05-07 16:39:25,081 : [2/3] TRAINING : Execution of calculate_sparsity_pattern took at 3.619 seconds.
+2023-05-07 16:39:25,082 : [2/3] TRAINING : iterating through steps 1,2, and 4 in section 3.2 of the paper ...
+2023-05-07 16:39:26,570 : [2/3] TRAINING : now step 3 in section 3.2 of the paper: iterating ...
+2023-05-07 16:39:36,198 : [2/3] TRAINING : final step: obtaining the sparse matrix BB by averaging the solutions regarding the various sets D ...
+/home/ubuntu/anaconda3/envs/sansa/lib/python3.10/site-packages/scipy/sparse/_index.py:125: SparseEfficiencyWarning: Changing the sparsity structure of a csc_matrix is expensive. lil_matrix is more efficient.
+  self._set_arrayXarray(i, j, x)
+2023-05-07 16:39:48,423 : [2/3] TRAINING : forcing the sparsity pattern of AA onto BB ...
+2023-05-07 16:39:49,282 : [2/3] TRAINING : resulting sparsity of learned BB: 0.010038013744577452
+2023-05-07 16:39:49,788 : [2/3] TRAINING : Execution of sparse_parameter_estimation took at 24.706 seconds.
+2023-05-07 16:39:49,789 : [2/3] TRAINING : Execution of sparse_solution took at 28.327 seconds.
+2023-05-07 16:39:49,835 : [2/3] TRAINING : Re-scaling BB back to the original item-popularities ...
+2023-05-07 16:39:49,943 : [2/3] TRAINING : Execution of _construct_weights took at 36.927 seconds.
+2023-05-07 16:39:49,944 : [2/3] TRAINING : Model: MRF, number of weights: 3620820, weights size: 41.516 MB
+2023-05-07 16:39:49,944 : [2/3] TRAINING : Execution of _get_model took at 37.504 seconds.
+2023-05-07 16:39:49,944 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-07 16:39:50,066 : [3/3] EVALUATION : Execution of _matmat took at 0.076 seconds.
+2023-05-07 16:39:50,296 : [3/3] EVALUATION : Execution of _predict took at 0.306 seconds.
+2023-05-07 16:39:51,320 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-07 16:39:51,440 : [3/3] EVALUATION : Execution of _matmat took at 0.077 seconds.
+2023-05-07 16:39:51,671 : [3/3] EVALUATION : Execution of _predict took at 0.307 seconds.
+2023-05-07 16:39:52,694 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-07 16:39:52,816 : [3/3] EVALUATION : Execution of _matmat took at 0.077 seconds.
+2023-05-07 16:39:53,045 : [3/3] EVALUATION : Execution of _predict took at 0.307 seconds.
+2023-05-07 16:39:54,060 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-07 16:39:54,180 : [3/3] EVALUATION : Execution of _matmat took at 0.077 seconds.
+2023-05-07 16:39:54,405 : [3/3] EVALUATION : Execution of _predict took at 0.302 seconds.
+2023-05-07 16:39:55,427 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-07 16:39:55,547 : [3/3] EVALUATION : Execution of _matmat took at 0.075 seconds.
+2023-05-07 16:39:55,769 : [3/3] EVALUATION : Execution of _predict took at 0.298 seconds.
+2023-05-07 16:39:56,833 : [3/3] EVALUATION : Execution of _evaluate_model took at 6.889 seconds.
+2023-05-07 16:39:56,833 : PIPELINE END : Execution of run took at 45.024 seconds.
+2023-05-07 16:39:56,846 : PIPELINE START : Starting evaluation pipeline.
+2023-05-07 16:39:56,847 : [1/3] DATASET : Loading processed dataset datasets/data/movielens20/dataset.parquet.
+2023-05-07 16:39:57,213 : [1/3] DATASET : Execution of _load_dataset_from_config took at 0.366 seconds.
+2023-05-07 16:39:57,299 : [1/3] DATASET : Dataset info | Dataset name: movielens20, Number of users: 136677, Number of items: 20720, Number of interactions: 9990682, Interaction density: 0.3528%
+2023-05-07 16:39:57,444 : [1/3] DATASET : Loaded dataset splits from datasets/data/movielens20/n_val_users=10000_n_test_users=10000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-07 16:39:57,448 : [1/3] DATASET : Execution of _create_dataset_splits took at 0.602 seconds.
+2023-05-07 16:39:57,448 : [2/3] TRAINING : Train user-item matrix info | n_users = 116677, n_items = 20720, n_ratings = 8516174, sparsity = 99.65%
+2023-05-07 16:39:57,448 : [2/3] TRAINING : Item-item matrix info | shape = (20720,20720)
+2023-05-07 16:39:57,448 : [2/3] TRAINING : Training MRF with L2=1.0, alpha=0.75, threshold=0.3, maxInColumn=1000, rr=0
+2023-05-07 16:39:57,448 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-07 16:39:58,015 : [2/3] TRAINING : Constructing weights:
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:234: RuntimeWarning: invalid value encountered in multiply
+  XtX = scaling[:, None] * XtX * scaling
+2023-05-07 16:40:06,524 : [2/3] TRAINING : Training the sparse model:
+2023-05-07 16:40:06,524 : [2/3] TRAINING : sparsifying the data-matrix (section 3.1 in the paper) ...
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:55: RuntimeWarning: invalid value encountered in greater
+  ix = np.where(np.abs(XtX) > threshold)
+2023-05-07 16:40:08,836 : [2/3] TRAINING : number of items with more than 1000 entries in column: 1641
+2023-05-07 16:40:10,158 : [2/3] TRAINING : resulting density of AA: 0.010038013744577452
+2023-05-07 16:40:10,158 : [2/3] TRAINING : Execution of calculate_sparsity_pattern took at 3.634 seconds.
+2023-05-07 16:40:10,159 : [2/3] TRAINING : iterating through steps 1,2, and 4 in section 3.2 of the paper ...
+2023-05-07 16:40:13,163 : [2/3] TRAINING : now step 3 in section 3.2 of the paper: iterating ...
+2023-05-07 16:41:30,710 : [2/3] TRAINING : final step: obtaining the sparse matrix BB by averaging the solutions regarding the various sets D ...
+/home/ubuntu/anaconda3/envs/sansa/lib/python3.10/site-packages/scipy/sparse/_index.py:125: SparseEfficiencyWarning: Changing the sparsity structure of a csc_matrix is expensive. lil_matrix is more efficient.
+  self._set_arrayXarray(i, j, x)
+2023-05-07 16:41:33,330 : [2/3] TRAINING : forcing the sparsity pattern of AA onto BB ...
+2023-05-07 16:41:34,136 : [2/3] TRAINING : resulting sparsity of learned BB: 0.010038013744577452
+2023-05-07 16:41:34,237 : [2/3] TRAINING : Execution of sparse_parameter_estimation took at 84.078 seconds.
+2023-05-07 16:41:34,237 : [2/3] TRAINING : Execution of sparse_solution took at 87.713 seconds.
+2023-05-07 16:41:34,282 : [2/3] TRAINING : Re-scaling BB back to the original item-popularities ...
+2023-05-07 16:41:34,390 : [2/3] TRAINING : Execution of _construct_weights took at 96.375 seconds.
+2023-05-07 16:41:34,391 : [2/3] TRAINING : Model: MRF, number of weights: 4009900, weights size: 45.969 MB
+2023-05-07 16:41:34,391 : [2/3] TRAINING : Execution of _get_model took at 96.943 seconds.
+2023-05-07 16:41:34,391 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-07 16:41:34,521 : [3/3] EVALUATION : Execution of _matmat took at 0.084 seconds.
+2023-05-07 16:41:34,763 : [3/3] EVALUATION : Execution of _predict took at 0.325 seconds.
+2023-05-07 16:41:35,788 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-07 16:41:35,915 : [3/3] EVALUATION : Execution of _matmat took at 0.083 seconds.
+2023-05-07 16:41:36,157 : [3/3] EVALUATION : Execution of _predict took at 0.325 seconds.
+2023-05-07 16:41:37,183 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-07 16:41:37,312 : [3/3] EVALUATION : Execution of _matmat took at 0.084 seconds.
+2023-05-07 16:41:37,552 : [3/3] EVALUATION : Execution of _predict took at 0.325 seconds.
+2023-05-07 16:41:38,573 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-07 16:41:38,701 : [3/3] EVALUATION : Execution of _matmat took at 0.085 seconds.
+2023-05-07 16:41:38,936 : [3/3] EVALUATION : Execution of _predict took at 0.320 seconds.
+2023-05-07 16:41:39,962 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-07 16:41:40,089 : [3/3] EVALUATION : Execution of _matmat took at 0.083 seconds.
+2023-05-07 16:41:40,323 : [3/3] EVALUATION : Execution of _predict took at 0.316 seconds.
+2023-05-07 16:41:41,394 : [3/3] EVALUATION : Execution of _evaluate_model took at 7.002 seconds.
+2023-05-07 16:41:41,394 : PIPELINE END : Execution of run took at 104.548 seconds.
+2023-05-07 16:41:41,408 : PIPELINE START : Starting evaluation pipeline.
+2023-05-07 16:41:41,408 : [1/3] DATASET : Loading processed dataset datasets/data/movielens20/dataset.parquet.
+2023-05-07 16:41:41,804 : [1/3] DATASET : Execution of _load_dataset_from_config took at 0.395 seconds.
+2023-05-07 16:41:41,889 : [1/3] DATASET : Dataset info | Dataset name: movielens20, Number of users: 136677, Number of items: 20720, Number of interactions: 9990682, Interaction density: 0.3528%
+2023-05-07 16:41:42,034 : [1/3] DATASET : Loaded dataset splits from datasets/data/movielens20/n_val_users=10000_n_test_users=10000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-07 16:41:42,038 : [1/3] DATASET : Execution of _create_dataset_splits took at 0.630 seconds.
+2023-05-07 16:41:42,038 : [2/3] TRAINING : Train user-item matrix info | n_users = 116677, n_items = 20720, n_ratings = 8516174, sparsity = 99.65%
+2023-05-07 16:41:42,038 : [2/3] TRAINING : Item-item matrix info | shape = (20720,20720)
+2023-05-07 16:41:42,039 : [2/3] TRAINING : Training MRF with L2=1.0, alpha=0.75, threshold=0.175, maxInColumn=1000, rr=0.5
+2023-05-07 16:41:42,039 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-07 16:41:42,613 : [2/3] TRAINING : Constructing weights:
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:234: RuntimeWarning: invalid value encountered in multiply
+  XtX = scaling[:, None] * XtX * scaling
+2023-05-07 16:41:51,050 : [2/3] TRAINING : Training the sparse model:
+2023-05-07 16:41:51,051 : [2/3] TRAINING : sparsifying the data-matrix (section 3.1 in the paper) ...
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:55: RuntimeWarning: invalid value encountered in greater
+  ix = np.where(np.abs(XtX) > threshold)
+2023-05-07 16:41:53,818 : [2/3] TRAINING : number of items with more than 1000 entries in column: 4362
+2023-05-07 16:42:00,204 : [2/3] TRAINING : resulting density of AA: 0.02003746403601616
+2023-05-07 16:42:00,204 : [2/3] TRAINING : Execution of calculate_sparsity_pattern took at 9.154 seconds.
+2023-05-07 16:42:00,206 : [2/3] TRAINING : iterating through steps 1,2, and 4 in section 3.2 of the paper ...
+2023-05-07 16:42:00,582 : [2/3] TRAINING : now step 3 in section 3.2 of the paper: iterating ...
+2023-05-07 16:42:10,664 : [2/3] TRAINING : final step: obtaining the sparse matrix BB by averaging the solutions regarding the various sets D ...
+/home/ubuntu/anaconda3/envs/sansa/lib/python3.10/site-packages/scipy/sparse/_index.py:125: SparseEfficiencyWarning: Changing the sparsity structure of a csc_matrix is expensive. lil_matrix is more efficient.
+  self._set_arrayXarray(i, j, x)
+2023-05-07 16:42:50,697 : [2/3] TRAINING : forcing the sparsity pattern of AA onto BB ...
+2023-05-07 16:42:52,748 : [2/3] TRAINING : resulting sparsity of learned BB: 0.02003746403601616
+2023-05-07 16:42:54,211 : [2/3] TRAINING : Execution of sparse_parameter_estimation took at 54.006 seconds.
+2023-05-07 16:42:54,212 : [2/3] TRAINING : Execution of sparse_solution took at 63.161 seconds.
+2023-05-07 16:42:54,259 : [2/3] TRAINING : Re-scaling BB back to the original item-popularities ...
+2023-05-07 16:42:54,478 : [2/3] TRAINING : Execution of _construct_weights took at 71.864 seconds.
+2023-05-07 16:42:54,478 : [2/3] TRAINING : Model: MRF, number of weights: 7097018, weights size: 81.298 MB
+2023-05-07 16:42:54,478 : [2/3] TRAINING : Execution of _get_model took at 72.440 seconds.
+2023-05-07 16:42:54,478 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-07 16:42:54,637 : [3/3] EVALUATION : Execution of _matmat took at 0.115 seconds.
+2023-05-07 16:42:54,969 : [3/3] EVALUATION : Execution of _predict took at 0.447 seconds.
+2023-05-07 16:42:56,025 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-07 16:42:56,183 : [3/3] EVALUATION : Execution of _matmat took at 0.115 seconds.
+2023-05-07 16:42:56,516 : [3/3] EVALUATION : Execution of _predict took at 0.448 seconds.
+2023-05-07 16:42:57,572 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-07 16:42:57,732 : [3/3] EVALUATION : Execution of _matmat took at 0.116 seconds.
+2023-05-07 16:42:58,066 : [3/3] EVALUATION : Execution of _predict took at 0.449 seconds.
+2023-05-07 16:42:59,115 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-07 16:42:59,275 : [3/3] EVALUATION : Execution of _matmat took at 0.117 seconds.
+2023-05-07 16:42:59,597 : [3/3] EVALUATION : Execution of _predict took at 0.439 seconds.
+2023-05-07 16:43:00,657 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-07 16:43:00,815 : [3/3] EVALUATION : Execution of _matmat took at 0.114 seconds.
+2023-05-07 16:43:01,137 : [3/3] EVALUATION : Execution of _predict took at 0.436 seconds.
+2023-05-07 16:43:02,241 : [3/3] EVALUATION : Execution of _evaluate_model took at 7.763 seconds.
+2023-05-07 16:43:02,242 : PIPELINE END : Execution of run took at 80.833 seconds.
+2023-05-07 16:43:02,255 : PIPELINE START : Starting evaluation pipeline.
+2023-05-07 16:43:02,255 : [1/3] DATASET : Loading processed dataset datasets/data/movielens20/dataset.parquet.
+2023-05-07 16:43:02,646 : [1/3] DATASET : Execution of _load_dataset_from_config took at 0.391 seconds.
+2023-05-07 16:43:02,731 : [1/3] DATASET : Dataset info | Dataset name: movielens20, Number of users: 136677, Number of items: 20720, Number of interactions: 9990682, Interaction density: 0.3528%
+2023-05-07 16:43:02,877 : [1/3] DATASET : Loaded dataset splits from datasets/data/movielens20/n_val_users=10000_n_test_users=10000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-07 16:43:02,881 : [1/3] DATASET : Execution of _create_dataset_splits took at 0.625 seconds.
+2023-05-07 16:43:02,881 : [2/3] TRAINING : Train user-item matrix info | n_users = 116677, n_items = 20720, n_ratings = 8516174, sparsity = 99.65%
+2023-05-07 16:43:02,881 : [2/3] TRAINING : Item-item matrix info | shape = (20720,20720)
+2023-05-07 16:43:02,881 : [2/3] TRAINING : Training MRF with L2=1.0, alpha=0.75, threshold=0.175, maxInColumn=1000, rr=0.1
+2023-05-07 16:43:02,881 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-07 16:43:03,447 : [2/3] TRAINING : Constructing weights:
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:234: RuntimeWarning: invalid value encountered in multiply
+  XtX = scaling[:, None] * XtX * scaling
+2023-05-07 16:43:11,876 : [2/3] TRAINING : Training the sparse model:
+2023-05-07 16:43:11,877 : [2/3] TRAINING : sparsifying the data-matrix (section 3.1 in the paper) ...
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:55: RuntimeWarning: invalid value encountered in greater
+  ix = np.where(np.abs(XtX) > threshold)
+2023-05-07 16:43:14,614 : [2/3] TRAINING : number of items with more than 1000 entries in column: 4362
+2023-05-07 16:43:20,998 : [2/3] TRAINING : resulting density of AA: 0.02003746403601616
+2023-05-07 16:43:20,999 : [2/3] TRAINING : Execution of calculate_sparsity_pattern took at 9.123 seconds.
+2023-05-07 16:43:21,001 : [2/3] TRAINING : iterating through steps 1,2, and 4 in section 3.2 of the paper ...
+2023-05-07 16:43:21,935 : [2/3] TRAINING : now step 3 in section 3.2 of the paper: iterating ...
+2023-05-07 16:43:45,166 : [2/3] TRAINING : final step: obtaining the sparse matrix BB by averaging the solutions regarding the various sets D ...
+/home/ubuntu/anaconda3/envs/sansa/lib/python3.10/site-packages/scipy/sparse/_index.py:125: SparseEfficiencyWarning: Changing the sparsity structure of a csc_matrix is expensive. lil_matrix is more efficient.
+  self._set_arrayXarray(i, j, x)
+2023-05-07 16:44:19,915 : [2/3] TRAINING : forcing the sparsity pattern of AA onto BB ...
+2023-05-07 16:44:21,932 : [2/3] TRAINING : resulting sparsity of learned BB: 0.02003746403601616
+2023-05-07 16:44:23,202 : [2/3] TRAINING : Execution of sparse_parameter_estimation took at 62.202 seconds.
+2023-05-07 16:44:23,202 : [2/3] TRAINING : Execution of sparse_solution took at 71.326 seconds.
+2023-05-07 16:44:23,248 : [2/3] TRAINING : Re-scaling BB back to the original item-popularities ...
+2023-05-07 16:44:23,472 : [2/3] TRAINING : Execution of _construct_weights took at 80.025 seconds.
+2023-05-07 16:44:23,473 : [2/3] TRAINING : Model: MRF, number of weights: 7126616, weights size: 81.637 MB
+2023-05-07 16:44:23,473 : [2/3] TRAINING : Execution of _get_model took at 80.592 seconds.
+2023-05-07 16:44:23,473 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-07 16:44:23,631 : [3/3] EVALUATION : Execution of _matmat took at 0.114 seconds.
+2023-05-07 16:44:23,964 : [3/3] EVALUATION : Execution of _predict took at 0.448 seconds.
+2023-05-07 16:44:25,021 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-07 16:44:25,179 : [3/3] EVALUATION : Execution of _matmat took at 0.114 seconds.
+2023-05-07 16:44:25,514 : [3/3] EVALUATION : Execution of _predict took at 0.449 seconds.
+2023-05-07 16:44:26,572 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-07 16:44:26,730 : [3/3] EVALUATION : Execution of _matmat took at 0.113 seconds.
+2023-05-07 16:44:27,066 : [3/3] EVALUATION : Execution of _predict took at 0.449 seconds.
+2023-05-07 16:44:28,115 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-07 16:44:28,272 : [3/3] EVALUATION : Execution of _matmat took at 0.114 seconds.
+2023-05-07 16:44:28,596 : [3/3] EVALUATION : Execution of _predict took at 0.438 seconds.
+2023-05-07 16:44:29,654 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-07 16:44:29,809 : [3/3] EVALUATION : Execution of _matmat took at 0.110 seconds.
+2023-05-07 16:44:30,134 : [3/3] EVALUATION : Execution of _predict took at 0.435 seconds.
+2023-05-07 16:44:31,235 : [3/3] EVALUATION : Execution of _evaluate_model took at 7.763 seconds.
+2023-05-07 16:44:31,236 : PIPELINE END : Execution of run took at 88.981 seconds.
+2023-05-07 16:44:31,251 : PIPELINE START : Starting evaluation pipeline.
+2023-05-07 16:44:31,251 : [1/3] DATASET : Loading processed dataset datasets/data/movielens20/dataset.parquet.
+2023-05-07 16:44:31,642 : [1/3] DATASET : Execution of _load_dataset_from_config took at 0.392 seconds.
+2023-05-07 16:44:31,727 : [1/3] DATASET : Dataset info | Dataset name: movielens20, Number of users: 136677, Number of items: 20720, Number of interactions: 9990682, Interaction density: 0.3528%
+2023-05-07 16:44:31,872 : [1/3] DATASET : Loaded dataset splits from datasets/data/movielens20/n_val_users=10000_n_test_users=10000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-07 16:44:31,876 : [1/3] DATASET : Execution of _create_dataset_splits took at 0.625 seconds.
+2023-05-07 16:44:31,876 : [2/3] TRAINING : Train user-item matrix info | n_users = 116677, n_items = 20720, n_ratings = 8516174, sparsity = 99.65%
+2023-05-07 16:44:31,876 : [2/3] TRAINING : Item-item matrix info | shape = (20720,20720)
+2023-05-07 16:44:31,876 : [2/3] TRAINING : Training MRF with L2=1.0, alpha=0.75, threshold=0.175, maxInColumn=1000, rr=0
+2023-05-07 16:44:31,876 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-07 16:44:32,449 : [2/3] TRAINING : Constructing weights:
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:234: RuntimeWarning: invalid value encountered in multiply
+  XtX = scaling[:, None] * XtX * scaling
+2023-05-07 16:44:40,885 : [2/3] TRAINING : Training the sparse model:
+2023-05-07 16:44:40,885 : [2/3] TRAINING : sparsifying the data-matrix (section 3.1 in the paper) ...
+/home/ubuntu/recsys-paper/experiments/accuracy/movielens20/../../../models/mrf.py:55: RuntimeWarning: invalid value encountered in greater
+  ix = np.where(np.abs(XtX) > threshold)
+2023-05-07 16:44:43,631 : [2/3] TRAINING : number of items with more than 1000 entries in column: 4362
+2023-05-07 16:44:49,991 : [2/3] TRAINING : resulting density of AA: 0.02003746403601616
+2023-05-07 16:44:49,992 : [2/3] TRAINING : Execution of calculate_sparsity_pattern took at 9.107 seconds.
+2023-05-07 16:44:49,993 : [2/3] TRAINING : iterating through steps 1,2, and 4 in section 3.2 of the paper ...
+2023-05-07 16:44:53,302 : [2/3] TRAINING : now step 3 in section 3.2 of the paper: iterating ...
+2023-05-07 16:47:53,021 : [2/3] TRAINING : final step: obtaining the sparse matrix BB by averaging the solutions regarding the various sets D ...
+/home/ubuntu/anaconda3/envs/sansa/lib/python3.10/site-packages/scipy/sparse/_index.py:125: SparseEfficiencyWarning: Changing the sparsity structure of a csc_matrix is expensive. lil_matrix is more efficient.
+  self._set_arrayXarray(i, j, x)
+2023-05-07 16:47:58,449 : [2/3] TRAINING : forcing the sparsity pattern of AA onto BB ...
+2023-05-07 16:48:00,262 : [2/3] TRAINING : resulting sparsity of learned BB: 0.02003746403601616
+2023-05-07 16:48:00,456 : [2/3] TRAINING : Execution of sparse_parameter_estimation took at 190.463 seconds.
+2023-05-07 16:48:00,457 : [2/3] TRAINING : Execution of sparse_solution took at 199.572 seconds.
+2023-05-07 16:48:00,503 : [2/3] TRAINING : Re-scaling BB back to the original item-popularities ...
+2023-05-07 16:48:00,732 : [2/3] TRAINING : Execution of _construct_weights took at 208.283 seconds.
+2023-05-07 16:48:00,732 : [2/3] TRAINING : Model: MRF, number of weights: 8095812, weights size: 92.728 MB
+2023-05-07 16:48:00,732 : [2/3] TRAINING : Execution of _get_model took at 208.857 seconds.
+2023-05-07 16:48:00,732 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-07 16:48:00,901 : [3/3] EVALUATION : Execution of _matmat took at 0.124 seconds.
+2023-05-07 16:48:01,251 : [3/3] EVALUATION : Execution of _predict took at 0.474 seconds.
+2023-05-07 16:48:02,319 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-07 16:48:02,487 : [3/3] EVALUATION : Execution of _matmat took at 0.123 seconds.
+2023-05-07 16:48:02,837 : [3/3] EVALUATION : Execution of _predict took at 0.474 seconds.
+2023-05-07 16:48:03,901 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-07 16:48:04,070 : [3/3] EVALUATION : Execution of _matmat took at 0.124 seconds.
+2023-05-07 16:48:04,422 : [3/3] EVALUATION : Execution of _predict took at 0.475 seconds.
+2023-05-07 16:48:05,480 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-07 16:48:05,649 : [3/3] EVALUATION : Execution of _matmat took at 0.125 seconds.
+2023-05-07 16:48:05,988 : [3/3] EVALUATION : Execution of _predict took at 0.465 seconds.
+2023-05-07 16:48:07,057 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-07 16:48:07,224 : [3/3] EVALUATION : Execution of _matmat took at 0.122 seconds.
+2023-05-07 16:48:07,562 : [3/3] EVALUATION : Execution of _predict took at 0.461 seconds.
+2023-05-07 16:48:08,666 : [3/3] EVALUATION : Execution of _evaluate_model took at 7.933 seconds.
+2023-05-07 16:48:08,666 : PIPELINE END : Execution of run took at 217.416 seconds.
+2023-05-07 16:48:08,681 : PIPELINE START : Starting evaluation pipeline.
+2023-05-07 16:48:08,681 : [1/3] DATASET : Loading processed dataset datasets/data/movielens20/dataset.parquet.
+2023-05-07 16:48:09,075 : [1/3] DATASET : Execution of _load_dataset_from_config took at 0.394 seconds.
+2023-05-07 16:48:09,161 : [1/3] DATASET : Dataset info | Dataset name: movielens20, Number of users: 136677, Number of items: 20720, Number of interactions: 9990682, Interaction density: 0.3528%
+2023-05-07 16:48:09,306 : [1/3] DATASET : Loaded dataset splits from datasets/data/movielens20/n_val_users=10000_n_test_users=10000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-07 16:48:09,310 : [1/3] DATASET : Execution of _create_dataset_splits took at 0.629 seconds.
+2023-05-07 16:48:09,310 : [2/3] TRAINING : Train user-item matrix info | n_users = 116677, n_items = 20720, n_ratings = 8516174, sparsity = 99.65%
+2023-05-07 16:48:09,310 : [2/3] TRAINING : Item-item matrix info | shape = (20720,20720)
+2023-05-07 16:48:09,310 : [2/3] TRAINING : Training SANSA with L2=600, target density=0.100000%, LDL^T method=cholmod, approx. inverse method=umr...
+2023-05-07 16:48:09,310 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-07 16:48:09,873 : [2/3] TRAINING : Constructing weights:
+2023-05-07 16:48:09,874 : [2/3] TRAINING : Computing LDL^T decomposition...
+2023-05-07 16:48:29,501 : [2/3] TRAINING : L info | nnz: 117492450, size: 1409.992 MB, density: 27.367206%
+2023-05-07 16:48:29,501 : [2/3] TRAINING : Dropping small values from L...
+2023-05-07 16:48:31,142 : [2/3] TRAINING : sparsified L info | nnz: 429319, size: 5.235 MB, density: 0.100000%
+2023-05-07 16:48:31,143 : [2/3] TRAINING : Execution of ldlt took at 21.269 seconds.
+2023-05-07 16:48:31,143 : [2/3] TRAINING : nnz of L: 429319, size: 5.235 MB
+2023-05-07 16:48:31,143 : [2/3] TRAINING : Computing approximate inverse of L:
+2023-05-07 16:48:31,143 : [2/3] TRAINING : Calculating initial guess using 1 step of Schultz method...
+2023-05-07 16:48:31,145 : [2/3] TRAINING : Calculating approximate inverse using Uniform Minimal Residual algorithm...
+2023-05-07 16:48:31,198 : [2/3] TRAINING : Current maximum residual: 16.36253960, relative Frobenius norm squared: 0.11558708
+2023-05-07 16:48:31,198 : [2/3] TRAINING : Performing UMR scan 1...
+2023-05-07 16:48:31,528 : [2/3] TRAINING : Execution of _umr_scan took at 0.329 seconds.
+2023-05-07 16:48:31,576 : [2/3] TRAINING : Current maximum residual: 3.64434610, relative Frobenius norm squared: 0.02921693
+2023-05-07 16:48:31,576 : [2/3] TRAINING : Performing UMR scan 2...
+2023-05-07 16:48:35,068 : [2/3] TRAINING : Execution of _umr_scan took at 3.491 seconds.
+2023-05-07 16:48:35,109 : [2/3] TRAINING : Current maximum residual: 2.51698018, relative Frobenius norm squared: 0.00675183
+2023-05-07 16:48:35,110 : [2/3] TRAINING : Performing UMR scan 3...
+2023-05-07 16:48:40,312 : [2/3] TRAINING : Execution of _umr_scan took at 5.203 seconds.
+2023-05-07 16:48:40,351 : [2/3] TRAINING : Current maximum residual: 1.65178362, relative Frobenius norm squared: 0.00292674
+2023-05-07 16:48:40,352 : [2/3] TRAINING : Performing UMR scan 4...
+2023-05-07 16:48:45,700 : [2/3] TRAINING : Execution of _umr_scan took at 5.348 seconds.
+2023-05-07 16:48:45,753 : [2/3] TRAINING : Current maximum residual: 0.82088304, relative Frobenius norm squared: 0.00160958
+2023-05-07 16:48:45,753 : [2/3] TRAINING : Performing UMR scan 5...
+2023-05-07 16:48:51,037 : [2/3] TRAINING : Execution of _umr_scan took at 5.284 seconds.
+2023-05-07 16:48:51,076 : [2/3] TRAINING : Current maximum residual: 0.50265325, relative Frobenius norm squared: 0.00115287
+2023-05-07 16:48:51,076 : [2/3] TRAINING : Performing UMR finetune step 1...
+2023-05-07 16:48:51,090 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.014 seconds.
+2023-05-07 16:48:51,129 : [2/3] TRAINING : Current maximum residual: 0.34025899, relative Frobenius norm squared: 0.00109872
+2023-05-07 16:48:51,129 : [2/3] TRAINING : Performing UMR finetune step 2...
+2023-05-07 16:48:51,143 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.013 seconds.
+2023-05-07 16:48:51,181 : [2/3] TRAINING : Current maximum residual: 0.24116849, relative Frobenius norm squared: 0.00107600
+2023-05-07 16:48:51,181 : [2/3] TRAINING : Performing UMR finetune step 3...
+2023-05-07 16:48:51,196 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.014 seconds.
+2023-05-07 16:48:51,234 : [2/3] TRAINING : Current maximum residual: 0.20695771, relative Frobenius norm squared: 0.00106615
+2023-05-07 16:48:51,234 : [2/3] TRAINING : Performing UMR finetune step 4...
+2023-05-07 16:48:51,249 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.014 seconds.
+2023-05-07 16:48:51,287 : [2/3] TRAINING : Current maximum residual: 0.19039812, relative Frobenius norm squared: 0.00105963
+2023-05-07 16:48:51,287 : [2/3] TRAINING : Performing UMR finetune step 5...
+2023-05-07 16:48:51,301 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.014 seconds.
+2023-05-07 16:48:51,340 : [2/3] TRAINING : Current maximum residual: 0.19039812, relative Frobenius norm squared: 0.00105470
+2023-05-07 16:48:51,340 : [2/3] TRAINING : Performing UMR finetune step 6...
+2023-05-07 16:48:51,353 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.013 seconds.
+2023-05-07 16:48:51,394 : [2/3] TRAINING : Current maximum residual: 0.19039812, relative Frobenius norm squared: 0.00104882
+2023-05-07 16:48:51,394 : [2/3] TRAINING : Performing UMR finetune step 7...
+2023-05-07 16:48:51,406 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.012 seconds.
+2023-05-07 16:48:51,445 : [2/3] TRAINING : Current maximum residual: 0.18287144, relative Frobenius norm squared: 0.00104501
+2023-05-07 16:48:51,445 : [2/3] TRAINING : Performing UMR finetune step 8...
+2023-05-07 16:48:51,458 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.013 seconds.
+2023-05-07 16:48:51,496 : [2/3] TRAINING : Current maximum residual: 0.18242642, relative Frobenius norm squared: 0.00104212
+2023-05-07 16:48:51,496 : [2/3] TRAINING : Performing UMR finetune step 9...
+2023-05-07 16:48:51,509 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.012 seconds.
+2023-05-07 16:48:51,552 : [2/3] TRAINING : Current maximum residual: 0.18242642, relative Frobenius norm squared: 0.00103891
+2023-05-07 16:48:51,552 : [2/3] TRAINING : Performing UMR finetune step 10...
+2023-05-07 16:48:51,564 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.011 seconds.
+2023-05-07 16:48:51,618 : [2/3] TRAINING : Current maximum residual: 0.17973641, relative Frobenius norm squared: 0.00103647
+2023-05-07 16:48:51,626 : [2/3] TRAINING : Execution of ainv_L took at 20.483 seconds.
+2023-05-07 16:48:51,626 : [2/3] TRAINING : nnz of L_inv: 429318, size: 5.235 MB
+2023-05-07 16:48:51,626 : [2/3] TRAINING : Constructing W = L_inv @ P...
+2023-05-07 16:48:51,631 : [2/3] TRAINING : Extracting diagonal of W.T @ D_inv @ W...
+2023-05-07 16:48:51,635 : [2/3] TRAINING : Dividing columns of W by diagonal entries...
+2023-05-07 16:48:51,745 : [2/3] TRAINING : Execution of _construct_weights took at 41.872 seconds.
+2023-05-07 16:48:51,746 : [2/3] TRAINING : Model: SANSA, number of weights: 858636, weights size: 9.984 MB
+2023-05-07 16:48:51,746 : [2/3] TRAINING : Execution of _get_model took at 42.435 seconds.
+2023-05-07 16:48:51,746 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-07 16:48:51,810 : [3/3] EVALUATION : Execution of _matmat took at 0.020 seconds.
+2023-05-07 16:48:51,995 : [3/3] EVALUATION : Execution of _matmat took at 0.186 seconds.
+2023-05-07 16:48:52,239 : [3/3] EVALUATION : Execution of _predict took at 0.450 seconds.
+2023-05-07 16:48:52,954 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-07 16:48:53,018 : [3/3] EVALUATION : Execution of _matmat took at 0.020 seconds.
+2023-05-07 16:48:53,206 : [3/3] EVALUATION : Execution of _matmat took at 0.187 seconds.
+2023-05-07 16:48:53,449 : [3/3] EVALUATION : Execution of _predict took at 0.451 seconds.
+2023-05-07 16:48:54,159 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-07 16:48:54,223 : [3/3] EVALUATION : Execution of _matmat took at 0.020 seconds.
+2023-05-07 16:48:54,408 : [3/3] EVALUATION : Execution of _matmat took at 0.184 seconds.
+2023-05-07 16:48:54,649 : [3/3] EVALUATION : Execution of _predict took at 0.446 seconds.
+2023-05-07 16:48:55,355 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-07 16:48:55,419 : [3/3] EVALUATION : Execution of _matmat took at 0.020 seconds.
+2023-05-07 16:48:55,605 : [3/3] EVALUATION : Execution of _matmat took at 0.186 seconds.
+2023-05-07 16:48:55,842 : [3/3] EVALUATION : Execution of _predict took at 0.444 seconds.
+2023-05-07 16:48:56,552 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-07 16:48:56,616 : [3/3] EVALUATION : Execution of _matmat took at 0.020 seconds.
+2023-05-07 16:48:56,800 : [3/3] EVALUATION : Execution of _matmat took at 0.184 seconds.
+2023-05-07 16:48:57,036 : [3/3] EVALUATION : Execution of _predict took at 0.440 seconds.
+2023-05-07 16:48:57,787 : [3/3] EVALUATION : Execution of _evaluate_model took at 6.041 seconds.
+2023-05-07 16:48:57,787 : PIPELINE END : Execution of run took at 49.106 seconds.
+2023-05-07 16:48:57,800 : PIPELINE START : Starting evaluation pipeline.
+2023-05-07 16:48:57,800 : [1/3] DATASET : Loading processed dataset datasets/data/movielens20/dataset.parquet.
+2023-05-07 16:48:58,191 : [1/3] DATASET : Execution of _load_dataset_from_config took at 0.391 seconds.
+2023-05-07 16:48:58,278 : [1/3] DATASET : Dataset info | Dataset name: movielens20, Number of users: 136677, Number of items: 20720, Number of interactions: 9990682, Interaction density: 0.3528%
+2023-05-07 16:48:58,422 : [1/3] DATASET : Loaded dataset splits from datasets/data/movielens20/n_val_users=10000_n_test_users=10000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-07 16:48:58,426 : [1/3] DATASET : Execution of _create_dataset_splits took at 0.625 seconds.
+2023-05-07 16:48:58,426 : [2/3] TRAINING : Train user-item matrix info | n_users = 116677, n_items = 20720, n_ratings = 8516174, sparsity = 99.65%
+2023-05-07 16:48:58,426 : [2/3] TRAINING : Item-item matrix info | shape = (20720,20720)
+2023-05-07 16:48:58,426 : [2/3] TRAINING : Training SANSA with L2=600, target density=0.250000%, LDL^T method=cholmod, approx. inverse method=umr...
+2023-05-07 16:48:58,426 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-07 16:48:58,994 : [2/3] TRAINING : Constructing weights:
+2023-05-07 16:48:58,995 : [2/3] TRAINING : Computing LDL^T decomposition...
+2023-05-07 16:49:18,823 : [2/3] TRAINING : L info | nnz: 117492450, size: 1409.992 MB, density: 27.367206%
+2023-05-07 16:49:18,823 : [2/3] TRAINING : Dropping small values from L...
+2023-05-07 16:49:20,474 : [2/3] TRAINING : sparsified L info | nnz: 1073296, size: 12.962 MB, density: 0.250000%
+2023-05-07 16:49:20,474 : [2/3] TRAINING : Execution of ldlt took at 21.480 seconds.
+2023-05-07 16:49:20,474 : [2/3] TRAINING : nnz of L: 1073296, size: 12.962 MB
+2023-05-07 16:49:20,474 : [2/3] TRAINING : Computing approximate inverse of L:
+2023-05-07 16:49:20,474 : [2/3] TRAINING : Calculating initial guess using 1 step of Schultz method...
+2023-05-07 16:49:20,480 : [2/3] TRAINING : Calculating approximate inverse using Uniform Minimal Residual algorithm...
+2023-05-07 16:49:20,683 : [2/3] TRAINING : Current maximum residual: 18.02835473, relative Frobenius norm squared: 0.17044058
+2023-05-07 16:49:20,683 : [2/3] TRAINING : Performing UMR scan 1...
+2023-05-07 16:49:21,140 : [2/3] TRAINING : Execution of _umr_scan took at 0.457 seconds.
+2023-05-07 16:49:21,341 : [2/3] TRAINING : Current maximum residual: 4.43949724, relative Frobenius norm squared: 0.04533624
+2023-05-07 16:49:21,341 : [2/3] TRAINING : Performing UMR scan 2...
+2023-05-07 16:49:25,493 : [2/3] TRAINING : Execution of _umr_scan took at 4.152 seconds.
+2023-05-07 16:49:25,691 : [2/3] TRAINING : Current maximum residual: 2.98525151, relative Frobenius norm squared: 0.01059297
+2023-05-07 16:49:25,691 : [2/3] TRAINING : Performing UMR scan 3...
+2023-05-07 16:49:32,166 : [2/3] TRAINING : Execution of _umr_scan took at 6.475 seconds.
+2023-05-07 16:49:32,366 : [2/3] TRAINING : Current maximum residual: 1.85270886, relative Frobenius norm squared: 0.00432996
+2023-05-07 16:49:32,366 : [2/3] TRAINING : Performing UMR scan 4...
+2023-05-07 16:49:38,534 : [2/3] TRAINING : Execution of _umr_scan took at 6.168 seconds.
+2023-05-07 16:49:38,737 : [2/3] TRAINING : Current maximum residual: 0.98661372, relative Frobenius norm squared: 0.00217310
+2023-05-07 16:49:38,737 : [2/3] TRAINING : Performing UMR scan 5...
+2023-05-07 16:49:45,078 : [2/3] TRAINING : Execution of _umr_scan took at 6.341 seconds.
+2023-05-07 16:49:45,281 : [2/3] TRAINING : Current maximum residual: 0.61178868, relative Frobenius norm squared: 0.00139601
+2023-05-07 16:49:45,281 : [2/3] TRAINING : Performing UMR finetune step 1...
+2023-05-07 16:49:45,324 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.044 seconds.
+2023-05-07 16:49:45,523 : [2/3] TRAINING : Current maximum residual: 0.40360635, relative Frobenius norm squared: 0.00128528
+2023-05-07 16:49:45,523 : [2/3] TRAINING : Performing UMR finetune step 2...
+2023-05-07 16:49:45,565 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.042 seconds.
+2023-05-07 16:49:45,765 : [2/3] TRAINING : Current maximum residual: 0.25419896, relative Frobenius norm squared: 0.00122995
+2023-05-07 16:49:45,765 : [2/3] TRAINING : Performing UMR finetune step 3...
+2023-05-07 16:49:45,806 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.041 seconds.
+2023-05-07 16:49:46,004 : [2/3] TRAINING : Current maximum residual: 0.17581075, relative Frobenius norm squared: 0.00120139
+2023-05-07 16:49:46,004 : [2/3] TRAINING : Performing UMR finetune step 4...
+2023-05-07 16:49:46,045 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.041 seconds.
+2023-05-07 16:49:46,241 : [2/3] TRAINING : Current maximum residual: 0.16763417, relative Frobenius norm squared: 0.00118470
+2023-05-07 16:49:46,241 : [2/3] TRAINING : Performing UMR finetune step 5...
+2023-05-07 16:49:46,280 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.038 seconds.
+2023-05-07 16:49:46,478 : [2/3] TRAINING : Current maximum residual: 0.16164623, relative Frobenius norm squared: 0.00117290
+2023-05-07 16:49:46,478 : [2/3] TRAINING : Performing UMR finetune step 6...
+2023-05-07 16:49:46,519 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.041 seconds.
+2023-05-07 16:49:46,717 : [2/3] TRAINING : Current maximum residual: 0.15759844, relative Frobenius norm squared: 0.00116169
+2023-05-07 16:49:46,717 : [2/3] TRAINING : Performing UMR finetune step 7...
+2023-05-07 16:49:46,754 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.037 seconds.
+2023-05-07 16:49:46,952 : [2/3] TRAINING : Current maximum residual: 0.15441235, relative Frobenius norm squared: 0.00115331
+2023-05-07 16:49:46,952 : [2/3] TRAINING : Performing UMR finetune step 8...
+2023-05-07 16:49:46,989 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.037 seconds.
+2023-05-07 16:49:47,188 : [2/3] TRAINING : Current maximum residual: 0.15195464, relative Frobenius norm squared: 0.00114566
+2023-05-07 16:49:47,188 : [2/3] TRAINING : Performing UMR finetune step 9...
+2023-05-07 16:49:47,227 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.039 seconds.
+2023-05-07 16:49:47,425 : [2/3] TRAINING : Current maximum residual: 0.15032348, relative Frobenius norm squared: 0.00113886
+2023-05-07 16:49:47,425 : [2/3] TRAINING : Performing UMR finetune step 10...
+2023-05-07 16:49:47,465 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.040 seconds.
+2023-05-07 16:49:47,665 : [2/3] TRAINING : Current maximum residual: 0.14913057, relative Frobenius norm squared: 0.00113432
+2023-05-07 16:49:47,678 : [2/3] TRAINING : Execution of ainv_L took at 27.203 seconds.
+2023-05-07 16:49:47,678 : [2/3] TRAINING : nnz of L_inv: 1073296, size: 12.962 MB
+2023-05-07 16:49:47,678 : [2/3] TRAINING : Constructing W = L_inv @ P...
+2023-05-07 16:49:47,687 : [2/3] TRAINING : Extracting diagonal of W.T @ D_inv @ W...
+2023-05-07 16:49:47,694 : [2/3] TRAINING : Dividing columns of W by diagonal entries...
+2023-05-07 16:49:47,837 : [2/3] TRAINING : Execution of _construct_weights took at 48.842 seconds.
+2023-05-07 16:49:47,837 : [2/3] TRAINING : Model: SANSA, number of weights: 2146592, weights size: 24.724 MB
+2023-05-07 16:49:47,837 : [2/3] TRAINING : Execution of _get_model took at 49.411 seconds.
+2023-05-07 16:49:47,837 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-07 16:49:47,909 : [3/3] EVALUATION : Execution of _matmat took at 0.028 seconds.
+2023-05-07 16:49:48,323 : [3/3] EVALUATION : Execution of _matmat took at 0.414 seconds.
+2023-05-07 16:49:48,662 : [3/3] EVALUATION : Execution of _predict took at 0.781 seconds.
+2023-05-07 16:49:49,416 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-07 16:49:49,486 : [3/3] EVALUATION : Execution of _matmat took at 0.027 seconds.
+2023-05-07 16:49:49,902 : [3/3] EVALUATION : Execution of _matmat took at 0.415 seconds.
+2023-05-07 16:49:50,240 : [3/3] EVALUATION : Execution of _predict took at 0.781 seconds.
+2023-05-07 16:49:50,990 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-07 16:49:51,061 : [3/3] EVALUATION : Execution of _matmat took at 0.027 seconds.
+2023-05-07 16:49:51,478 : [3/3] EVALUATION : Execution of _matmat took at 0.417 seconds.
+2023-05-07 16:49:51,814 : [3/3] EVALUATION : Execution of _predict took at 0.780 seconds.
+2023-05-07 16:49:52,562 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-07 16:49:52,632 : [3/3] EVALUATION : Execution of _matmat took at 0.027 seconds.
+2023-05-07 16:49:53,049 : [3/3] EVALUATION : Execution of _matmat took at 0.417 seconds.
+2023-05-07 16:49:53,380 : [3/3] EVALUATION : Execution of _predict took at 0.775 seconds.
+2023-05-07 16:49:54,130 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-07 16:49:54,200 : [3/3] EVALUATION : Execution of _matmat took at 0.026 seconds.
+2023-05-07 16:49:54,614 : [3/3] EVALUATION : Execution of _matmat took at 0.414 seconds.
+2023-05-07 16:49:54,943 : [3/3] EVALUATION : Execution of _predict took at 0.769 seconds.
+2023-05-07 16:49:55,734 : [3/3] EVALUATION : Execution of _evaluate_model took at 7.896 seconds.
+2023-05-07 16:49:55,734 : PIPELINE END : Execution of run took at 57.934 seconds.
+2023-05-07 16:49:55,747 : PIPELINE START : Starting evaluation pipeline.
+2023-05-07 16:49:55,747 : [1/3] DATASET : Loading processed dataset datasets/data/movielens20/dataset.parquet.
+2023-05-07 16:49:56,133 : [1/3] DATASET : Execution of _load_dataset_from_config took at 0.385 seconds.
+2023-05-07 16:49:56,219 : [1/3] DATASET : Dataset info | Dataset name: movielens20, Number of users: 136677, Number of items: 20720, Number of interactions: 9990682, Interaction density: 0.3528%
+2023-05-07 16:49:56,364 : [1/3] DATASET : Loaded dataset splits from datasets/data/movielens20/n_val_users=10000_n_test_users=10000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-07 16:49:56,368 : [1/3] DATASET : Execution of _create_dataset_splits took at 0.621 seconds.
+2023-05-07 16:49:56,369 : [2/3] TRAINING : Train user-item matrix info | n_users = 116677, n_items = 20720, n_ratings = 8516174, sparsity = 99.65%
+2023-05-07 16:49:56,369 : [2/3] TRAINING : Item-item matrix info | shape = (20720,20720)
+2023-05-07 16:49:56,369 : [2/3] TRAINING : Training SANSA with L2=600, target density=0.500000%, LDL^T method=cholmod, approx. inverse method=umr...
+2023-05-07 16:49:56,369 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-07 16:49:56,944 : [2/3] TRAINING : Constructing weights:
+2023-05-07 16:49:56,944 : [2/3] TRAINING : Computing LDL^T decomposition...
+2023-05-07 16:50:16,865 : [2/3] TRAINING : L info | nnz: 117492450, size: 1409.992 MB, density: 27.367206%
+2023-05-07 16:50:16,865 : [2/3] TRAINING : Dropping small values from L...
+2023-05-07 16:50:18,555 : [2/3] TRAINING : sparsified L info | nnz: 2146592, size: 25.842 MB, density: 0.500000%
+2023-05-07 16:50:18,556 : [2/3] TRAINING : Execution of ldlt took at 21.611 seconds.
+2023-05-07 16:50:18,556 : [2/3] TRAINING : nnz of L: 2146592, size: 25.842 MB
+2023-05-07 16:50:18,556 : [2/3] TRAINING : Computing approximate inverse of L:
+2023-05-07 16:50:18,556 : [2/3] TRAINING : Calculating initial guess using 1 step of Schultz method...
+2023-05-07 16:50:18,565 : [2/3] TRAINING : Calculating approximate inverse using Uniform Minimal Residual algorithm...
+2023-05-07 16:50:19,042 : [2/3] TRAINING : Current maximum residual: 18.76292935, relative Frobenius norm squared: 0.20726841
+2023-05-07 16:50:19,042 : [2/3] TRAINING : Performing UMR scan 1...
+2023-05-07 16:50:19,956 : [2/3] TRAINING : Execution of _umr_scan took at 0.914 seconds.
+2023-05-07 16:50:20,434 : [2/3] TRAINING : Current maximum residual: 4.89834214, relative Frobenius norm squared: 0.05857488
+2023-05-07 16:50:20,435 : [2/3] TRAINING : Performing UMR scan 2...
+2023-05-07 16:50:26,890 : [2/3] TRAINING : Execution of _umr_scan took at 6.456 seconds.
+2023-05-07 16:50:27,362 : [2/3] TRAINING : Current maximum residual: 3.20863301, relative Frobenius norm squared: 0.01341238
+2023-05-07 16:50:27,362 : [2/3] TRAINING : Performing UMR scan 3...
+2023-05-07 16:50:36,024 : [2/3] TRAINING : Execution of _umr_scan took at 8.662 seconds.
+2023-05-07 16:50:36,495 : [2/3] TRAINING : Current maximum residual: 1.95290707, relative Frobenius norm squared: 0.00522288
+2023-05-07 16:50:36,495 : [2/3] TRAINING : Performing UMR scan 4...
+2023-05-07 16:50:45,421 : [2/3] TRAINING : Execution of _umr_scan took at 8.926 seconds.
+2023-05-07 16:50:45,889 : [2/3] TRAINING : Current maximum residual: 1.07802518, relative Frobenius norm squared: 0.00245536
+2023-05-07 16:50:45,889 : [2/3] TRAINING : Performing UMR scan 5...
+2023-05-07 16:50:54,476 : [2/3] TRAINING : Execution of _umr_scan took at 8.587 seconds.
+2023-05-07 16:50:54,941 : [2/3] TRAINING : Current maximum residual: 0.67581761, relative Frobenius norm squared: 0.00144627
+2023-05-07 16:50:54,941 : [2/3] TRAINING : Performing UMR finetune step 1...
+2023-05-07 16:50:55,061 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.120 seconds.
+2023-05-07 16:50:55,524 : [2/3] TRAINING : Current maximum residual: 0.44934002, relative Frobenius norm squared: 0.00127535
+2023-05-07 16:50:55,525 : [2/3] TRAINING : Performing UMR finetune step 2...
+2023-05-07 16:50:55,639 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.114 seconds.
+2023-05-07 16:50:56,101 : [2/3] TRAINING : Current maximum residual: 0.27023061, relative Frobenius norm squared: 0.00118961
+2023-05-07 16:50:56,101 : [2/3] TRAINING : Performing UMR finetune step 3...
+2023-05-07 16:50:56,209 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.108 seconds.
+2023-05-07 16:50:56,672 : [2/3] TRAINING : Current maximum residual: 0.17613849, relative Frobenius norm squared: 0.00114693
+2023-05-07 16:50:56,672 : [2/3] TRAINING : Performing UMR finetune step 4...
+2023-05-07 16:50:56,789 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.117 seconds.
+2023-05-07 16:50:57,248 : [2/3] TRAINING : Current maximum residual: 0.13903999, relative Frobenius norm squared: 0.00112264
+2023-05-07 16:50:57,249 : [2/3] TRAINING : Performing UMR finetune step 5...
+2023-05-07 16:50:57,360 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.112 seconds.
+2023-05-07 16:50:57,830 : [2/3] TRAINING : Current maximum residual: 0.13421990, relative Frobenius norm squared: 0.00110380
+2023-05-07 16:50:57,830 : [2/3] TRAINING : Performing UMR finetune step 6...
+2023-05-07 16:50:57,941 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.111 seconds.
+2023-05-07 16:50:58,403 : [2/3] TRAINING : Current maximum residual: 0.12993436, relative Frobenius norm squared: 0.00108797
+2023-05-07 16:50:58,403 : [2/3] TRAINING : Performing UMR finetune step 7...
+2023-05-07 16:50:58,504 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.101 seconds.
+2023-05-07 16:50:58,967 : [2/3] TRAINING : Current maximum residual: 0.12767946, relative Frobenius norm squared: 0.00107569
+2023-05-07 16:50:58,967 : [2/3] TRAINING : Performing UMR finetune step 8...
+2023-05-07 16:50:59,067 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.100 seconds.
+2023-05-07 16:50:59,527 : [2/3] TRAINING : Current maximum residual: 0.12583360, relative Frobenius norm squared: 0.00106341
+2023-05-07 16:50:59,527 : [2/3] TRAINING : Performing UMR finetune step 9...
+2023-05-07 16:50:59,633 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.106 seconds.
+2023-05-07 16:51:00,092 : [2/3] TRAINING : Current maximum residual: 0.12381516, relative Frobenius norm squared: 0.00105264
+2023-05-07 16:51:00,092 : [2/3] TRAINING : Performing UMR finetune step 10...
+2023-05-07 16:51:00,189 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.097 seconds.
+2023-05-07 16:51:00,654 : [2/3] TRAINING : Current maximum residual: 0.12270902, relative Frobenius norm squared: 0.00104433
+2023-05-07 16:51:00,685 : [2/3] TRAINING : Execution of ainv_L took at 42.129 seconds.
+2023-05-07 16:51:00,685 : [2/3] TRAINING : nnz of L_inv: 2146592, size: 25.842 MB
+2023-05-07 16:51:00,685 : [2/3] TRAINING : Constructing W = L_inv @ P...
+2023-05-07 16:51:00,701 : [2/3] TRAINING : Extracting diagonal of W.T @ D_inv @ W...
+2023-05-07 16:51:00,712 : [2/3] TRAINING : Dividing columns of W by diagonal entries...
+2023-05-07 16:51:00,873 : [2/3] TRAINING : Execution of _construct_weights took at 63.929 seconds.
+2023-05-07 16:51:00,874 : [2/3] TRAINING : Model: SANSA, number of weights: 4293184, weights size: 49.290 MB
+2023-05-07 16:51:00,874 : [2/3] TRAINING : Execution of _get_model took at 64.505 seconds.
+2023-05-07 16:51:00,874 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-07 16:51:00,961 : [3/3] EVALUATION : Execution of _matmat took at 0.044 seconds.
+2023-05-07 16:51:02,104 : [3/3] EVALUATION : Execution of _matmat took at 1.142 seconds.
+2023-05-07 16:51:02,540 : [3/3] EVALUATION : Execution of _predict took at 1.622 seconds.
+2023-05-07 16:51:03,333 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-07 16:51:03,415 : [3/3] EVALUATION : Execution of _matmat took at 0.038 seconds.
+2023-05-07 16:51:04,551 : [3/3] EVALUATION : Execution of _matmat took at 1.135 seconds.
+2023-05-07 16:51:04,986 : [3/3] EVALUATION : Execution of _predict took at 1.609 seconds.
+2023-05-07 16:51:05,776 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-07 16:51:05,859 : [3/3] EVALUATION : Execution of _matmat took at 0.038 seconds.
+2023-05-07 16:51:06,991 : [3/3] EVALUATION : Execution of _matmat took at 1.132 seconds.
+2023-05-07 16:51:07,423 : [3/3] EVALUATION : Execution of _predict took at 1.602 seconds.
+2023-05-07 16:51:08,208 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-07 16:51:08,289 : [3/3] EVALUATION : Execution of _matmat took at 0.038 seconds.
+2023-05-07 16:51:09,423 : [3/3] EVALUATION : Execution of _matmat took at 1.134 seconds.
+2023-05-07 16:51:09,848 : [3/3] EVALUATION : Execution of _predict took at 1.597 seconds.
+2023-05-07 16:51:10,639 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-07 16:51:10,720 : [3/3] EVALUATION : Execution of _matmat took at 0.038 seconds.
+2023-05-07 16:51:11,863 : [3/3] EVALUATION : Execution of _matmat took at 1.143 seconds.
+2023-05-07 16:51:12,285 : [3/3] EVALUATION : Execution of _predict took at 1.602 seconds.
+2023-05-07 16:51:13,116 : [3/3] EVALUATION : Execution of _evaluate_model took at 12.243 seconds.
+2023-05-07 16:51:13,117 : PIPELINE END : Execution of run took at 77.370 seconds.
+2023-05-07 16:51:13,130 : PIPELINE START : Starting evaluation pipeline.
+2023-05-07 16:51:13,130 : [1/3] DATASET : Loading processed dataset datasets/data/movielens20/dataset.parquet.
+2023-05-07 16:51:13,519 : [1/3] DATASET : Execution of _load_dataset_from_config took at 0.389 seconds.
+2023-05-07 16:51:13,601 : [1/3] DATASET : Dataset info | Dataset name: movielens20, Number of users: 136677, Number of items: 20720, Number of interactions: 9990682, Interaction density: 0.3528%
+2023-05-07 16:51:13,747 : [1/3] DATASET : Loaded dataset splits from datasets/data/movielens20/n_val_users=10000_n_test_users=10000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-07 16:51:13,751 : [1/3] DATASET : Execution of _create_dataset_splits took at 0.621 seconds.
+2023-05-07 16:51:13,751 : [2/3] TRAINING : Train user-item matrix info | n_users = 116677, n_items = 20720, n_ratings = 8516174, sparsity = 99.65%
+2023-05-07 16:51:13,751 : [2/3] TRAINING : Item-item matrix info | shape = (20720,20720)
+2023-05-07 16:51:13,751 : [2/3] TRAINING : Training SANSA with L2=600, target density=1.000000%, LDL^T method=cholmod, approx. inverse method=umr...
+2023-05-07 16:51:13,751 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-07 16:51:14,317 : [2/3] TRAINING : Constructing weights:
+2023-05-07 16:51:14,317 : [2/3] TRAINING : Computing LDL^T decomposition...
+2023-05-07 16:51:34,249 : [2/3] TRAINING : L info | nnz: 117492450, size: 1409.992 MB, density: 27.367206%
+2023-05-07 16:51:34,249 : [2/3] TRAINING : Dropping small values from L...
+2023-05-07 16:51:36,033 : [2/3] TRAINING : sparsified L info | nnz: 4293184, size: 51.601 MB, density: 1.000000%
+2023-05-07 16:51:36,033 : [2/3] TRAINING : Execution of ldlt took at 21.716 seconds.
+2023-05-07 16:51:36,033 : [2/3] TRAINING : nnz of L: 4293184, size: 51.601 MB
+2023-05-07 16:51:36,033 : [2/3] TRAINING : Computing approximate inverse of L:
+2023-05-07 16:51:36,033 : [2/3] TRAINING : Calculating initial guess using 1 step of Schultz method...
+2023-05-07 16:51:36,064 : [2/3] TRAINING : Calculating approximate inverse using Uniform Minimal Residual algorithm...
+2023-05-07 16:51:37,202 : [2/3] TRAINING : Current maximum residual: 19.20700365, relative Frobenius norm squared: 0.23587090
+2023-05-07 16:51:37,202 : [2/3] TRAINING : Performing UMR scan 1...
+2023-05-07 16:51:38,946 : [2/3] TRAINING : Execution of _umr_scan took at 1.745 seconds.
+2023-05-07 16:51:40,113 : [2/3] TRAINING : Current maximum residual: 5.25942102, relative Frobenius norm squared: 0.07001529
+2023-05-07 16:51:40,113 : [2/3] TRAINING : Performing UMR scan 2...
+2023-05-07 16:51:51,838 : [2/3] TRAINING : Execution of _umr_scan took at 11.725 seconds.
+2023-05-07 16:51:52,950 : [2/3] TRAINING : Current maximum residual: 3.36924972, relative Frobenius norm squared: 0.01576762
+2023-05-07 16:51:52,950 : [2/3] TRAINING : Performing UMR scan 3...
+2023-05-07 16:52:07,288 : [2/3] TRAINING : Execution of _umr_scan took at 14.338 seconds.
+2023-05-07 16:52:08,408 : [2/3] TRAINING : Current maximum residual: 2.00309278, relative Frobenius norm squared: 0.00583507
+2023-05-07 16:52:08,408 : [2/3] TRAINING : Performing UMR scan 4...
+2023-05-07 16:52:22,223 : [2/3] TRAINING : Execution of _umr_scan took at 13.815 seconds.
+2023-05-07 16:52:23,318 : [2/3] TRAINING : Current maximum residual: 1.13559690, relative Frobenius norm squared: 0.00254942
+2023-05-07 16:52:23,318 : [2/3] TRAINING : Performing UMR scan 5...
+2023-05-07 16:52:37,226 : [2/3] TRAINING : Execution of _umr_scan took at 13.908 seconds.
+2023-05-07 16:52:38,334 : [2/3] TRAINING : Current maximum residual: 0.72324048, relative Frobenius norm squared: 0.00137737
+2023-05-07 16:52:38,335 : [2/3] TRAINING : Performing UMR finetune step 1...
+2023-05-07 16:52:38,788 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.453 seconds.
+2023-05-07 16:52:39,895 : [2/3] TRAINING : Current maximum residual: 0.48239400, relative Frobenius norm squared: 0.00113644
+2023-05-07 16:52:39,896 : [2/3] TRAINING : Performing UMR finetune step 2...
+2023-05-07 16:52:40,358 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.462 seconds.
+2023-05-07 16:52:41,469 : [2/3] TRAINING : Current maximum residual: 0.29413516, relative Frobenius norm squared: 0.00101663
+2023-05-07 16:52:41,469 : [2/3] TRAINING : Performing UMR finetune step 3...
+2023-05-07 16:52:41,914 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.445 seconds.
+2023-05-07 16:52:43,009 : [2/3] TRAINING : Current maximum residual: 0.19076808, relative Frobenius norm squared: 0.00095616
+2023-05-07 16:52:43,009 : [2/3] TRAINING : Performing UMR finetune step 4...
+2023-05-07 16:52:43,451 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.441 seconds.
+2023-05-07 16:52:44,561 : [2/3] TRAINING : Current maximum residual: 0.13026471, relative Frobenius norm squared: 0.00091879
+2023-05-07 16:52:44,561 : [2/3] TRAINING : Performing UMR finetune step 5...
+2023-05-07 16:52:44,974 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.413 seconds.
+2023-05-07 16:52:46,072 : [2/3] TRAINING : Current maximum residual: 0.10611146, relative Frobenius norm squared: 0.00089313
+2023-05-07 16:52:46,072 : [2/3] TRAINING : Performing UMR finetune step 6...
+2023-05-07 16:52:46,467 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.395 seconds.
+2023-05-07 16:52:47,566 : [2/3] TRAINING : Current maximum residual: 0.10319273, relative Frobenius norm squared: 0.00087345
+2023-05-07 16:52:47,566 : [2/3] TRAINING : Performing UMR finetune step 7...
+2023-05-07 16:52:47,972 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.406 seconds.
+2023-05-07 16:52:49,058 : [2/3] TRAINING : Current maximum residual: 0.10113663, relative Frobenius norm squared: 0.00085725
+2023-05-07 16:52:49,058 : [2/3] TRAINING : Performing UMR finetune step 8...
+2023-05-07 16:52:49,435 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.377 seconds.
+2023-05-07 16:52:50,526 : [2/3] TRAINING : Current maximum residual: 0.09986599, relative Frobenius norm squared: 0.00084354
+2023-05-07 16:52:50,526 : [2/3] TRAINING : Performing UMR finetune step 9...
+2023-05-07 16:52:50,930 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.404 seconds.
+2023-05-07 16:52:52,034 : [2/3] TRAINING : Current maximum residual: 0.09969049, relative Frobenius norm squared: 0.00083166
+2023-05-07 16:52:52,034 : [2/3] TRAINING : Performing UMR finetune step 10...
+2023-05-07 16:52:52,414 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.380 seconds.
+2023-05-07 16:52:53,514 : [2/3] TRAINING : Current maximum residual: 0.09950665, relative Frobenius norm squared: 0.00082235
+2023-05-07 16:52:53,572 : [2/3] TRAINING : Execution of ainv_L took at 77.539 seconds.
+2023-05-07 16:52:53,573 : [2/3] TRAINING : nnz of L_inv: 4293184, size: 51.601 MB
+2023-05-07 16:52:53,573 : [2/3] TRAINING : Constructing W = L_inv @ P...
+2023-05-07 16:52:53,615 : [2/3] TRAINING : Extracting diagonal of W.T @ D_inv @ W...
+2023-05-07 16:52:53,650 : [2/3] TRAINING : Dividing columns of W by diagonal entries...
+2023-05-07 16:52:53,854 : [2/3] TRAINING : Execution of _construct_weights took at 99.537 seconds.
+2023-05-07 16:52:53,855 : [2/3] TRAINING : Model: SANSA, number of weights: 8586368, weights size: 98.421 MB
+2023-05-07 16:52:53,855 : [2/3] TRAINING : Execution of _get_model took at 100.103 seconds.
+2023-05-07 16:52:53,855 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-07 16:52:53,960 : [3/3] EVALUATION : Execution of _matmat took at 0.062 seconds.
+2023-05-07 16:52:56,305 : [3/3] EVALUATION : Execution of _matmat took at 2.344 seconds.
+2023-05-07 16:52:56,841 : [3/3] EVALUATION : Execution of _predict took at 2.942 seconds.
+2023-05-07 16:52:57,680 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-07 16:52:57,779 : [3/3] EVALUATION : Execution of _matmat took at 0.055 seconds.
+2023-05-07 16:53:00,122 : [3/3] EVALUATION : Execution of _matmat took at 2.342 seconds.
+2023-05-07 16:53:00,657 : [3/3] EVALUATION : Execution of _predict took at 2.933 seconds.
+2023-05-07 16:53:01,489 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-07 16:53:01,589 : [3/3] EVALUATION : Execution of _matmat took at 0.055 seconds.
+2023-05-07 16:53:03,921 : [3/3] EVALUATION : Execution of _matmat took at 2.331 seconds.
+2023-05-07 16:53:04,451 : [3/3] EVALUATION : Execution of _predict took at 2.917 seconds.
+2023-05-07 16:53:05,285 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-07 16:53:05,383 : [3/3] EVALUATION : Execution of _matmat took at 0.055 seconds.
+2023-05-07 16:53:07,724 : [3/3] EVALUATION : Execution of _matmat took at 2.340 seconds.
+2023-05-07 16:53:08,247 : [3/3] EVALUATION : Execution of _predict took at 2.919 seconds.
+2023-05-07 16:53:09,081 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-07 16:53:09,178 : [3/3] EVALUATION : Execution of _matmat took at 0.054 seconds.
+2023-05-07 16:53:11,509 : [3/3] EVALUATION : Execution of _matmat took at 2.330 seconds.
+2023-05-07 16:53:12,028 : [3/3] EVALUATION : Execution of _predict took at 2.903 seconds.
+2023-05-07 16:53:12,905 : [3/3] EVALUATION : Execution of _evaluate_model took at 19.050 seconds.
+2023-05-07 16:53:12,906 : PIPELINE END : Execution of run took at 119.776 seconds.
+
+
+Recall @ 20:
+ EASE : 0.3920 +- 0.0027
+MRF
+th=0.458, r=0.5: 0.3800 +- 0.0026
+th=0.458, r=0.1: 0.3841 +- 0.0027
+th=0.458, r=0.0: 0.3904 +- 0.0027
+th=0.300, r=0.5: 0.3848 +- 0.0027
+th=0.300, r=0.1: 0.3874 +- 0.0027
+th=0.300, r=0.0: 0.3904 +- 0.0027
+th=0.175, r=0.5: 0.3862 +- 0.0027
+th=0.175, r=0.1: 0.3894 +- 0.0027
+th=0.175, r=0.0: 0.3901 +- 0.0027
+SANSA
+0.0010: 0.3767 +- 0.0027
+0.0025: 0.3830 +- 0.0027
+0.0050: 0.3869 +- 0.0027
+0.0100: 0.3884 +- 0.0027
+
+
+Recall @ 50:
+ EASE : 0.5206 +- 0.0028
+MRF
+th=0.458, r=0.5: 0.5076 +- 0.0028
+th=0.458, r=0.1: 0.5105 +- 0.0028
+th=0.458, r=0.0: 0.5155 +- 0.0028
+th=0.300, r=0.5: 0.5127 +- 0.0028
+th=0.300, r=0.1: 0.5147 +- 0.0028
+th=0.300, r=0.0: 0.5164 +- 0.0028
+th=0.175, r=0.5: 0.5149 +- 0.0028
+th=0.175, r=0.1: 0.5164 +- 0.0028
+th=0.175, r=0.0: 0.5165 +- 0.0028
+SANSA
+0.0010: 0.5007 +- 0.0028
+0.0025: 0.5117 +- 0.0028
+0.0050: 0.5161 +- 0.0028
+0.0100: 0.5177 +- 0.0028
+
+
+nDCG @ 100:
+ EASE : 0.4221 +- 0.0022
+MRF
+th=0.458, r=0.5: 0.4119 +- 0.0022
+th=0.458, r=0.1: 0.4153 +- 0.0022
+th=0.458, r=0.0: 0.4195 +- 0.0022
+th=0.300, r=0.5: 0.4162 +- 0.0022
+th=0.300, r=0.1: 0.4184 +- 0.0022
+th=0.300, r=0.0: 0.4198 +- 0.0022
+th=0.175, r=0.5: 0.4179 +- 0.0022
+th=0.175, r=0.1: 0.4198 +- 0.0022
+th=0.175, r=0.0: 0.4197 +- 0.0022
+SANSA
+0.0010: 0.4053 +- 0.0021
+0.0025: 0.4129 +- 0.0022
+0.0050: 0.4172 +- 0.0022
+0.0100: 0.4195 +- 0.0022
+

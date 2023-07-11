@@ -1,0 +1,496 @@
+(sansa) ➜  recsys-paper (dev) python experiments/accuracy/msd/run_experiment_sansa_icf.py 
+2023-05-09 16:50:12,502 : PIPELINE START : Starting evaluation pipeline.
+2023-05-09 16:50:12,504 : [1/3] DATASET : Loading processed dataset datasets/data/msd/dataset.parquet.
+2023-05-09 16:50:14,358 : [1/3] DATASET : Execution of _load_dataset_from_config took at 1.855 seconds.
+2023-05-09 16:50:14,745 : [1/3] DATASET : Dataset info | Dataset name: msd, Number of users: 571355, Number of items: 41140, Number of interactions: 33633450, Interaction density: 0.1431%
+2023-05-09 16:50:23,708 : [1/3] DATASET : Loaded dataset splits from datasets/data/msd/n_val_users=50000_n_test_users=50000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-09 16:50:23,716 : [1/3] DATASET : Execution of _create_dataset_splits took at 11.214 seconds.
+2023-05-09 16:50:23,719 : [2/3] TRAINING : Train user-item matrix info | n_users = 471355, n_items = 41140, n_ratings = 27765348, sparsity = 99.86%
+2023-05-09 16:50:23,719 : [2/3] TRAINING : Item-item matrix info | shape = (41140,41140)
+2023-05-09 16:50:23,719 : [2/3] TRAINING : Training SANSA with L2=2.5, target density=0.050000%, LDL^T method=icf, approx. inverse method=umr...
+2023-05-09 16:50:23,719 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-09 16:50:26,032 : [2/3] TRAINING : Constructing weights:
+2023-05-09 16:50:37,379 : [2/3] TRAINING : Constructing A...
+2023-05-09 16:50:43,650 : [2/3] TRAINING : A info | nnz: 703011634, size: 8436.3 MB
+2023-05-09 16:50:52,733 : [2/3] TRAINING : Computing incomplete LL^T decomposition...
+2023-05-09 16:53:16,217 : [2/3] TRAINING : L info | nnz: 846061, size: 10.317 MB, density: 0.049989%
+2023-05-09 16:53:16,217 : [2/3] TRAINING : Scaling columns and creating D (LL^T -> L'DL'^T)
+2023-05-09 16:53:16,224 : [2/3] TRAINING : Execution of ldlt took at 170.192 seconds.
+2023-05-09 16:53:16,224 : [2/3] TRAINING : nnz of L: 846061, size: 10.317 MB
+2023-05-09 16:53:16,224 : [2/3] TRAINING : Computing approximate inverse of L:
+2023-05-09 16:53:16,224 : [2/3] TRAINING : Calculating initial guess using 1 step of Schultz method...
+2023-05-09 16:53:16,236 : [2/3] TRAINING : Calculating approximate inverse using Uniform Minimal Residual algorithm...
+2023-05-09 16:53:16,331 : [2/3] TRAINING : Current maximum residual: 0.17458985, relative Frobenius norm squared: 0.00059450
+2023-05-09 16:53:16,331 : [2/3] TRAINING : Performing UMR scan 1...
+2023-05-09 16:53:16,347 : [2/3] TRAINING : Execution of _umr_scan took at 0.016 seconds.
+2023-05-09 16:53:16,436 : [2/3] TRAINING : Current maximum residual: 0.17458985, relative Frobenius norm squared: 0.00059450
+2023-05-09 16:53:16,436 : [2/3] TRAINING : Performing UMR scan 2...
+2023-05-09 16:53:16,452 : [2/3] TRAINING : Execution of _umr_scan took at 0.016 seconds.
+2023-05-09 16:53:16,533 : [2/3] TRAINING : Current maximum residual: 0.17458985, relative Frobenius norm squared: 0.00059450
+2023-05-09 16:53:16,534 : [2/3] TRAINING : Performing UMR scan 3...
+2023-05-09 16:53:35,313 : [2/3] TRAINING : Execution of _umr_scan took at 18.779 seconds.
+2023-05-09 16:53:35,390 : [2/3] TRAINING : Current maximum residual: 0.02149857, relative Frobenius norm squared: 0.00007801
+2023-05-09 16:53:35,390 : [2/3] TRAINING : Reached stopping criterion.
+2023-05-09 16:53:35,474 : [2/3] TRAINING : Current maximum residual: 0.02149857, relative Frobenius norm squared: 0.00007801
+2023-05-09 16:53:35,486 : [2/3] TRAINING : Execution of ainv_L took at 19.261 seconds.
+2023-05-09 16:53:35,486 : [2/3] TRAINING : nnz of L_inv: 846249, size: 10.320 MB
+2023-05-09 16:53:35,486 : [2/3] TRAINING : Constructing W = L_inv @ P...
+2023-05-09 16:53:35,497 : [2/3] TRAINING : Extracting diagonal of W.T @ D_inv @ W...
+2023-05-09 16:53:35,503 : [2/3] TRAINING : Dividing columns of W by diagonal entries...
+2023-05-09 16:53:35,561 : [2/3] TRAINING : Execution of _construct_weights took at 189.529 seconds.
+2023-05-09 16:53:35,562 : [2/3] TRAINING : Model: SANSA, number of weights: 1692498, weights size: 19.683 MB
+2023-05-09 16:53:35,562 : [2/3] TRAINING : Execution of _get_model took at 191.845 seconds.
+2023-05-09 16:53:35,562 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-09 16:53:35,629 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:35,775 : [3/3] EVALUATION : Execution of _matmat took at 0.146 seconds.
+2023-05-09 16:53:36,197 : [3/3] EVALUATION : Execution of _predict took at 0.571 seconds.
+2023-05-09 16:53:36,943 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-09 16:53:37,002 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:37,137 : [3/3] EVALUATION : Execution of _matmat took at 0.135 seconds.
+2023-05-09 16:53:37,540 : [3/3] EVALUATION : Execution of _predict took at 0.542 seconds.
+2023-05-09 16:53:38,266 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-09 16:53:38,325 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:38,465 : [3/3] EVALUATION : Execution of _matmat took at 0.140 seconds.
+2023-05-09 16:53:38,914 : [3/3] EVALUATION : Execution of _predict took at 0.592 seconds.
+2023-05-09 16:53:39,653 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-09 16:53:39,711 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:39,848 : [3/3] EVALUATION : Execution of _matmat took at 0.137 seconds.
+2023-05-09 16:53:40,282 : [3/3] EVALUATION : Execution of _predict took at 0.575 seconds.
+2023-05-09 16:53:41,015 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-09 16:53:41,074 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:41,210 : [3/3] EVALUATION : Execution of _matmat took at 0.136 seconds.
+2023-05-09 16:53:41,644 : [3/3] EVALUATION : Execution of _predict took at 0.575 seconds.
+2023-05-09 16:53:42,373 : [3/3] EVALUATION : Evaluating model at batch 10000:12000
+2023-05-09 16:53:42,432 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:42,569 : [3/3] EVALUATION : Execution of _matmat took at 0.137 seconds.
+2023-05-09 16:53:42,996 : [3/3] EVALUATION : Execution of _predict took at 0.568 seconds.
+2023-05-09 16:53:43,730 : [3/3] EVALUATION : Evaluating model at batch 12000:14000
+2023-05-09 16:53:43,787 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:43,924 : [3/3] EVALUATION : Execution of _matmat took at 0.136 seconds.
+2023-05-09 16:53:44,346 : [3/3] EVALUATION : Execution of _predict took at 0.562 seconds.
+2023-05-09 16:53:45,076 : [3/3] EVALUATION : Evaluating model at batch 14000:16000
+2023-05-09 16:53:45,133 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:45,271 : [3/3] EVALUATION : Execution of _matmat took at 0.138 seconds.
+2023-05-09 16:53:45,685 : [3/3] EVALUATION : Execution of _predict took at 0.555 seconds.
+2023-05-09 16:53:46,417 : [3/3] EVALUATION : Evaluating model at batch 16000:18000
+2023-05-09 16:53:46,476 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:46,615 : [3/3] EVALUATION : Execution of _matmat took at 0.139 seconds.
+2023-05-09 16:53:47,048 : [3/3] EVALUATION : Execution of _predict took at 0.576 seconds.
+2023-05-09 16:53:47,782 : [3/3] EVALUATION : Evaluating model at batch 18000:20000
+2023-05-09 16:53:47,839 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:47,974 : [3/3] EVALUATION : Execution of _matmat took at 0.135 seconds.
+2023-05-09 16:53:48,378 : [3/3] EVALUATION : Execution of _predict took at 0.544 seconds.
+2023-05-09 16:53:49,106 : [3/3] EVALUATION : Evaluating model at batch 20000:22000
+2023-05-09 16:53:49,164 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:49,299 : [3/3] EVALUATION : Execution of _matmat took at 0.135 seconds.
+2023-05-09 16:53:49,710 : [3/3] EVALUATION : Execution of _predict took at 0.549 seconds.
+2023-05-09 16:53:50,433 : [3/3] EVALUATION : Evaluating model at batch 22000:24000
+2023-05-09 16:53:50,491 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:50,633 : [3/3] EVALUATION : Execution of _matmat took at 0.143 seconds.
+2023-05-09 16:53:51,087 : [3/3] EVALUATION : Execution of _predict took at 0.601 seconds.
+2023-05-09 16:53:51,821 : [3/3] EVALUATION : Evaluating model at batch 24000:26000
+2023-05-09 16:53:51,879 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:52,016 : [3/3] EVALUATION : Execution of _matmat took at 0.137 seconds.
+2023-05-09 16:53:52,460 : [3/3] EVALUATION : Execution of _predict took at 0.585 seconds.
+2023-05-09 16:53:53,199 : [3/3] EVALUATION : Evaluating model at batch 26000:28000
+2023-05-09 16:53:53,256 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:53,393 : [3/3] EVALUATION : Execution of _matmat took at 0.136 seconds.
+2023-05-09 16:53:53,815 : [3/3] EVALUATION : Execution of _predict took at 0.563 seconds.
+2023-05-09 16:53:54,548 : [3/3] EVALUATION : Evaluating model at batch 28000:30000
+2023-05-09 16:53:54,605 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:54,740 : [3/3] EVALUATION : Execution of _matmat took at 0.134 seconds.
+2023-05-09 16:53:55,147 : [3/3] EVALUATION : Execution of _predict took at 0.545 seconds.
+2023-05-09 16:53:55,876 : [3/3] EVALUATION : Evaluating model at batch 30000:32000
+2023-05-09 16:53:55,932 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:56,069 : [3/3] EVALUATION : Execution of _matmat took at 0.137 seconds.
+2023-05-09 16:53:56,492 : [3/3] EVALUATION : Execution of _predict took at 0.563 seconds.
+2023-05-09 16:53:57,224 : [3/3] EVALUATION : Evaluating model at batch 32000:34000
+2023-05-09 16:53:57,282 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:57,420 : [3/3] EVALUATION : Execution of _matmat took at 0.138 seconds.
+2023-05-09 16:53:57,865 : [3/3] EVALUATION : Execution of _predict took at 0.587 seconds.
+2023-05-09 16:53:58,604 : [3/3] EVALUATION : Evaluating model at batch 34000:36000
+2023-05-09 16:53:58,661 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:53:58,797 : [3/3] EVALUATION : Execution of _matmat took at 0.136 seconds.
+2023-05-09 16:53:59,238 : [3/3] EVALUATION : Execution of _predict took at 0.581 seconds.
+2023-05-09 16:53:59,973 : [3/3] EVALUATION : Evaluating model at batch 36000:38000
+2023-05-09 16:54:00,030 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:54:00,166 : [3/3] EVALUATION : Execution of _matmat took at 0.135 seconds.
+2023-05-09 16:54:00,586 : [3/3] EVALUATION : Execution of _predict took at 0.559 seconds.
+2023-05-09 16:54:01,319 : [3/3] EVALUATION : Evaluating model at batch 38000:40000
+2023-05-09 16:54:01,429 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:54:01,564 : [3/3] EVALUATION : Execution of _matmat took at 0.135 seconds.
+2023-05-09 16:54:01,979 : [3/3] EVALUATION : Execution of _predict took at 0.554 seconds.
+2023-05-09 16:54:02,704 : [3/3] EVALUATION : Evaluating model at batch 40000:42000
+2023-05-09 16:54:02,762 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:54:02,901 : [3/3] EVALUATION : Execution of _matmat took at 0.139 seconds.
+2023-05-09 16:54:03,343 : [3/3] EVALUATION : Execution of _predict took at 0.584 seconds.
+2023-05-09 16:54:04,082 : [3/3] EVALUATION : Evaluating model at batch 42000:44000
+2023-05-09 16:54:04,139 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:54:04,276 : [3/3] EVALUATION : Execution of _matmat took at 0.137 seconds.
+2023-05-09 16:54:04,699 : [3/3] EVALUATION : Execution of _predict took at 0.563 seconds.
+2023-05-09 16:54:05,431 : [3/3] EVALUATION : Evaluating model at batch 44000:46000
+2023-05-09 16:54:05,489 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:54:05,627 : [3/3] EVALUATION : Execution of _matmat took at 0.138 seconds.
+2023-05-09 16:54:06,042 : [3/3] EVALUATION : Execution of _predict took at 0.557 seconds.
+2023-05-09 16:54:06,773 : [3/3] EVALUATION : Evaluating model at batch 46000:48000
+2023-05-09 16:54:06,831 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:54:06,966 : [3/3] EVALUATION : Execution of _matmat took at 0.135 seconds.
+2023-05-09 16:54:07,380 : [3/3] EVALUATION : Execution of _predict took at 0.553 seconds.
+2023-05-09 16:54:08,109 : [3/3] EVALUATION : Evaluating model at batch 48000:50000
+2023-05-09 16:54:08,168 : [3/3] EVALUATION : Execution of _matmat took at 0.004 seconds.
+2023-05-09 16:54:08,308 : [3/3] EVALUATION : Execution of _matmat took at 0.140 seconds.
+2023-05-09 16:54:08,748 : [3/3] EVALUATION : Execution of _predict took at 0.584 seconds.
+2023-05-09 16:54:09,683 : [3/3] EVALUATION : Execution of _evaluate_model took at 34.121 seconds.
+2023-05-09 16:54:09,684 : PIPELINE END : Execution of run took at 237.181 seconds.
+2023-05-09 16:54:09,716 : PIPELINE START : Starting evaluation pipeline.
+2023-05-09 16:54:09,717 : [1/3] DATASET : Loading processed dataset datasets/data/msd/dataset.parquet.
+2023-05-09 16:54:10,921 : [1/3] DATASET : Execution of _load_dataset_from_config took at 1.204 seconds.
+2023-05-09 16:54:11,295 : [1/3] DATASET : Dataset info | Dataset name: msd, Number of users: 571355, Number of items: 41140, Number of interactions: 33633450, Interaction density: 0.1431%
+2023-05-09 16:54:11,807 : [1/3] DATASET : Loaded dataset splits from datasets/data/msd/n_val_users=50000_n_test_users=50000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-09 16:54:11,822 : [1/3] DATASET : Execution of _create_dataset_splits took at 2.105 seconds.
+2023-05-09 16:54:11,822 : [2/3] TRAINING : Train user-item matrix info | n_users = 471355, n_items = 41140, n_ratings = 27765348, sparsity = 99.86%
+2023-05-09 16:54:11,822 : [2/3] TRAINING : Item-item matrix info | shape = (41140,41140)
+2023-05-09 16:54:11,822 : [2/3] TRAINING : Training SANSA with L2=2.5, target density=0.250000%, LDL^T method=icf, approx. inverse method=umr...
+2023-05-09 16:54:11,822 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-09 16:54:14,049 : [2/3] TRAINING : Constructing weights:
+2023-05-09 16:54:30,469 : [2/3] TRAINING : Constructing A...
+2023-05-09 16:54:36,674 : [2/3] TRAINING : A info | nnz: 703011634, size: 8436.3 MB
+2023-05-09 16:54:45,761 : [2/3] TRAINING : Computing incomplete LL^T decomposition...
+2023-05-09 16:56:22,173 : [2/3] TRAINING : Incomplete Cholesky decomposition failed due to insufficient positive-definiteness of matrix A with shift 2.50e+00. Continuing with shift 2.50e+00.
+2023-05-09 16:57:04,472 : [2/3] TRAINING : Incomplete Cholesky decomposition failed due to insufficient positive-definiteness of matrix A with shift 2.50e+00. Continuing with shift 2.50e+00.
+2023-05-09 16:57:46,727 : [2/3] TRAINING : Incomplete Cholesky decomposition failed due to insufficient positive-definiteness of matrix A with shift 2.50e+00. Continuing with shift 2.50e+00.
+2023-05-09 16:58:28,992 : [2/3] TRAINING : Incomplete Cholesky decomposition failed due to insufficient positive-definiteness of matrix A with shift 2.50e+00. Continuing with shift 2.51e+00.
+2023-05-09 16:59:11,246 : [2/3] TRAINING : Incomplete Cholesky decomposition failed due to insufficient positive-definiteness of matrix A with shift 2.51e+00. Continuing with shift 2.52e+00.
+2023-05-09 16:59:53,528 : [2/3] TRAINING : Incomplete Cholesky decomposition failed due to insufficient positive-definiteness of matrix A with shift 2.52e+00. Continuing with shift 2.53e+00.
+2023-05-09 17:00:35,864 : [2/3] TRAINING : Incomplete Cholesky decomposition failed due to insufficient positive-definiteness of matrix A with shift 2.53e+00. Continuing with shift 2.56e+00.
+2023-05-09 17:01:18,225 : [2/3] TRAINING : Incomplete Cholesky decomposition failed due to insufficient positive-definiteness of matrix A with shift 2.56e+00. Continuing with shift 2.63e+00.
+2023-05-09 17:02:00,604 : [2/3] TRAINING : Incomplete Cholesky decomposition failed due to insufficient positive-definiteness of matrix A with shift 2.63e+00. Continuing with shift 2.76e+00.
+2023-05-09 17:02:43,067 : [2/3] TRAINING : Incomplete Cholesky decomposition failed due to insufficient positive-definiteness of matrix A with shift 2.76e+00. Continuing with shift 3.01e+00.
+2023-05-09 17:03:25,665 : [2/3] TRAINING : L info | nnz: 4226099, size: 50.878 MB, density: 0.249696%
+2023-05-09 17:03:25,665 : [2/3] TRAINING : Scaling columns and creating D (LL^T -> L'DL'^T)
+2023-05-09 17:03:25,686 : [2/3] TRAINING : Execution of ldlt took at 551.637 seconds.
+2023-05-09 17:03:25,686 : [2/3] TRAINING : nnz of L: 4226099, size: 50.878 MB
+2023-05-09 17:03:25,686 : [2/3] TRAINING : Computing approximate inverse of L:
+2023-05-09 17:03:25,686 : [2/3] TRAINING : Calculating initial guess using 1 step of Schultz method...
+2023-05-09 17:03:25,725 : [2/3] TRAINING : Calculating approximate inverse using Uniform Minimal Residual algorithm...
+2023-05-09 17:03:26,985 : [2/3] TRAINING : Current maximum residual: 0.18485738, relative Frobenius norm squared: 0.00073596
+2023-05-09 17:03:26,985 : [2/3] TRAINING : Performing UMR scan 1...
+2023-05-09 17:03:26,989 : [2/3] TRAINING : Execution of _umr_scan took at 0.004 seconds.
+2023-05-09 17:03:28,248 : [2/3] TRAINING : Current maximum residual: 0.18485738, relative Frobenius norm squared: 0.00073596
+2023-05-09 17:03:28,248 : [2/3] TRAINING : Performing UMR scan 2...
+2023-05-09 17:03:28,251 : [2/3] TRAINING : Execution of _umr_scan took at 0.004 seconds.
+2023-05-09 17:03:29,509 : [2/3] TRAINING : Current maximum residual: 0.18485738, relative Frobenius norm squared: 0.00073596
+2023-05-09 17:03:29,509 : [2/3] TRAINING : Performing UMR scan 3...
+2023-05-09 17:04:00,921 : [2/3] TRAINING : Execution of _umr_scan took at 31.412 seconds.
+2023-05-09 17:04:02,167 : [2/3] TRAINING : Current maximum residual: 0.05516510, relative Frobenius norm squared: 0.00011228
+2023-05-09 17:04:02,167 : [2/3] TRAINING : Performing UMR scan 4...
+2023-05-09 17:04:43,664 : [2/3] TRAINING : Execution of _umr_scan took at 41.496 seconds.
+2023-05-09 17:04:44,933 : [2/3] TRAINING : Current maximum residual: 0.02386893, relative Frobenius norm squared: 0.00005057
+2023-05-09 17:04:44,933 : [2/3] TRAINING : Reached stopping criterion.
+2023-05-09 17:04:46,189 : [2/3] TRAINING : Current maximum residual: 0.02386893, relative Frobenius norm squared: 0.00005057
+2023-05-09 17:04:46,248 : [2/3] TRAINING : Execution of ainv_L took at 80.562 seconds.
+2023-05-09 17:04:46,248 : [2/3] TRAINING : nnz of L_inv: 4231249, size: 50.940 MB
+2023-05-09 17:04:46,248 : [2/3] TRAINING : Constructing W = L_inv @ P...
+2023-05-09 17:04:46,288 : [2/3] TRAINING : Extracting diagonal of W.T @ D_inv @ W...
+2023-05-09 17:04:46,324 : [2/3] TRAINING : Dividing columns of W by diagonal entries...
+2023-05-09 17:04:46,480 : [2/3] TRAINING : Execution of _construct_weights took at 632.431 seconds.
+2023-05-09 17:04:46,481 : [2/3] TRAINING : Model: SANSA, number of weights: 8462498, weights size: 97.159 MB
+2023-05-09 17:04:46,481 : [2/3] TRAINING : Execution of _get_model took at 634.659 seconds.
+2023-05-09 17:04:46,481 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-09 17:04:46,561 : [3/3] EVALUATION : Execution of _matmat took at 0.023 seconds.
+2023-05-09 17:04:47,622 : [3/3] EVALUATION : Execution of _matmat took at 1.061 seconds.
+2023-05-09 17:04:48,805 : [3/3] EVALUATION : Execution of _predict took at 2.268 seconds.
+2023-05-09 17:04:49,800 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-09 17:04:49,873 : [3/3] EVALUATION : Execution of _matmat took at 0.020 seconds.
+2023-05-09 17:04:50,896 : [3/3] EVALUATION : Execution of _matmat took at 1.022 seconds.
+2023-05-09 17:04:52,050 : [3/3] EVALUATION : Execution of _predict took at 2.196 seconds.
+2023-05-09 17:04:53,024 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-09 17:04:53,099 : [3/3] EVALUATION : Execution of _matmat took at 0.020 seconds.
+2023-05-09 17:04:54,141 : [3/3] EVALUATION : Execution of _matmat took at 1.042 seconds.
+2023-05-09 17:04:55,369 : [3/3] EVALUATION : Execution of _predict took at 2.290 seconds.
+2023-05-09 17:04:56,360 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-09 17:04:56,427 : [3/3] EVALUATION : Execution of _matmat took at 0.013 seconds.
+2023-05-09 17:04:57,466 : [3/3] EVALUATION : Execution of _matmat took at 1.039 seconds.
+2023-05-09 17:04:58,676 : [3/3] EVALUATION : Execution of _predict took at 2.262 seconds.
+2023-05-09 17:04:59,663 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-09 17:04:59,730 : [3/3] EVALUATION : Execution of _matmat took at 0.012 seconds.
+2023-05-09 17:05:00,743 : [3/3] EVALUATION : Execution of _matmat took at 1.013 seconds.
+2023-05-09 17:05:01,943 : [3/3] EVALUATION : Execution of _predict took at 2.226 seconds.
+2023-05-09 17:05:02,922 : [3/3] EVALUATION : Evaluating model at batch 10000:12000
+2023-05-09 17:05:02,991 : [3/3] EVALUATION : Execution of _matmat took at 0.014 seconds.
+2023-05-09 17:05:04,188 : [3/3] EVALUATION : Execution of _matmat took at 1.197 seconds.
+2023-05-09 17:05:05,385 : [3/3] EVALUATION : Execution of _predict took at 2.408 seconds.
+2023-05-09 17:05:06,373 : [3/3] EVALUATION : Evaluating model at batch 12000:14000
+2023-05-09 17:05:06,443 : [3/3] EVALUATION : Execution of _matmat took at 0.015 seconds.
+2023-05-09 17:05:07,636 : [3/3] EVALUATION : Execution of _matmat took at 1.193 seconds.
+2023-05-09 17:05:08,897 : [3/3] EVALUATION : Execution of _predict took at 2.470 seconds.
+2023-05-09 17:05:09,881 : [3/3] EVALUATION : Evaluating model at batch 14000:16000
+2023-05-09 17:05:09,948 : [3/3] EVALUATION : Execution of _matmat took at 0.013 seconds.
+2023-05-09 17:05:11,110 : [3/3] EVALUATION : Execution of _matmat took at 1.162 seconds.
+2023-05-09 17:05:12,281 : [3/3] EVALUATION : Execution of _predict took at 2.347 seconds.
+2023-05-09 17:05:13,265 : [3/3] EVALUATION : Evaluating model at batch 16000:18000
+2023-05-09 17:05:13,332 : [3/3] EVALUATION : Execution of _matmat took at 0.012 seconds.
+2023-05-09 17:05:14,376 : [3/3] EVALUATION : Execution of _matmat took at 1.044 seconds.
+2023-05-09 17:05:15,572 : [3/3] EVALUATION : Execution of _predict took at 2.253 seconds.
+2023-05-09 17:05:16,562 : [3/3] EVALUATION : Evaluating model at batch 18000:20000
+2023-05-09 17:05:16,627 : [3/3] EVALUATION : Execution of _matmat took at 0.012 seconds.
+2023-05-09 17:05:17,655 : [3/3] EVALUATION : Execution of _matmat took at 1.028 seconds.
+2023-05-09 17:05:18,808 : [3/3] EVALUATION : Execution of _predict took at 2.193 seconds.
+2023-05-09 17:05:19,793 : [3/3] EVALUATION : Evaluating model at batch 20000:22000
+2023-05-09 17:05:19,860 : [3/3] EVALUATION : Execution of _matmat took at 0.012 seconds.
+2023-05-09 17:05:20,892 : [3/3] EVALUATION : Execution of _matmat took at 1.033 seconds.
+2023-05-09 17:05:22,051 : [3/3] EVALUATION : Execution of _predict took at 2.203 seconds.
+2023-05-09 17:05:23,028 : [3/3] EVALUATION : Evaluating model at batch 22000:24000
+2023-05-09 17:05:23,102 : [3/3] EVALUATION : Execution of _matmat took at 0.020 seconds.
+2023-05-09 17:05:24,139 : [3/3] EVALUATION : Execution of _matmat took at 1.036 seconds.
+2023-05-09 17:05:25,376 : [3/3] EVALUATION : Execution of _predict took at 2.294 seconds.
+2023-05-09 17:05:26,360 : [3/3] EVALUATION : Evaluating model at batch 24000:26000
+2023-05-09 17:05:26,436 : [3/3] EVALUATION : Execution of _matmat took at 0.021 seconds.
+2023-05-09 17:05:27,467 : [3/3] EVALUATION : Execution of _matmat took at 1.032 seconds.
+2023-05-09 17:05:28,681 : [3/3] EVALUATION : Execution of _predict took at 2.267 seconds.
+2023-05-09 17:05:29,669 : [3/3] EVALUATION : Evaluating model at batch 26000:28000
+2023-05-09 17:05:29,735 : [3/3] EVALUATION : Execution of _matmat took at 0.012 seconds.
+2023-05-09 17:05:30,781 : [3/3] EVALUATION : Execution of _matmat took at 1.046 seconds.
+2023-05-09 17:05:31,956 : [3/3] EVALUATION : Execution of _predict took at 2.233 seconds.
+2023-05-09 17:05:32,940 : [3/3] EVALUATION : Evaluating model at batch 28000:30000
+2023-05-09 17:05:33,007 : [3/3] EVALUATION : Execution of _matmat took at 0.012 seconds.
+2023-05-09 17:05:34,023 : [3/3] EVALUATION : Execution of _matmat took at 1.016 seconds.
+2023-05-09 17:05:35,179 : [3/3] EVALUATION : Execution of _predict took at 2.184 seconds.
+2023-05-09 17:05:36,161 : [3/3] EVALUATION : Evaluating model at batch 30000:32000
+2023-05-09 17:05:36,227 : [3/3] EVALUATION : Execution of _matmat took at 0.013 seconds.
+2023-05-09 17:05:37,253 : [3/3] EVALUATION : Execution of _matmat took at 1.026 seconds.
+2023-05-09 17:05:38,445 : [3/3] EVALUATION : Execution of _predict took at 2.231 seconds.
+2023-05-09 17:05:39,427 : [3/3] EVALUATION : Evaluating model at batch 32000:34000
+2023-05-09 17:05:39,502 : [3/3] EVALUATION : Execution of _matmat took at 0.020 seconds.
+2023-05-09 17:05:40,545 : [3/3] EVALUATION : Execution of _matmat took at 1.042 seconds.
+2023-05-09 17:05:41,771 : [3/3] EVALUATION : Execution of _predict took at 2.289 seconds.
+2023-05-09 17:05:42,763 : [3/3] EVALUATION : Evaluating model at batch 34000:36000
+2023-05-09 17:05:42,829 : [3/3] EVALUATION : Execution of _matmat took at 0.013 seconds.
+2023-05-09 17:05:43,870 : [3/3] EVALUATION : Execution of _matmat took at 1.041 seconds.
+2023-05-09 17:05:45,074 : [3/3] EVALUATION : Execution of _predict took at 2.258 seconds.
+2023-05-09 17:05:46,055 : [3/3] EVALUATION : Evaluating model at batch 36000:38000
+2023-05-09 17:05:46,122 : [3/3] EVALUATION : Execution of _matmat took at 0.012 seconds.
+2023-05-09 17:05:47,149 : [3/3] EVALUATION : Execution of _matmat took at 1.027 seconds.
+2023-05-09 17:05:48,333 : [3/3] EVALUATION : Execution of _predict took at 2.223 seconds.
+2023-05-09 17:05:49,317 : [3/3] EVALUATION : Evaluating model at batch 38000:40000
+2023-05-09 17:05:49,383 : [3/3] EVALUATION : Execution of _matmat took at 0.012 seconds.
+2023-05-09 17:05:50,412 : [3/3] EVALUATION : Execution of _matmat took at 1.029 seconds.
+2023-05-09 17:05:51,574 : [3/3] EVALUATION : Execution of _predict took at 2.204 seconds.
+2023-05-09 17:05:52,551 : [3/3] EVALUATION : Evaluating model at batch 40000:42000
+2023-05-09 17:05:52,686 : [3/3] EVALUATION : Execution of _matmat took at 0.020 seconds.
+2023-05-09 17:05:53,738 : [3/3] EVALUATION : Execution of _matmat took at 1.052 seconds.
+2023-05-09 17:05:54,954 : [3/3] EVALUATION : Execution of _predict took at 2.289 seconds.
+2023-05-09 17:05:55,943 : [3/3] EVALUATION : Evaluating model at batch 42000:44000
+2023-05-09 17:05:56,009 : [3/3] EVALUATION : Execution of _matmat took at 0.012 seconds.
+2023-05-09 17:05:57,053 : [3/3] EVALUATION : Execution of _matmat took at 1.044 seconds.
+2023-05-09 17:05:58,238 : [3/3] EVALUATION : Execution of _predict took at 2.241 seconds.
+2023-05-09 17:05:59,225 : [3/3] EVALUATION : Evaluating model at batch 44000:46000
+2023-05-09 17:05:59,291 : [3/3] EVALUATION : Execution of _matmat took at 0.012 seconds.
+2023-05-09 17:06:00,331 : [3/3] EVALUATION : Execution of _matmat took at 1.040 seconds.
+2023-05-09 17:06:01,506 : [3/3] EVALUATION : Execution of _predict took at 2.227 seconds.
+2023-05-09 17:06:02,491 : [3/3] EVALUATION : Evaluating model at batch 46000:48000
+2023-05-09 17:06:02,557 : [3/3] EVALUATION : Execution of _matmat took at 0.012 seconds.
+2023-05-09 17:06:03,587 : [3/3] EVALUATION : Execution of _matmat took at 1.030 seconds.
+2023-05-09 17:06:04,753 : [3/3] EVALUATION : Execution of _predict took at 2.209 seconds.
+2023-05-09 17:06:05,737 : [3/3] EVALUATION : Evaluating model at batch 48000:50000
+2023-05-09 17:06:05,804 : [3/3] EVALUATION : Execution of _matmat took at 0.013 seconds.
+2023-05-09 17:06:06,833 : [3/3] EVALUATION : Execution of _matmat took at 1.029 seconds.
+2023-05-09 17:06:08,056 : [3/3] EVALUATION : Execution of _predict took at 2.265 seconds.
+2023-05-09 17:06:09,254 : [3/3] EVALUATION : Execution of _evaluate_model took at 82.773 seconds.
+2023-05-09 17:06:09,255 : PIPELINE END : Execution of run took at 719.539 seconds.
+2023-05-09 17:06:09,294 : PIPELINE START : Starting evaluation pipeline.
+2023-05-09 17:06:09,295 : [1/3] DATASET : Loading processed dataset datasets/data/msd/dataset.parquet.
+2023-05-09 17:06:10,486 : [1/3] DATASET : Execution of _load_dataset_from_config took at 1.192 seconds.
+2023-05-09 17:06:10,857 : [1/3] DATASET : Dataset info | Dataset name: msd, Number of users: 571355, Number of items: 41140, Number of interactions: 33633450, Interaction density: 0.1431%
+2023-05-09 17:06:11,346 : [1/3] DATASET : Loaded dataset splits from datasets/data/msd/n_val_users=50000_n_test_users=50000_seed=42_target_proportion=0.2_targets_newest=False.
+2023-05-09 17:06:11,361 : [1/3] DATASET : Execution of _create_dataset_splits took at 2.066 seconds.
+2023-05-09 17:06:11,361 : [2/3] TRAINING : Train user-item matrix info | n_users = 471355, n_items = 41140, n_ratings = 27765348, sparsity = 99.86%
+2023-05-09 17:06:11,361 : [2/3] TRAINING : Item-item matrix info | shape = (41140,41140)
+2023-05-09 17:06:11,361 : [2/3] TRAINING : Training SANSA with L2=2.5, target density=1.000000%, LDL^T method=icf, approx. inverse method=umr...
+2023-05-09 17:06:11,361 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-09 17:06:13,537 : [2/3] TRAINING : Constructing weights:
+2023-05-09 17:06:27,165 : [2/3] TRAINING : Constructing A...
+2023-05-09 17:06:33,486 : [2/3] TRAINING : A info | nnz: 703011634, size: 8436.3 MB
+2023-05-09 17:06:42,440 : [2/3] TRAINING : Computing incomplete LL^T decomposition...
+2023-05-09 17:08:17,529 : [2/3] TRAINING : L info | nnz: 16840742, size: 202.253 MB, density: 0.995022%
+2023-05-09 17:08:17,529 : [2/3] TRAINING : Scaling columns and creating D (LL^T -> L'DL'^T)
+2023-05-09 17:08:17,605 : [2/3] TRAINING : Execution of ldlt took at 124.067 seconds.
+2023-05-09 17:08:17,605 : [2/3] TRAINING : nnz of L: 16840742, size: 202.253 MB
+2023-05-09 17:08:17,605 : [2/3] TRAINING : Computing approximate inverse of L:
+2023-05-09 17:08:17,605 : [2/3] TRAINING : Calculating initial guess using 1 step of Schultz method...
+2023-05-09 17:08:17,749 : [2/3] TRAINING : Calculating approximate inverse using Uniform Minimal Residual algorithm...
+2023-05-09 17:08:25,911 : [2/3] TRAINING : Current maximum residual: 0.35246790, relative Frobenius norm squared: 0.00193258
+2023-05-09 17:08:25,912 : [2/3] TRAINING : Performing UMR scan 1...
+2023-05-09 17:08:25,913 : [2/3] TRAINING : Execution of _umr_scan took at 0.001 seconds.
+2023-05-09 17:08:34,066 : [2/3] TRAINING : Current maximum residual: 0.35246790, relative Frobenius norm squared: 0.00193258
+2023-05-09 17:08:34,066 : [2/3] TRAINING : Performing UMR scan 2...
+2023-05-09 17:08:43,237 : [2/3] TRAINING : Execution of _umr_scan took at 9.171 seconds.
+2023-05-09 17:08:51,473 : [2/3] TRAINING : Current maximum residual: 0.20190548, relative Frobenius norm squared: 0.00175634
+2023-05-09 17:08:51,473 : [2/3] TRAINING : Performing UMR scan 3...
+2023-05-09 17:10:38,863 : [2/3] TRAINING : Execution of _umr_scan took at 107.390 seconds.
+2023-05-09 17:10:47,238 : [2/3] TRAINING : Current maximum residual: 0.03578133, relative Frobenius norm squared: 0.00021533
+2023-05-09 17:10:47,238 : [2/3] TRAINING : Performing UMR scan 4...
+2023-05-09 17:13:28,310 : [2/3] TRAINING : Execution of _umr_scan took at 161.072 seconds.
+2023-05-09 17:13:36,527 : [2/3] TRAINING : Current maximum residual: 0.02665202, relative Frobenius norm squared: 0.00013920
+2023-05-09 17:13:36,528 : [2/3] TRAINING : Performing UMR finetune step 1...
+2023-05-09 17:13:36,871 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.344 seconds.
+2023-05-09 17:13:44,982 : [2/3] TRAINING : Current maximum residual: 0.02665202, relative Frobenius norm squared: 0.00013920
+2023-05-09 17:13:44,982 : [2/3] TRAINING : Performing UMR finetune step 2...
+2023-05-09 17:13:45,227 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.245 seconds.
+2023-05-09 17:13:53,305 : [2/3] TRAINING : Current maximum residual: 0.02665202, relative Frobenius norm squared: 0.00013920
+2023-05-09 17:13:53,305 : [2/3] TRAINING : Performing UMR finetune step 3...
+2023-05-09 17:13:53,583 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.278 seconds.
+2023-05-09 17:14:01,715 : [2/3] TRAINING : Current maximum residual: 0.02665202, relative Frobenius norm squared: 0.00013920
+2023-05-09 17:14:01,715 : [2/3] TRAINING : Performing UMR finetune step 4...
+2023-05-09 17:14:01,997 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.282 seconds.
+2023-05-09 17:14:10,115 : [2/3] TRAINING : Current maximum residual: 0.02665202, relative Frobenius norm squared: 0.00013920
+2023-05-09 17:14:10,115 : [2/3] TRAINING : Performing UMR finetune step 5...
+2023-05-09 17:14:10,391 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.276 seconds.
+2023-05-09 17:14:18,476 : [2/3] TRAINING : Current maximum residual: 0.02665202, relative Frobenius norm squared: 0.00013920
+2023-05-09 17:14:18,476 : [2/3] TRAINING : Performing UMR finetune step 6...
+2023-05-09 17:14:18,758 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.282 seconds.
+2023-05-09 17:14:26,838 : [2/3] TRAINING : Current maximum residual: 0.02665202, relative Frobenius norm squared: 0.00013920
+2023-05-09 17:14:26,838 : [2/3] TRAINING : Performing UMR finetune step 7...
+2023-05-09 17:14:27,110 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.272 seconds.
+2023-05-09 17:14:35,181 : [2/3] TRAINING : Current maximum residual: 0.02665202, relative Frobenius norm squared: 0.00013920
+2023-05-09 17:14:35,182 : [2/3] TRAINING : Performing UMR finetune step 8...
+2023-05-09 17:14:35,462 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.281 seconds.
+2023-05-09 17:14:43,559 : [2/3] TRAINING : Current maximum residual: 0.02665202, relative Frobenius norm squared: 0.00013920
+2023-05-09 17:14:43,560 : [2/3] TRAINING : Performing UMR finetune step 9...
+2023-05-09 17:14:43,833 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.273 seconds.
+2023-05-09 17:14:51,924 : [2/3] TRAINING : Current maximum residual: 0.02665202, relative Frobenius norm squared: 0.00013920
+2023-05-09 17:14:51,924 : [2/3] TRAINING : Performing UMR finetune step 10...
+2023-05-09 17:14:52,206 : [2/3] TRAINING : Execution of _umr_finetune_step took at 0.282 seconds.
+2023-05-09 17:15:00,283 : [2/3] TRAINING : Current maximum residual: 0.02665202, relative Frobenius norm squared: 0.00013920
+2023-05-09 17:15:00,588 : [2/3] TRAINING : Execution of ainv_L took at 402.983 seconds.
+2023-05-09 17:15:00,589 : [2/3] TRAINING : nnz of L_inv: 16924996, size: 203.265 MB
+2023-05-09 17:15:00,589 : [2/3] TRAINING : Constructing W = L_inv @ P...
+2023-05-09 17:15:00,789 : [2/3] TRAINING : Extracting diagonal of W.T @ D_inv @ W...
+2023-05-09 17:15:00,940 : [2/3] TRAINING : Dividing columns of W by diagonal entries...
+2023-05-09 17:15:01,395 : [2/3] TRAINING : Execution of _construct_weights took at 527.858 seconds.
+2023-05-09 17:15:01,396 : [2/3] TRAINING : Model: SANSA, number of weights: 33849992, weights size: 387.696 MB
+2023-05-09 17:15:01,397 : [2/3] TRAINING : Execution of _get_model took at 530.036 seconds.
+2023-05-09 17:15:01,397 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-09 17:15:01,528 : [3/3] EVALUATION : Execution of _matmat took at 0.075 seconds.
+2023-05-09 17:15:08,294 : [3/3] EVALUATION : Execution of _matmat took at 6.766 seconds.
+2023-05-09 17:15:09,643 : [3/3] EVALUATION : Execution of _predict took at 8.191 seconds.
+2023-05-09 17:15:10,767 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-09 17:15:10,894 : [3/3] EVALUATION : Execution of _matmat took at 0.073 seconds.
+2023-05-09 17:15:17,665 : [3/3] EVALUATION : Execution of _matmat took at 6.770 seconds.
+2023-05-09 17:15:18,985 : [3/3] EVALUATION : Execution of _predict took at 8.164 seconds.
+2023-05-09 17:15:20,088 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-09 17:15:20,220 : [3/3] EVALUATION : Execution of _matmat took at 0.077 seconds.
+2023-05-09 17:15:26,913 : [3/3] EVALUATION : Execution of _matmat took at 6.693 seconds.
+2023-05-09 17:15:28,309 : [3/3] EVALUATION : Execution of _predict took at 8.166 seconds.
+2023-05-09 17:15:29,422 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-09 17:15:29,553 : [3/3] EVALUATION : Execution of _matmat took at 0.076 seconds.
+2023-05-09 17:15:36,206 : [3/3] EVALUATION : Execution of _matmat took at 6.653 seconds.
+2023-05-09 17:15:37,575 : [3/3] EVALUATION : Execution of _predict took at 8.098 seconds.
+2023-05-09 17:15:38,681 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-09 17:15:38,811 : [3/3] EVALUATION : Execution of _matmat took at 0.074 seconds.
+2023-05-09 17:15:45,451 : [3/3] EVALUATION : Execution of _matmat took at 6.640 seconds.
+2023-05-09 17:15:46,824 : [3/3] EVALUATION : Execution of _predict took at 8.088 seconds.
+2023-05-09 17:15:47,931 : [3/3] EVALUATION : Evaluating model at batch 10000:12000
+2023-05-09 17:15:48,061 : [3/3] EVALUATION : Execution of _matmat took at 0.075 seconds.
+2023-05-09 17:15:54,725 : [3/3] EVALUATION : Execution of _matmat took at 6.663 seconds.
+2023-05-09 17:15:56,088 : [3/3] EVALUATION : Execution of _predict took at 8.102 seconds.
+2023-05-09 17:15:57,198 : [3/3] EVALUATION : Evaluating model at batch 12000:14000
+2023-05-09 17:15:57,326 : [3/3] EVALUATION : Execution of _matmat took at 0.074 seconds.
+2023-05-09 17:16:04,062 : [3/3] EVALUATION : Execution of _matmat took at 6.736 seconds.
+2023-05-09 17:16:05,415 : [3/3] EVALUATION : Execution of _predict took at 8.163 seconds.
+2023-05-09 17:16:06,528 : [3/3] EVALUATION : Evaluating model at batch 14000:16000
+2023-05-09 17:16:06,656 : [3/3] EVALUATION : Execution of _matmat took at 0.074 seconds.
+2023-05-09 17:16:13,382 : [3/3] EVALUATION : Execution of _matmat took at 6.725 seconds.
+2023-05-09 17:16:14,723 : [3/3] EVALUATION : Execution of _predict took at 8.141 seconds.
+2023-05-09 17:16:15,827 : [3/3] EVALUATION : Evaluating model at batch 16000:18000
+2023-05-09 17:16:15,960 : [3/3] EVALUATION : Execution of _matmat took at 0.077 seconds.
+2023-05-09 17:16:22,907 : [3/3] EVALUATION : Execution of _matmat took at 6.948 seconds.
+2023-05-09 17:16:24,278 : [3/3] EVALUATION : Execution of _predict took at 8.395 seconds.
+2023-05-09 17:16:25,397 : [3/3] EVALUATION : Evaluating model at batch 18000:20000
+2023-05-09 17:16:25,528 : [3/3] EVALUATION : Execution of _matmat took at 0.077 seconds.
+2023-05-09 17:16:32,160 : [3/3] EVALUATION : Execution of _matmat took at 6.632 seconds.
+2023-05-09 17:16:33,488 : [3/3] EVALUATION : Execution of _predict took at 8.038 seconds.
+2023-05-09 17:16:34,601 : [3/3] EVALUATION : Evaluating model at batch 20000:22000
+2023-05-09 17:16:34,729 : [3/3] EVALUATION : Execution of _matmat took at 0.073 seconds.
+2023-05-09 17:16:41,523 : [3/3] EVALUATION : Execution of _matmat took at 6.794 seconds.
+2023-05-09 17:16:42,851 : [3/3] EVALUATION : Execution of _predict took at 8.196 seconds.
+2023-05-09 17:16:43,950 : [3/3] EVALUATION : Evaluating model at batch 22000:24000
+2023-05-09 17:16:44,080 : [3/3] EVALUATION : Execution of _matmat took at 0.077 seconds.
+2023-05-09 17:16:50,767 : [3/3] EVALUATION : Execution of _matmat took at 6.687 seconds.
+2023-05-09 17:16:52,178 : [3/3] EVALUATION : Execution of _predict took at 8.175 seconds.
+2023-05-09 17:16:53,292 : [3/3] EVALUATION : Evaluating model at batch 24000:26000
+2023-05-09 17:16:53,423 : [3/3] EVALUATION : Execution of _matmat took at 0.077 seconds.
+2023-05-09 17:17:00,146 : [3/3] EVALUATION : Execution of _matmat took at 6.723 seconds.
+2023-05-09 17:17:01,528 : [3/3] EVALUATION : Execution of _predict took at 8.181 seconds.
+2023-05-09 17:17:02,640 : [3/3] EVALUATION : Evaluating model at batch 26000:28000
+2023-05-09 17:17:02,767 : [3/3] EVALUATION : Execution of _matmat took at 0.074 seconds.
+2023-05-09 17:17:09,548 : [3/3] EVALUATION : Execution of _matmat took at 6.781 seconds.
+2023-05-09 17:17:10,891 : [3/3] EVALUATION : Execution of _predict took at 8.198 seconds.
+2023-05-09 17:17:12,002 : [3/3] EVALUATION : Evaluating model at batch 28000:30000
+2023-05-09 17:17:12,137 : [3/3] EVALUATION : Execution of _matmat took at 0.081 seconds.
+2023-05-09 17:17:18,835 : [3/3] EVALUATION : Execution of _matmat took at 6.697 seconds.
+2023-05-09 17:17:20,164 : [3/3] EVALUATION : Execution of _predict took at 8.107 seconds.
+2023-05-09 17:17:21,276 : [3/3] EVALUATION : Evaluating model at batch 30000:32000
+2023-05-09 17:17:21,402 : [3/3] EVALUATION : Execution of _matmat took at 0.074 seconds.
+2023-05-09 17:17:28,034 : [3/3] EVALUATION : Execution of _matmat took at 6.631 seconds.
+2023-05-09 17:17:29,400 : [3/3] EVALUATION : Execution of _predict took at 8.071 seconds.
+2023-05-09 17:17:30,514 : [3/3] EVALUATION : Evaluating model at batch 32000:34000
+2023-05-09 17:17:30,645 : [3/3] EVALUATION : Execution of _matmat took at 0.076 seconds.
+2023-05-09 17:17:37,397 : [3/3] EVALUATION : Execution of _matmat took at 6.752 seconds.
+2023-05-09 17:17:38,796 : [3/3] EVALUATION : Execution of _predict took at 8.227 seconds.
+2023-05-09 17:17:39,911 : [3/3] EVALUATION : Evaluating model at batch 34000:36000
+2023-05-09 17:17:40,039 : [3/3] EVALUATION : Execution of _matmat took at 0.075 seconds.
+2023-05-09 17:17:46,670 : [3/3] EVALUATION : Execution of _matmat took at 6.630 seconds.
+2023-05-09 17:17:48,043 : [3/3] EVALUATION : Execution of _predict took at 8.078 seconds.
+2023-05-09 17:17:49,147 : [3/3] EVALUATION : Evaluating model at batch 36000:38000
+2023-05-09 17:17:49,275 : [3/3] EVALUATION : Execution of _matmat took at 0.074 seconds.
+2023-05-09 17:17:55,903 : [3/3] EVALUATION : Execution of _matmat took at 6.628 seconds.
+2023-05-09 17:17:57,257 : [3/3] EVALUATION : Execution of _predict took at 8.056 seconds.
+2023-05-09 17:17:58,374 : [3/3] EVALUATION : Evaluating model at batch 38000:40000
+2023-05-09 17:17:58,503 : [3/3] EVALUATION : Execution of _matmat took at 0.075 seconds.
+2023-05-09 17:18:05,166 : [3/3] EVALUATION : Execution of _matmat took at 6.663 seconds.
+2023-05-09 17:18:06,492 : [3/3] EVALUATION : Execution of _predict took at 8.064 seconds.
+2023-05-09 17:18:07,595 : [3/3] EVALUATION : Evaluating model at batch 40000:42000
+2023-05-09 17:18:07,792 : [3/3] EVALUATION : Execution of _matmat took at 0.078 seconds.
+2023-05-09 17:18:14,667 : [3/3] EVALUATION : Execution of _matmat took at 6.875 seconds.
+2023-05-09 17:18:16,050 : [3/3] EVALUATION : Execution of _predict took at 8.335 seconds.
+2023-05-09 17:18:17,175 : [3/3] EVALUATION : Evaluating model at batch 42000:44000
+2023-05-09 17:18:17,302 : [3/3] EVALUATION : Execution of _matmat took at 0.074 seconds.
+2023-05-09 17:18:24,040 : [3/3] EVALUATION : Execution of _matmat took at 6.738 seconds.
+2023-05-09 17:18:25,389 : [3/3] EVALUATION : Execution of _predict took at 8.162 seconds.
+2023-05-09 17:18:26,501 : [3/3] EVALUATION : Evaluating model at batch 44000:46000
+2023-05-09 17:18:26,631 : [3/3] EVALUATION : Execution of _matmat took at 0.074 seconds.
+2023-05-09 17:18:33,382 : [3/3] EVALUATION : Execution of _matmat took at 6.751 seconds.
+2023-05-09 17:18:34,720 : [3/3] EVALUATION : Execution of _predict took at 8.164 seconds.
+2023-05-09 17:18:35,828 : [3/3] EVALUATION : Evaluating model at batch 46000:48000
+2023-05-09 17:18:35,955 : [3/3] EVALUATION : Execution of _matmat took at 0.073 seconds.
+2023-05-09 17:18:42,632 : [3/3] EVALUATION : Execution of _matmat took at 6.676 seconds.
+2023-05-09 17:18:43,971 : [3/3] EVALUATION : Execution of _predict took at 8.089 seconds.
+2023-05-09 17:18:45,084 : [3/3] EVALUATION : Evaluating model at batch 48000:50000
+2023-05-09 17:18:45,216 : [3/3] EVALUATION : Execution of _matmat took at 0.078 seconds.
+2023-05-09 17:18:51,922 : [3/3] EVALUATION : Execution of _matmat took at 6.706 seconds.
+2023-05-09 17:18:53,321 : [3/3] EVALUATION : Execution of _predict took at 8.183 seconds.
+2023-05-09 17:18:54,660 : [3/3] EVALUATION : Execution of _evaluate_model took at 233.263 seconds.
+2023-05-09 17:18:54,661 : PIPELINE END : Execution of run took at 765.366 seconds.
+
+
+Recall @ 20:
+SANSA
+0.0005: 0.2882 +- 0.0011
+0.0025: 0.2764 +- 0.0011
+0.0100: 0.2976 +- 0.0011
+
+
+Recall @ 50:
+SANSA
+0.0005: 0.3848 +- 0.0012
+0.0025: 0.3700 +- 0.0012
+0.0100: 0.3990 +- 0.0012
+
+
+nDCG @ 100:
+SANSA
+0.0005: 0.3457 +- 0.0011
+0.0025: 0.3365 +- 0.0011
+0.0100: 0.3593 +- 0.0011
+

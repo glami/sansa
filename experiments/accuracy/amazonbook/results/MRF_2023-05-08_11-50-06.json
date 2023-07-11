@@ -1,0 +1,100 @@
+{
+    "dataset": {
+        "name": "amazonbook",
+        "rewrite": false
+    },
+    "split": {
+        "seed": 42,
+        "val_target_proportion": 0.0
+    },
+    "model": {
+        "general": {
+            "model": "MRF",
+            "checkpoints_folder": "models/checkpoints/",
+            "retrain": true,
+            "save": false
+        },
+        "model_specific": {
+            "l2": 2.0,
+            "alpha": 0.75,
+            "threshold": 0.48,
+            "maxInColumn": 1000,
+            "rr": 0.5,
+            "sparse_evaluation": false
+        }
+    },
+    "evaluation": {
+        "split": "test",
+        "metrics": [
+            "recall BARS",
+            "ndcg"
+        ],
+        "ks": [
+            20
+        ],
+        "experiment_folder": "experiments/accuracy"
+    },
+    "performance": {
+        "time": {
+            "sparsity_pattern_time": 50.330874685,
+            "sparse_estimation_time": 12.441529947999982,
+            "sparse_solution_time": 62.776029308999966,
+            "construct_weights_time": 166.82531518599998,
+            "matmat_times": [
+                0.0009795299999950657
+            ],
+            "predict_time": 0.009477576999984194,
+            "pipeline": {
+                "dataset_load_time": 0.32705737200001295,
+                "dataset_split_time": 0.0,
+                "data_preparation_time": 1.6075152960000025,
+                "model_preparation_time": 166.941438175,
+                "evaluation_time": 41.15570091200004
+            }
+        },
+        "memory": {
+            "density": 0.0001037782951411934
+        }
+    },
+    "results": {
+        "20": {
+            "coverage": 0.0,
+            "recall BARS": {
+                "mean": 0.06861872467839701,
+                "std": 0.12514456444232058,
+                "se": 0.0005454540565819259,
+                "min": 0.0,
+                "max": 1.0,
+                "percentiles": {
+                    "1": 0.0,
+                    "5": 0.0,
+                    "10": 0.0,
+                    "25": 0.0,
+                    "50": 0.0,
+                    "75": 0.1111111111111111,
+                    "90": 0.2,
+                    "95": 0.3333333333333333,
+                    "99": 0.6
+                }
+            },
+            "ndcg": {
+                "mean": 0.05537596496390397,
+                "std": 0.10424132181948799,
+                "se": 0.00045434535733358296,
+                "min": 0.0,
+                "max": 1.0,
+                "percentiles": {
+                    "1": 0.0,
+                    "5": 0.0,
+                    "10": 0.0,
+                    "25": 0.0,
+                    "50": 0.0,
+                    "75": 0.07973975479432688,
+                    "90": 0.1797127241794918,
+                    "95": 0.27487633291429087,
+                    "99": 0.4879750624901271
+                }
+            }
+        }
+    }
+}

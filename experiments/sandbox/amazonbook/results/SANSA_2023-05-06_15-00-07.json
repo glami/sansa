@@ -1,0 +1,113 @@
+{
+    "dataset": {
+        "name": "amazonbook",
+        "rewrite": false
+    },
+    "split": {
+        "seed": 42,
+        "val_target_proportion": 0.0
+    },
+    "model": {
+        "general": {
+            "model": "SANSA",
+            "checkpoints_folder": "models/checkpoints/",
+            "retrain": true,
+            "save": false
+        },
+        "model_specific": {
+            "l2": 20.0,
+            "target_density": 5e-05,
+            "ainv_params": {
+                "umr_scans": 3,
+                "umr_finetune_steps": 10,
+                "umr_loss_threshold": 0.0001
+            },
+            "ldlt_method": "icf"
+        }
+    },
+    "evaluation": {
+        "split": "test",
+        "metrics": [
+            "recall BARS",
+            "ndcg"
+        ],
+        "ks": [
+            20
+        ],
+        "experiment_folder": "experiments/sandbox"
+    },
+    "performance": {
+        "time": {
+            "ldlt_time": 47.816546218999974,
+            "umr_scans_times": [],
+            "umr_finetune_step_times": [],
+            "ainv_time": 0.06229507399984868,
+            "construct_weights_time": 47.94942570499961,
+            "matmat_times": [
+                0.001855352999882598,
+                0.008049448999827291
+            ],
+            "predict_time": 0.01512098800003514,
+            "pipeline": {
+                "dataset_load_time": 0.12468825899986768,
+                "dataset_split_time": 0.0,
+                "data_preparation_time": 0.2695381759999691,
+                "model_preparation_time": 48.05500941199989,
+                "evaluation_time": 12.976633359000061
+            }
+        },
+        "memory": {
+            "L_memory": {
+                "nnz": 419506,
+                "mbytes": 5.400472,
+                "density": 4.99984696694434e-05
+            },
+            "L_inv_memory": {
+                "nnz": 419506,
+                "mbytes": 5.400472,
+                "density": 4.99984696694434e-05
+            }
+        }
+    },
+    "results": {
+        "20": {
+            "coverage": 0.0,
+            "recall BARS": {
+                "mean": 0.07680163600460184,
+                "std": 0.13325786235632864,
+                "se": 0.0005808166093158328,
+                "min": 0.0,
+                "max": 1.0,
+                "percentiles": {
+                    "1": 0.0,
+                    "5": 0.0,
+                    "10": 0.0,
+                    "25": 0.0,
+                    "50": 0.0,
+                    "75": 0.125,
+                    "90": 0.25,
+                    "95": 0.3333333333333333,
+                    "99": 0.6
+                }
+            },
+            "ndcg": {
+                "mean": 0.06372584086509926,
+                "std": 0.11405143860560445,
+                "se": 0.0004971036506751682,
+                "min": 0.0,
+                "max": 1.0,
+                "percentiles": {
+                    "1": 0.0,
+                    "5": 0.0,
+                    "10": 0.0,
+                    "25": 0.0,
+                    "50": 0.0,
+                    "75": 0.0891051490973257,
+                    "90": 0.20736122891466585,
+                    "95": 0.3033357667267622,
+                    "99": 0.5311292605814927
+                }
+            }
+        }
+    }
+}

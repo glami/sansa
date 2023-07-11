@@ -1,0 +1,226 @@
+(sansa) ➜  recsys-paper (dev) python experiments/accuracy/amazonbook/run_experiment_mrf.py
+2023-05-08 11:46:36,946 : PIPELINE START : Starting evaluation pipeline.
+2023-05-08 11:46:36,947 : [1/3] DATASET : Loading processed dataset datasets/data/amazonbook/dataset.parquet.
+2023-05-08 11:46:37,273 : [1/3] DATASET : Execution of _load_dataset_from_config took at 0.327 seconds.
+2023-05-08 11:46:37,317 : [1/3] DATASET : Dataset info | Dataset name: amazonbook, Number of users: 52643, Number of items: 91599, Number of interactions: 2984108, Interaction density: 0.0619%
+2023-05-08 11:46:38,552 : [1/3] DATASET : Loaded dataset splits from datasets/data/amazonbook/seed=42_val_target_proportion=0.0.
+2023-05-08 11:46:38,554 : [1/3] DATASET : Execution of _create_dataset_splits took at 1.608 seconds.
+2023-05-08 11:46:38,554 : [2/3] TRAINING : Train user-item matrix info | n_users = 52643, n_items = 91599, n_ratings = 2380730, sparsity = 99.95%
+2023-05-08 11:46:38,554 : [2/3] TRAINING : Item-item matrix info | shape = (91599,91599)
+2023-05-08 11:46:38,554 : [2/3] TRAINING : Training MRF with L2=2.0, alpha=0.75, threshold=0.48, maxInColumn=1000, rr=0.5
+2023-05-08 11:46:38,554 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-08 11:46:38,669 : [2/3] TRAINING : Constructing weights:
+2023-05-08 11:48:22,571 : [2/3] TRAINING : Training the sparse model:
+2023-05-08 11:48:22,573 : [2/3] TRAINING : sparsifying the data-matrix (section 3.1 in the paper) ...
+2023-05-08 11:49:12,902 : [2/3] TRAINING : number of items with more than 1000 entries in column: 0
+2023-05-08 11:49:12,904 : [2/3] TRAINING : resulting density of AA: 0.0001037782951411934
+2023-05-08 11:49:12,904 : [2/3] TRAINING : Execution of calculate_sparsity_pattern took at 50.331 seconds.
+2023-05-08 11:49:12,913 : [2/3] TRAINING : iterating through steps 1,2, and 4 in section 3.2 of the paper ...
+2023-05-08 11:49:20,675 : [2/3] TRAINING : now step 3 in section 3.2 of the paper: iterating ...
+2023-05-08 11:49:23,489 : [2/3] TRAINING : final step: obtaining the sparse matrix BB by averaging the solutions regarding the various sets D ...
+/home/ubuntu/anaconda3/envs/sansa/lib/python3.10/site-packages/scipy/sparse/_index.py:125: SparseEfficiencyWarning: Changing the sparsity structure of a csc_matrix is expensive. lil_matrix is more efficient.
+  self._set_arrayXarray(i, j, x)
+2023-05-08 11:49:25,122 : [2/3] TRAINING : forcing the sparsity pattern of AA onto BB ...
+2023-05-08 11:49:25,278 : [2/3] TRAINING : resulting sparsity of learned BB: 0.0001037782951411934
+2023-05-08 11:49:25,347 : [2/3] TRAINING : Execution of sparse_parameter_estimation took at 12.442 seconds.
+2023-05-08 11:49:25,347 : [2/3] TRAINING : Execution of sparse_solution took at 62.776 seconds.
+2023-05-08 11:49:25,440 : [2/3] TRAINING : Re-scaling BB back to the original item-popularities ...
+2023-05-08 11:49:25,495 : [2/3] TRAINING : Execution of _construct_weights took at 166.825 seconds.
+2023-05-08 11:49:25,495 : [2/3] TRAINING : Model: MRF, number of weights: 678827, weights size: 8.118 MB
+2023-05-08 11:49:25,495 : [2/3] TRAINING : Execution of _get_model took at 166.941 seconds.
+2023-05-08 11:49:25,495 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-08 11:49:25,606 : [3/3] EVALUATION : Execution of _matmat took at 0.003 seconds.
+2023-05-08 11:49:25,748 : [3/3] EVALUATION : Execution of _predict took at 0.145 seconds.
+2023-05-08 11:49:27,072 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-08 11:49:27,162 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:27,206 : [3/3] EVALUATION : Execution of _predict took at 0.046 seconds.
+2023-05-08 11:49:28,587 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-08 11:49:28,682 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:28,736 : [3/3] EVALUATION : Execution of _predict took at 0.057 seconds.
+2023-05-08 11:49:30,123 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-08 11:49:30,213 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:30,261 : [3/3] EVALUATION : Execution of _predict took at 0.050 seconds.
+2023-05-08 11:49:31,659 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-08 11:49:31,753 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:31,800 : [3/3] EVALUATION : Execution of _predict took at 0.050 seconds.
+2023-05-08 11:49:33,201 : [3/3] EVALUATION : Evaluating model at batch 10000:12000
+2023-05-08 11:49:33,291 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:33,333 : [3/3] EVALUATION : Execution of _predict took at 0.045 seconds.
+2023-05-08 11:49:34,743 : [3/3] EVALUATION : Evaluating model at batch 12000:14000
+2023-05-08 11:49:34,835 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:34,878 : [3/3] EVALUATION : Execution of _predict took at 0.046 seconds.
+2023-05-08 11:49:36,293 : [3/3] EVALUATION : Evaluating model at batch 14000:16000
+2023-05-08 11:49:36,382 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:36,428 : [3/3] EVALUATION : Execution of _predict took at 0.048 seconds.
+2023-05-08 11:49:37,837 : [3/3] EVALUATION : Evaluating model at batch 16000:18000
+2023-05-08 11:49:37,931 : [3/3] EVALUATION : Execution of _matmat took at 0.003 seconds.
+2023-05-08 11:49:37,979 : [3/3] EVALUATION : Execution of _predict took at 0.051 seconds.
+2023-05-08 11:49:39,411 : [3/3] EVALUATION : Evaluating model at batch 18000:20000
+2023-05-08 11:49:39,500 : [3/3] EVALUATION : Execution of _matmat took at 0.003 seconds.
+2023-05-08 11:49:39,547 : [3/3] EVALUATION : Execution of _predict took at 0.050 seconds.
+2023-05-08 11:49:40,989 : [3/3] EVALUATION : Evaluating model at batch 20000:22000
+2023-05-08 11:49:41,080 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:41,122 : [3/3] EVALUATION : Execution of _predict took at 0.044 seconds.
+2023-05-08 11:49:42,551 : [3/3] EVALUATION : Evaluating model at batch 22000:24000
+2023-05-08 11:49:42,639 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:42,678 : [3/3] EVALUATION : Execution of _predict took at 0.041 seconds.
+2023-05-08 11:49:44,118 : [3/3] EVALUATION : Evaluating model at batch 24000:26000
+2023-05-08 11:49:44,208 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:44,249 : [3/3] EVALUATION : Execution of _predict took at 0.043 seconds.
+2023-05-08 11:49:45,704 : [3/3] EVALUATION : Evaluating model at batch 26000:28000
+2023-05-08 11:49:45,792 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:45,833 : [3/3] EVALUATION : Execution of _predict took at 0.043 seconds.
+2023-05-08 11:49:47,266 : [3/3] EVALUATION : Evaluating model at batch 28000:30000
+2023-05-08 11:49:47,356 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:47,398 : [3/3] EVALUATION : Execution of _predict took at 0.044 seconds.
+2023-05-08 11:49:48,840 : [3/3] EVALUATION : Evaluating model at batch 30000:32000
+2023-05-08 11:49:48,927 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:48,962 : [3/3] EVALUATION : Execution of _predict took at 0.037 seconds.
+2023-05-08 11:49:50,396 : [3/3] EVALUATION : Evaluating model at batch 32000:34000
+2023-05-08 11:49:50,520 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:50,556 : [3/3] EVALUATION : Execution of _predict took at 0.038 seconds.
+2023-05-08 11:49:51,999 : [3/3] EVALUATION : Evaluating model at batch 34000:36000
+2023-05-08 11:49:52,087 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:52,122 : [3/3] EVALUATION : Execution of _predict took at 0.037 seconds.
+2023-05-08 11:49:53,550 : [3/3] EVALUATION : Evaluating model at batch 36000:38000
+2023-05-08 11:49:53,637 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:53,671 : [3/3] EVALUATION : Execution of _predict took at 0.036 seconds.
+2023-05-08 11:49:55,103 : [3/3] EVALUATION : Evaluating model at batch 38000:40000
+2023-05-08 11:49:55,190 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:55,224 : [3/3] EVALUATION : Execution of _predict took at 0.036 seconds.
+2023-05-08 11:49:56,649 : [3/3] EVALUATION : Evaluating model at batch 40000:42000
+2023-05-08 11:49:56,736 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:56,768 : [3/3] EVALUATION : Execution of _predict took at 0.034 seconds.
+2023-05-08 11:49:58,195 : [3/3] EVALUATION : Evaluating model at batch 42000:44000
+2023-05-08 11:49:58,281 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:58,313 : [3/3] EVALUATION : Execution of _predict took at 0.034 seconds.
+2023-05-08 11:49:59,734 : [3/3] EVALUATION : Evaluating model at batch 44000:46000
+2023-05-08 11:49:59,822 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:49:59,854 : [3/3] EVALUATION : Execution of _predict took at 0.034 seconds.
+2023-05-08 11:50:01,293 : [3/3] EVALUATION : Evaluating model at batch 46000:48000
+2023-05-08 11:50:01,382 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:50:01,416 : [3/3] EVALUATION : Execution of _predict took at 0.036 seconds.
+2023-05-08 11:50:02,856 : [3/3] EVALUATION : Evaluating model at batch 48000:50000
+2023-05-08 11:50:02,943 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:50:02,973 : [3/3] EVALUATION : Execution of _predict took at 0.032 seconds.
+2023-05-08 11:50:04,409 : [3/3] EVALUATION : Evaluating model at batch 50000:52000
+2023-05-08 11:50:04,495 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:50:04,524 : [3/3] EVALUATION : Execution of _predict took at 0.031 seconds.
+2023-05-08 11:50:05,950 : [3/3] EVALUATION : Evaluating model at batch 52000:52639
+2023-05-08 11:50:06,019 : [3/3] EVALUATION : Execution of _matmat took at 0.001 seconds.
+2023-05-08 11:50:06,028 : [3/3] EVALUATION : Execution of _predict took at 0.009 seconds.
+2023-05-08 11:50:06,651 : [3/3] EVALUATION : Execution of _evaluate_model took at 41.156 seconds.
+2023-05-08 11:50:06,652 : PIPELINE END : Execution of run took at 209.707 seconds.
+2023-05-08 11:50:06,654 : PIPELINE START : Starting evaluation pipeline.
+2023-05-08 11:50:06,654 : [1/3] DATASET : Loading processed dataset datasets/data/amazonbook/dataset.parquet.
+2023-05-08 11:50:06,716 : [1/3] DATASET : Execution of _load_dataset_from_config took at 0.062 seconds.
+2023-05-08 11:50:06,746 : [1/3] DATASET : Dataset info | Dataset name: amazonbook, Number of users: 52643, Number of items: 91599, Number of interactions: 2984108, Interaction density: 0.0619%
+2023-05-08 11:50:06,825 : [1/3] DATASET : Loaded dataset splits from datasets/data/amazonbook/seed=42_val_target_proportion=0.0.
+2023-05-08 11:50:06,825 : [1/3] DATASET : Execution of _create_dataset_splits took at 0.172 seconds.
+2023-05-08 11:50:06,825 : [2/3] TRAINING : Train user-item matrix info | n_users = 52643, n_items = 91599, n_ratings = 2380730, sparsity = 99.95%
+2023-05-08 11:50:06,825 : [2/3] TRAINING : Item-item matrix info | shape = (91599,91599)
+2023-05-08 11:50:06,825 : [2/3] TRAINING : Training MRF with L2=2.0, alpha=0.75, threshold=0.48, maxInColumn=1000, rr=0
+2023-05-08 11:50:06,825 : [2/3] TRAINING : Loading item-user matrix...
+2023-05-08 11:50:06,933 : [2/3] TRAINING : Constructing weights:
+2023-05-08 11:51:50,790 : [2/3] TRAINING : Training the sparse model:
+2023-05-08 11:51:50,791 : [2/3] TRAINING : sparsifying the data-matrix (section 3.1 in the paper) ...
+2023-05-08 11:52:41,021 : [2/3] TRAINING : number of items with more than 1000 entries in column: 0
+2023-05-08 11:52:41,023 : [2/3] TRAINING : resulting density of AA: 0.0001037782951411934
+2023-05-08 11:52:41,023 : [2/3] TRAINING : Execution of calculate_sparsity_pattern took at 50.231 seconds.
+2023-05-08 11:52:41,031 : [2/3] TRAINING : iterating through steps 1,2, and 4 in section 3.2 of the paper ...
+2023-05-08 11:52:53,159 : [2/3] TRAINING : now step 3 in section 3.2 of the paper: iterating ...
+2023-05-08 11:52:58,221 : [2/3] TRAINING : final step: obtaining the sparse matrix BB by averaging the solutions regarding the various sets D ...
+/home/ubuntu/anaconda3/envs/sansa/lib/python3.10/site-packages/scipy/sparse/_index.py:125: SparseEfficiencyWarning: Changing the sparsity structure of a csc_matrix is expensive. lil_matrix is more efficient.
+  self._set_arrayXarray(i, j, x)
+2023-05-08 11:52:58,781 : [2/3] TRAINING : forcing the sparsity pattern of AA onto BB ...
+2023-05-08 11:52:58,928 : [2/3] TRAINING : resulting sparsity of learned BB: 0.0001037782951411934
+2023-05-08 11:52:58,966 : [2/3] TRAINING : Execution of sparse_parameter_estimation took at 17.942 seconds.
+2023-05-08 11:52:58,966 : [2/3] TRAINING : Execution of sparse_solution took at 68.177 seconds.
+2023-05-08 11:52:59,057 : [2/3] TRAINING : Re-scaling BB back to the original item-popularities ...
+2023-05-08 11:52:59,107 : [2/3] TRAINING : Execution of _construct_weights took at 172.174 seconds.
+2023-05-08 11:52:59,107 : [2/3] TRAINING : Model: MRF, number of weights: 775570, weights size: 9.225 MB
+2023-05-08 11:52:59,107 : [2/3] TRAINING : Execution of _get_model took at 172.282 seconds.
+2023-05-08 11:52:59,107 : [3/3] EVALUATION : Evaluating model at batch 0:2000
+2023-05-08 11:52:59,210 : [3/3] EVALUATION : Execution of _matmat took at 0.003 seconds.
+2023-05-08 11:52:59,361 : [3/3] EVALUATION : Execution of _predict took at 0.154 seconds.
+2023-05-08 11:53:00,689 : [3/3] EVALUATION : Evaluating model at batch 2000:4000
+2023-05-08 11:53:00,779 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:00,825 : [3/3] EVALUATION : Execution of _predict took at 0.048 seconds.
+2023-05-08 11:53:02,212 : [3/3] EVALUATION : Evaluating model at batch 4000:6000
+2023-05-08 11:53:02,308 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:02,366 : [3/3] EVALUATION : Execution of _predict took at 0.061 seconds.
+2023-05-08 11:53:03,755 : [3/3] EVALUATION : Evaluating model at batch 6000:8000
+2023-05-08 11:53:03,846 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:03,896 : [3/3] EVALUATION : Execution of _predict took at 0.053 seconds.
+2023-05-08 11:53:05,300 : [3/3] EVALUATION : Evaluating model at batch 8000:10000
+2023-05-08 11:53:05,394 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:05,445 : [3/3] EVALUATION : Execution of _predict took at 0.053 seconds.
+2023-05-08 11:53:06,853 : [3/3] EVALUATION : Evaluating model at batch 10000:12000
+2023-05-08 11:53:06,943 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:06,988 : [3/3] EVALUATION : Execution of _predict took at 0.047 seconds.
+2023-05-08 11:53:08,410 : [3/3] EVALUATION : Evaluating model at batch 12000:14000
+2023-05-08 11:53:08,501 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:08,547 : [3/3] EVALUATION : Execution of _predict took at 0.048 seconds.
+2023-05-08 11:53:09,971 : [3/3] EVALUATION : Evaluating model at batch 14000:16000
+2023-05-08 11:53:10,061 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:10,110 : [3/3] EVALUATION : Execution of _predict took at 0.052 seconds.
+2023-05-08 11:53:11,542 : [3/3] EVALUATION : Evaluating model at batch 16000:18000
+2023-05-08 11:53:11,635 : [3/3] EVALUATION : Execution of _matmat took at 0.003 seconds.
+2023-05-08 11:53:11,687 : [3/3] EVALUATION : Execution of _predict took at 0.054 seconds.
+2023-05-08 11:53:13,136 : [3/3] EVALUATION : Evaluating model at batch 18000:20000
+2023-05-08 11:53:13,226 : [3/3] EVALUATION : Execution of _matmat took at 0.003 seconds.
+2023-05-08 11:53:13,276 : [3/3] EVALUATION : Execution of _predict took at 0.053 seconds.
+2023-05-08 11:53:14,724 : [3/3] EVALUATION : Evaluating model at batch 20000:22000
+2023-05-08 11:53:14,815 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:14,860 : [3/3] EVALUATION : Execution of _predict took at 0.047 seconds.
+2023-05-08 11:53:16,313 : [3/3] EVALUATION : Evaluating model at batch 22000:24000
+2023-05-08 11:53:16,401 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:16,442 : [3/3] EVALUATION : Execution of _predict took at 0.043 seconds.
+2023-05-08 11:53:17,896 : [3/3] EVALUATION : Evaluating model at batch 24000:26000
+2023-05-08 11:53:17,986 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:18,029 : [3/3] EVALUATION : Execution of _predict took at 0.045 seconds.
+2023-05-08 11:53:19,493 : [3/3] EVALUATION : Evaluating model at batch 26000:28000
+2023-05-08 11:53:19,581 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:19,624 : [3/3] EVALUATION : Execution of _predict took at 0.046 seconds.
+2023-05-08 11:53:21,089 : [3/3] EVALUATION : Evaluating model at batch 28000:30000
+2023-05-08 11:53:21,179 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:21,222 : [3/3] EVALUATION : Execution of _predict took at 0.046 seconds.
+2023-05-08 11:53:22,669 : [3/3] EVALUATION : Evaluating model at batch 30000:32000
+2023-05-08 11:53:22,755 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:22,792 : [3/3] EVALUATION : Execution of _predict took at 0.038 seconds.
+2023-05-08 11:53:24,237 : [3/3] EVALUATION : Evaluating model at batch 32000:34000
+2023-05-08 11:53:24,362 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:24,399 : [3/3] EVALUATION : Execution of _predict took at 0.039 seconds.
+2023-05-08 11:53:25,839 : [3/3] EVALUATION : Evaluating model at batch 34000:36000
+2023-05-08 11:53:25,926 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:25,962 : [3/3] EVALUATION : Execution of _predict took at 0.038 seconds.
+2023-05-08 11:53:27,406 : [3/3] EVALUATION : Evaluating model at batch 36000:38000
+2023-05-08 11:53:27,493 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:27,527 : [3/3] EVALUATION : Execution of _predict took at 0.037 seconds.
+2023-05-08 11:53:28,975 : [3/3] EVALUATION : Evaluating model at batch 38000:40000
+2023-05-08 11:53:29,061 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:29,096 : [3/3] EVALUATION : Execution of _predict took at 0.037 seconds.
+2023-05-08 11:53:30,531 : [3/3] EVALUATION : Evaluating model at batch 40000:42000
+2023-05-08 11:53:30,618 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:30,650 : [3/3] EVALUATION : Execution of _predict took at 0.035 seconds.
+2023-05-08 11:53:32,090 : [3/3] EVALUATION : Evaluating model at batch 42000:44000
+2023-05-08 11:53:32,175 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:32,208 : [3/3] EVALUATION : Execution of _predict took at 0.035 seconds.
+2023-05-08 11:53:33,639 : [3/3] EVALUATION : Evaluating model at batch 44000:46000
+2023-05-08 11:53:33,726 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:33,759 : [3/3] EVALUATION : Execution of _predict took at 0.034 seconds.
+2023-05-08 11:53:35,199 : [3/3] EVALUATION : Evaluating model at batch 46000:48000
+2023-05-08 11:53:35,286 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:35,319 : [3/3] EVALUATION : Execution of _predict took at 0.035 seconds.
+2023-05-08 11:53:36,754 : [3/3] EVALUATION : Evaluating model at batch 48000:50000
+2023-05-08 11:53:36,839 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:36,870 : [3/3] EVALUATION : Execution of _predict took at 0.033 seconds.
+2023-05-08 11:53:38,299 : [3/3] EVALUATION : Evaluating model at batch 50000:52000
+2023-05-08 11:53:38,383 : [3/3] EVALUATION : Execution of _matmat took at 0.002 seconds.
+2023-05-08 11:53:38,413 : [3/3] EVALUATION : Execution of _predict took at 0.031 seconds.
+2023-05-08 11:53:39,821 : [3/3] EVALUATION : Evaluating model at batch 52000:52639
+2023-05-08 11:53:39,890 : [3/3] EVALUATION : Execution of _matmat took at 0.001 seconds.
+2023-05-08 11:53:39,898 : [3/3] EVALUATION : Execution of _predict took at 0.009 seconds.
+2023-05-08 11:53:40,522 : [3/3] EVALUATION : Execution of _evaluate_model took at 41.415 seconds.
+2023-05-08 11:53:40,523 : PIPELINE END : Execution of run took at 213.869 seconds.
+

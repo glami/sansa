@@ -1,0 +1,7 @@
+SANSA:
+r6i.large (2 vCPU, 16 GB RAM)
+
+MRF:
+r6i.4xlarge (16 vCPU, 128 GB RAM)
+
+64 GB swap
