@@ -25,7 +25,7 @@ In this paper, we propose a hyperefficient factorization technique for sparse ap
 2. `movielens20`: MovieLens 20M dataset ([link](https://www.kaggle.com/datasets/grouplens/movielens-20m-dataset)).
 3. `msd`: Million Song Dataset ([link](https://www.kaggle.com/competitions/msdchallenge/data)).
 4. `netflix`: Netflix Prize dataset ([link](https://www.kaggle.com/datasets/netflix-inc/netflix-prize-data)).
-5. `amazonbook`: Amazon Books dataset ([link](https://github.com/kuandeng/LightGCN/tree/master/Data/amazon-book))
+5. `amazonbook`: Amazon Books dataset ([link](https://github.com/kuandeng/LightGCN/tree/master/Data/amazon-book)).
 
 The dataset files should be located inside `datasets/data/{dataset_name}`.
 
