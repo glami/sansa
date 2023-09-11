@@ -17,7 +17,7 @@ In the field of recommender systems, shallow autoencoders have recently gained s
 In this paper, we propose a hyperefficient factorization technique for sparse approximate inversion of the data-Gram matrix used in EASE. The resulting autoencoder, SANSA, is an end-to-end sparse solution with prescribable density and almost arbitrarily low memory requirements (even for training). As such, SANSA allows us to effortlessly scale the concept of EASE to millions of items and beyond.
 
 ### Model
-![Architecture and training procedure of SANSA](https://gcdnb.pbrd.co/images/UrdzeLSiVDYg.png?raw=True "Architecture and training procedure of SANSA")
+![Architecture and training procedure of SANSA](https://github.com/glami/sansa/blob/main/sansa.png)
 
 ### Data
 5 datasets are available for experiments:
