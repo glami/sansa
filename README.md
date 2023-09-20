@@ -9,7 +9,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
 -->
 # Scalable Approximate NonSymmetric Autoencoder (SANSA)
 
-This repository accompanies the paper "Scalable Approximate NonSymmetric Autoencoder for Collaborative Filtering" by Spišák et al., accepted at the 17th ACM Conference on Recommender Systems (ACM RecSys 2023), Singapore. It contains the official implementation of SANSA along with the codes used in experiments and complete experimental results.
+This repository accompanies the paper "Scalable Approximate NonSymmetric Autoencoder for Collaborative Filtering" by Spišák et al., accepted at the 17th ACM Conference on Recommender Systems (ACM RecSys 2023), Singapore. It contains the official implementation of SANSA along with the codes used in experiments and complete experimental results. 
+
+### Full paper available [here](https://dl.acm.org/doi/10.1145/3604915.3608827).
 
 ### Abstract
 In the field of recommender systems, shallow autoencoders have recently gained significant attention. One of the most highly acclaimed shallow autoencoders is EASE, favored for its competitive recommendation accuracy and simultaneous simplicity. However, the poor scalability of EASE (both in time and especially in memory) severely restricts its use in production environments with vast item sets.
