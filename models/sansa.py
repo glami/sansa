@@ -19,6 +19,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 import sklearn.utils.sparsefuncs as spfuncs
+from typing import Union
 import warnings
 
 from datasets.split import DatasetSplit, df_to_csr
@@ -220,12 +221,27 @@ class SANSA(EASE):
         return P
 
     def recommend(
-        self, inputs_df: pd.DataFrame, k: int
+        self, inputs: Union[pd.DataFrame, tuple[np.ndarray, np.ndarray]], k: int
     ) -> tuple[np.ndarray, np.ndarray]:
-        """Recommend for a batch of users."""
+        """
+        Recommend top k items for a single user given their interactions a (item_ids, item_feedback),
+        or for a batch of users given a pandas DataFrame.
+        """
+
         # Create sparse user-item matrix of feedbacks
-        n_users = inputs_df.user_id.nunique()
-        X = df_to_csr(df=inputs_df, shape=(n_users, self.n_items))
+        if isinstance(inputs, pd.DataFrame):
+            n_users = inputs.user_id.nunique()
+            X = df_to_csr(df=inputs, shape=(n_users, self.n_items))
+        elif isinstance(inputs, tuple):
+            n_users = 1
+            X = sp.csr_matrix(
+                (inputs[1], inputs[0], np.array([0, len(inputs[0])])),
+                shape=(n_users, self.n_items),
+            )
+        else:
+            raise ValueError(
+                f"Invalid inputs type {type(inputs)}, must be one of pd.DataFrame or tuple[np.ndarray, np.ndarray]."
+            )
 
         # Run prediction to obtain Predicted Score Matrix
         evaluation_logger.debug(f"Predicting scores (n_users = {n_users}):")
