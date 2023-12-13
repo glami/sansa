@@ -9,6 +9,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
 -->
 # SANSA: how to compute EASE on million item datasets
 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/scalable-approximate-nonsymmetric-autoencoder/recommendation-systems-on-amazon-book)](https://paperswithcode.com/sota/recommendation-systems-on-amazon-book?p=scalable-approximate-nonsymmetric-autoencoder)
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/scalable-approximate-nonsymmetric-autoencoder/collaborative-filtering-on-million-song)](https://paperswithcode.com/sota/collaborative-filtering-on-million-song?p=scalable-approximate-nonsymmetric-autoencoder)
+
 Official implementation of scalable collaborative filtering model SANSA (*Scalable Approximate NonSymmetric Autoencoder for Collaborative Filtering*, Spišák et al., 17th ACM Conference on Recommender Systems (ACM RecSys 2023), Singapore, Best Short Paper Runner-Up). 
 
 ### Try it yourself in [Google Colab](https://colab.research.google.com/drive/1ktQMuROR7Z528JKJDQh3GdTatDmWbDHQ?usp=sharing).
