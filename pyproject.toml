@@ -1,0 +1,33 @@
+[project]
+name = "sansa"
+version = "0.1.0"
+dependencies = [
+  "numba >= 0.57.0",
+  "numpy >= 1.22.3",
+  "scikit-sparse >= 0.4.8",
+  "scipy >= 1.7.3",
+]
+requires-python = ">= 3.10"
+license = {file = "LICENSE"}
+
+[project.urls]
+Homepage = "https://github.com/glami/sansa"
+Repository = "https://github.com/glami/sansa.git"
+Issues = "https://github.com/glami/sansa/issues"
+
+[project.optional-dependencies]
+mkl = ["sparse_dot_mkl"]
+dev = ["black", "isort"]
+demo = ["jupyter", "matplotlib", "pandas", "pyarrow", "ipyplot", "scikit-learn"]
+
+[tool.black]
+line-length = 120
+
+[tool.pyright]
+include = ["sansa"]
+exclude = ["**/__pycache__"]
+reportMissingImports = true
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
