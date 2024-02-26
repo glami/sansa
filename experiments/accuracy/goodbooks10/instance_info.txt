@@ -1,3 +1,0 @@
-m6i.4xlarge (16 vCPU, 64 GB RAM)
-
-64 GB swap
