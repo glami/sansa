@@ -1,6 +1,6 @@
 [project]
 name = "sansa"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
   "numba >= 0.57.0",
   "numpy >= 1.22.3",
