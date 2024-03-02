@@ -1,5 +1,6 @@
 # SANSA: how to compute EASE on million item datasets
 
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/scalable-approximate-nonsymmetric-autoencoder/recommendation-systems-on-amazon-book)](https://paperswithcode.com/sota/recommendation-systems-on-amazon-book?p=scalable-approximate-nonsymmetric-autoencoder)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/scalable-approximate-nonsymmetric-autoencoder/collaborative-filtering-on-million-song)](https://paperswithcode.com/sota/collaborative-filtering-on-million-song?p=scalable-approximate-nonsymmetric-autoencoder)
 
