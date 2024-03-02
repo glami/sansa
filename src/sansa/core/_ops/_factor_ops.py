@@ -9,10 +9,10 @@
 ########################################################################################################################
 import logging
 
-from numba import njit
 import numpy as np
 import numpy.typing as npt
 import scipy.sparse as sp
+from numba import njit
 
 logger = logging.getLogger(__name__)
 

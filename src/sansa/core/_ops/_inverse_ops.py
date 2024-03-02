@@ -8,8 +8,8 @@ import warnings
 
 import numpy as np
 import numpy.typing as npt
-from numba import njit
 import scipy.sparse as sp
+from numba import njit
 
 from ...utils import (
     get_squared_norms_along_compressed_axis,

@@ -3,10 +3,7 @@ import unittest
 import numpy as np
 import scipy.sparse as sp
 
-from sansa.utils import (
-    get_norms_along_compressed_axis,
-    get_squared_norms_along_compressed_axis,
-)
+from sansa.utils import get_norms_along_compressed_axis, get_squared_norms_along_compressed_axis
 
 ARRAY = np.array([[1, 1, 1, 1, 1], [2, 2, 2, 2, 2], [3, 3, 3, 3, 3]])
 CSR = sp.csr_matrix(ARRAY)

@@ -3,10 +3,7 @@ import unittest
 import numpy as np
 import scipy.sparse as sp
 
-from sansa.utils import (
-    inplace_scale_along_compressed_axis,
-    inplace_scale_along_uncompressed_axis,
-)
+from sansa.utils import inplace_scale_along_compressed_axis, inplace_scale_along_uncompressed_axis
 
 ARRAY = np.array([[1, 1, 1, 1, 1], [2, 2, 2, 2, 2], [3, 3, 3, 3, 3]])
 CSR = sp.csr_matrix(ARRAY)

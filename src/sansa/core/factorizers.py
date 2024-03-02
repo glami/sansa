@@ -1,16 +1,16 @@
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from enum import Enum
 import gc
 import importlib
 import logging
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from enum import Enum
 
 import numpy as np
 import scipy.sparse as sp
 import sksparse.cholmod as cholmod
 
-from ._ops import icf
 from ..utils import inplace_scale_along_compressed_axis, inplace_sparsify, matmat
+from ._ops import icf
 
 logger = logging.getLogger(__name__)
 

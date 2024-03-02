@@ -3,10 +3,7 @@ import unittest
 import numpy as np
 import scipy.sparse as sp
 
-from sansa.utils import (
-    inplace_sparsify,
-    inplace_sparsify_vector,
-)
+from sansa.utils import inplace_sparsify, inplace_sparsify_vector
 
 ARRAY = np.array([[1, 100, 1, 1, 1], [2, 2, 2, 20, 2], [3, -300, 3, 3, 3]])
 VECTOR = sp.csr_matrix(np.array([[1, 100, 1, 1, 1, 2, 2, 2, 20, 2, 3, -300, 3, 3, 3]]))

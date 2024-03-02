@@ -1,14 +1,14 @@
+import importlib
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
-import logging
-import importlib
 
 import numpy as np
 import scipy.sparse as sp
 
-from ._ops import get_residual_matrix, s1, umr
 from ..utils import get_norms_along_compressed_axis
+from ._ops import get_residual_matrix, s1, umr
 
 logger = logging.getLogger(__name__)
 
