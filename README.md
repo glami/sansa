@@ -12,7 +12,7 @@ Official implementation of scalable collaborative filtering model **SANSA**.
 > Spišák M., Bartyzal R., Hoskovec A., Peška L., Tůma M.  
 > Paper: [10.1145/3604915.3608827](https://doi.org/10.1145/3604915.3608827)
 > 
-> *Best Short Paper Runner-Up*, [17th ACM Conference on Recommender Systems (ACM RecSys 2023), Singapore](https://recsys.acm.org/recsys23/)
+> *Best Short Paper Runner-Up*, [17th ACM Conference on Recommender Systems (ACM RecSys 2023)](https://recsys.acm.org/recsys23/)
 
 ### Reproducibility
 See branch [reproduce_our_results](https://github.com/glami/sansa/tree/reproduce_our_results) for codes used in experiments and complete experimental results. 
