@@ -79,11 +79,11 @@ publisher = {Association for Computing Machinery},
 address = {New York, NY, USA},
 url = {https://doi.org/10.1145/3604915.3608827},
 doi = {10.1145/3604915.3608827},
-abstract = {In the&nbsp;field of recommender systems, shallow autoencoders have recently gained significant attention. One of the&nbsp;most highly acclaimed shallow autoencoders is easer, favored for its competitive recommendation accuracy and simultaneous simplicity. However, the&nbsp;poor scalability of easer (both in time and especially in memory) severely restricts its use in production environments with vast item sets. In this paper, we propose a&nbsp;hyperefficient factorization technique for sparse approximate inversion of the&nbsp;data-Gram matrix used in easer. The&nbsp;resulting autoencoder, sansa, is an&nbsp;end-to-end sparse solution with prescribable density and almost arbitrarily low memory requirements — even for training. As such, sansa allows us to effortlessly scale the&nbsp;concept of easer to millions of items and beyond.},
+abstract = {In the field of recommender systems, shallow autoencoders have recently gained significant attention. One of the most highly acclaimed shallow autoencoders is easer, favored for its competitive recommendation accuracy and simultaneous simplicity. However, the poor scalability of easer (both in time and especially in memory) severely restricts its use in production environments with vast item sets. In this paper, we propose a hyperefficient factorization technique for sparse approximate inversion of the data-Gram matrix used in easer. The resulting autoencoder, sansa, is an end-to-end sparse solution with prescribable density and almost arbitrarily low memory requirements — even for training. As such, sansa allows us to effortlessly scale the concept of easer to millions of items and beyond.},
 booktitle = {Proceedings of the 17th ACM Conference on Recommender Systems},
 pages = {763–770},
 numpages = {8},
-keywords = {Numerical approximation, Algorithm scalability, Sparse autoencoders, Sparse approximate inverse},
+keywords = {Algorithm scalability, Numerical approximation, Sparse approximate inverse, Sparse autoencoders},
 location = {Singapore, Singapore},
 series = {RecSys '23}
 }
