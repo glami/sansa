@@ -4,32 +4,37 @@
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/scalable-approximate-nonsymmetric-autoencoder/recommendation-systems-on-amazon-book)](https://paperswithcode.com/sota/recommendation-systems-on-amazon-book?p=scalable-approximate-nonsymmetric-autoencoder)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/scalable-approximate-nonsymmetric-autoencoder/collaborative-filtering-on-million-song)](https://paperswithcode.com/sota/collaborative-filtering-on-million-song?p=scalable-approximate-nonsymmetric-autoencoder)
 
-Official implementation of scalable collaborative filtering model SANSA (*Scalable Approximate NonSymmetric Autoencoder for Collaborative Filtering*, Spišák et al., 17th ACM Conference on Recommender Systems (ACM RecSys 2023), Singapore, Best Short Paper Runner-Up). 
+Official implementation of scalable collaborative filtering model **SANSA**.
 
-### Try it yourself in [Google Colab](https://colab.research.google.com/drive/1ktQMuROR7Z528JKJDQh3GdTatDmWbDHQ?usp=sharing).
+![Architecture and training procedure of SANSA](assets/sansa.png)
 
-### Read our short paper [here](https://dl.acm.org/doi/10.1145/3604915.3608827), or check out the conference [poster](https://github.com/glami/sansa/blob/main/assets/poster.pdf).
+> **Scalable Approximate NonSymmetric Autoencoder for Collaborative Filtering**  
+> Spišák M., Bartyzal R., Hoskovec A., Peška L., Tůma M.  
+> Paper: [10.1145/3604915.3608827](https://doi.org/10.1145/3604915.3608827)
+> 
+> *Best Short Paper Runner-Up*, [17th ACM Conference on Recommender Systems (ACM RecSys 2023), Singapore](https://recsys.acm.org/recsys23/)
 
 ### Reproducibility
 See branch [reproduce_our_results](https://github.com/glami/sansa/tree/reproduce_our_results) for codes used in experiments and complete experimental results. 
 
-### Abstract
-In the field of recommender systems, shallow autoencoders have recently gained significant attention. One of the most highly acclaimed shallow autoencoders is EASE, favored for its competitive recommendation accuracy and simultaneous simplicity. However, the poor scalability of EASE (both in time and especially in memory) severely restricts its use in production environments with vast item sets.
+## About
 
-In this paper, we propose a hyperefficient factorization technique for sparse approximate inversion of the data-Gram matrix used in EASE. The resulting autoencoder, SANSA, is an end-to-end sparse solution with prescribable density and almost arbitrarily low memory requirements (even for training). As such, SANSA allows us to effortlessly scale the concept of EASE to millions of items and beyond.
+SANSA is a scalable modification of [EASE](https://arxiv.org/abs/1905.03375), a shallow autoencoder for collaborative filtering, **specifically designed to handle item sets with millions of items**.
+- The efficiency of SANSA stems from end-to-end sparse training procedure: instead of strenuously inverting the Gramian $X^TX$ of user-item interaction matrix $X$, SANSA efficiently finds a sparse approximate inverse of $X^TX$. 
+- Training memory requirements are proportional to the number of non-zero elements in $X^TX$ (and this can be improved further).  
+- The model's density is prescribed via a hyperparameter. 
+- As a sparse neural network, SANSA offers very fast inference times.
 
-## Model
-![Architecture and training procedure of SANSA](https://github.com/glami/sansa/blob/release/assets/sansa.png)
+### Learn more in our [short paper](https://dl.acm.org/doi/10.1145/3604915.3608827), or check out the conference [poster](assets/poster.pdf).
 
 ## Installation
 ### Prerequisites
-Training of SANSA requires [scikit-sparse](https://github.com/scikit-sparse/scikit-sparse), which depends on the [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) numerical library.
-#### Ubuntu
+Training of SANSA uses [scikit-sparse](https://github.com/scikit-sparse/scikit-sparse), which depends on the [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) numerical library. To install SuiteSparse on Ubuntu and macOS, run the commands below: 
 ```bash
+# Ubuntu
 sudo apt-get install libsuitesparse-dev
-```
-#### macOS
-```bash
+
+# macOS
 brew install suite-sparse
 ```
 Note that `brew` installs SuiteSparse objects to non-standard location. Before installing the package, you need to set
@@ -40,10 +45,8 @@ export SUITESPARSE_LIBRARY_PATH={PATH TO YOUR SUITESPARSE}/lib
 ```
 You can find `{PATH TO YOUR SUITESPARSE}` by running `brew info suite-sparse`.
 
-#### Other platforms
-For instructions on how to install `scikit-sparse` on other platforms, please refer to [scikit-sparse readme](https://github.com/scikit-sparse/scikit-sparse/blob/master/README.md).
 ### Installation from source
-With SuiteSparse objects path correctly specified, simply run
+With SuiteSparse path correctly specified, simply run
 ```bash
 pip install .
 ```
