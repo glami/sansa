@@ -52,6 +52,91 @@ pip install .
 ```
 in the root directory of this repository.
 
+## Usage
+### Configuration
+SANSA model supports two methods of factorization of the Gramian matrix $X^TX$ and one method for inverting the lower triangular factor. 
+Factorizers and inverters are configured separately and included in the model configuration:
+```python
+from sansa import SANSAConfig
+
+config = SANSAConfig(
+    l2 = 20.0,  # regularization strength
+    weight_matrix_density = 5e-5,  # desired density of weights
+    gramian_factorizer_config = factorizer_config,  # factorizer configuration
+    lower_triangle_inverter_config = inverter_config,  # inverter configuration
+)
+```
+To get the configuration of a model instance, use the `config` property:
+```python
+config = model.config
+```
+#### Factorizer configuration
+Choose between two factorization techniques:
+1. **CHOLMOD** = exact Cholesky factorization sparsified after factorization. More accurate but memory-hungry; recommended for smaller, denser matrices.
+```python
+from sansa import CHOLMODGramianFactorizerConfig
+
+factorizer_config = CHOLMODGramianFactorizerConfig()  # no hyperparameters
+```
+2. **ICF** = Incomplete Cholesky factorization. Less accurate but much more memory-efficient; recommended for very large, sparse matrices.
+```python
+from sansa import ICFGramianFactorizerConfig
+
+factorizer_config = ICFGramianFactorizerConfig(
+    factorization_shift_step = 1e-3,  # initial diagonal shift if incomplete factorization fails
+    factorization_shift_multiplier = 2.0,  # multiplier for the shift for subsequent attempts
+)
+```
+#### Inverter configuration
+Currently only one inverter is available: **UMR** -- residual minimization approach
+```python
+from sansa import UMRUnitLowerTriangleInverterConfig
+
+inverter_config = UMRUnitLowerTriangleInverterConfig(
+    scans=1,  # number of scans through all columns of the matrix
+    finetune_steps=5,  # number of finetuning steps, targeting worst columns
+)
+```
+### Training
+```python
+from sansa import SANSA
+
+X = ...  # training data -- scipy.sparse.csr_matrix (rows=users, columns=items)
+config = ...  # specify configuration of SANSA model
+
+# Instantiate model with the config
+model = SANSA(config)
+
+# Train model on the user-item matrix
+model.fit(X)
+```
+Weights of a SANSA model can be accessed using the `weights` attribute:
+```python
+w1, w2 = model.weights  # tuple of scipy.sparse.csr_matrix of shape (num_items, num_items)
+```
+Weights can be loaded into a model using the `load_weights` method:
+```python
+w1, w2 = ...  # tuple of scipy.sparse.csr_matrix of shape (num_items, num_items)
+
+model.load_weights((w1, w2))
+```
+### Inference
+#### 1. High-level inference: recommendation for a batch of users
+```python
+X = ...  # input interactions -- scipy.sparse.csr_matrix (rows=users, columns=items)
+
+# Get indices of top-k items for each user + corresponding scores
+# if mask_input=True, input items get score=0
+top_k_indices, top_k_scores = model.recommend(X, k=10, mask_input=True)  # np.ndarrays of shape (X.shape[0], k)
+```
+#### 2. Low-level inference: forward pass
+```python
+X = ...  # input interactions -- scipy.sparse.csr_matrix (rows=users, columns=items)
+
+# Forward pass
+scores = model.forward(X)  # scipy.sparse.csr_matrix of shape X.shape
+```
+
 ## License
 Copyright 2023 Inspigroup s.r.o.
 
