@@ -20,7 +20,7 @@ See branch [reproduce_our_results](https://github.com/glami/sansa/tree/reproduce
 ## About
 
 SANSA is a scalable modification of [EASE](https://arxiv.org/abs/1905.03375), a shallow autoencoder for collaborative filtering, **specifically designed to handle item sets with millions of items**.
-- The efficiency of SANSA stems from end-to-end sparse training procedure: instead of strenuously inverting the Gramian $X^TX$ of user-item interaction matrix $X$, SANSA efficiently finds a *sparse approximate inverse* of $X^TX$. 
+- End-to-end sparse training procedure: instead of strenuously inverting the Gramian $X^TX$ of user-item interaction matrix $X$, SANSA efficiently finds a *sparse approximate inverse* of $X^TX$. 
 - Training memory requirements are proportional to the number of non-zero elements in $X^TX$ (and this can be improved further).  
 - The model's density is prescribed via a hyperparameter. 
 - As a sparse neural network, SANSA offers *very fast inference* times.
