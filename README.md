@@ -37,13 +37,19 @@ sudo apt-get install libsuitesparse-dev
 # macOS
 brew install suite-sparse
 ```
-Note that `brew` installs SuiteSparse objects to non-standard location. Before installing the package, you need to set
+Note that `brew` (and possibly other package managers) installs SuiteSparse objects to non-standard location. Before installing the package, you need to set
 the correct path to SuiteSparse by setting the following 2 environment variables:
 ```bash
-export SUITESPARSE_INCLUDE_PATH={PATH TO YOUR SUITESPARSE}/include/suitesparse
-export SUITESPARSE_LIBRARY_PATH={PATH TO YOUR SUITESPARSE}/lib
+export SUITESPARSE_INCLUDE_DIR={PATH TO YOUR SUITESPARSE}/include/suitesparse
+export SUITESPARSE_LIBRARY_DIR={PATH TO YOUR SUITESPARSE}/lib
 ```
-You can find `{PATH TO YOUR SUITESPARSE}` by running `brew info suite-sparse`.
+For `brew`, you can find `{PATH TO YOUR SUITESPARSE}` by running `brew info suite-sparse`. To streamline this process, you can run
+```bash
+SUITESPARSE_DIR=$(brew info suitesparse | sed -n 4p | awk '{print $1}')  # path to brew-installed package is on the 4th line, 1st column
+export SUITESPARSE_INCLUDE_DIR=$SUITESPARSE_DIR/include/suitesparse
+export SUITESPARSE_LIBRARY_DIR=$SUITESPARSE_DIR/lib
+```
+which should set the correct environment variables for you.
 
 ### Installation from source
 With SuiteSparse path correctly specified, simply run
