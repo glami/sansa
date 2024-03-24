@@ -1,6 +1,11 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "sansa"
 version = "1.0.0"
+description = "Scalable collaborative filtering model based on sparse approximate inverse"
 dependencies = [
   "numba >= 0.57.0",
   "numpy >= 1.22.3",
@@ -8,7 +13,34 @@ dependencies = [
   "scipy >= 1.7.3",
 ]
 requires-python = ">= 3.10"
+authors = [
+  {name = "Martin Spisak", email = "masp430@gmail.com"},
+  {name = "Radek Bartyzal", email = "radek.bartyzal@glami.cz"},
+  {name = "Antonin Hoskovec", email = "antonin.hoskovec@glami.cz"},
+  {name = "Ladislav Peska", email = "ladislav.peska@matfyz.cuni.cz"},
+  {name = "Miroslav Tuma", email = "miroslav.tuma@mff.cuni.cz"},
+]
+maintainers = [
+  {name = "Martin Spisak", email = "masp430@gmail.com"},
+]
+readme = "README.md"
 license = {file = "LICENSE"}
+keywords = ["recommendation", "collaborative filtering", "sparse matrix", "sparse approximate inverse"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Operating System :: OS Independent",
+  "License :: OSI Approved :: Apache Software License",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Scientific/Engineering :: Mathematics",
+]
 
 [project.urls]
 Homepage = "https://github.com/glami/sansa"
@@ -20,14 +52,3 @@ mkl = ["sparse_dot_mkl"]
 dev = ["black", "isort"]
 demo = ["jupyter", "matplotlib", "pandas", "pyarrow", "ipyplot", "scikit-learn"]
 
-[tool.black]
-line-length = 120
-
-[tool.pyright]
-include = ["sansa"]
-exclude = ["**/__pycache__"]
-reportMissingImports = true
-
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
