@@ -1,3 +1,0 @@
-c6i.8xlarge (32 vCPU, 64 GB RAM)
-
-64 GB swap
