@@ -24,7 +24,6 @@ def icf(
     shift_step: float = 1e-3,
     shift_multiplier: float = 2.0,
 ) -> sp.csc_matrix:
-
     if isinstance(A, sp.csr_matrix):
         A = A.T
     if not isinstance(A, sp.csc_matrix):
@@ -107,7 +106,6 @@ def _core_icf(
     t = np.zeros(n, np.int64)  # First subdiagonal index i in column j of A
     l = np.zeros(n, np.int64) - 1  # Linked list of non-zero columns in row k of L
     a = np.zeros(n, np.float32)  # Values of column j
-    r = np.zeros(n, np.float32)  # r[j] = sum(abs(A[j:, j])) for relative threshold
     b = np.zeros(n, np.bool_)  # b[i] indicates if the i-th element of column j is non-zero
     c = np.empty(n, np.int64)  # Row indices of non-zero elements in column j
     d = np.full(n, shift, np.float32)  # Diagonal elements of A
@@ -117,8 +115,6 @@ def _core_icf(
             if i == j:
                 d[j] += Av[idx]
                 t[j] = idx + 1
-            if i >= j:
-                r[j] += abs(Av[idx])
     for j in range(n):  # For each column j
         for idx in range(t[j], Ap[j + 1]):  # For each L_ij
             i = Ar[idx]
