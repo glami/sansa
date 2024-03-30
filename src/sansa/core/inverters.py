@@ -96,7 +96,7 @@ class UMRUnitLowerTriangleInverter(UnitLowerTriangleInverter):
         norms = get_norms_along_compressed_axis(R)
         del R
         max_res = np.max(norms)  # Maximum residual
-        loss = np.mean(norms)  # Loss = n * MSE = mean (column norm)^2 = (relative Frobenius norm)^2
+        loss = np.mean(norms**2)  # Loss = n * MSE = mean (column norm)^2 = (relative Frobenius norm)^2
         logger.info(f"Current maximum residual: {max_res}, relative Frobenius norm squared: {loss}")
 
         return L_inv
