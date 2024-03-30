@@ -28,6 +28,10 @@ SANSA is a scalable modification of [EASE](https://arxiv.org/abs/1905.03375), a 
 ### Learn more in our [short paper](https://dl.acm.org/doi/10.1145/3604915.3608827), or check out the conference [poster](assets/poster.pdf).
 
 ## Installation
+```bash
+pip install sansa
+```
+(make sure to install prerequisites first, see next section)
 ### Prerequisites
 Training of SANSA uses [scikit-sparse](https://github.com/scikit-sparse/scikit-sparse), which depends on the [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) numerical library. To install SuiteSparse on Ubuntu and macOS, run the commands below: 
 ```bash
