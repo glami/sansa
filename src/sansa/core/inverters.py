@@ -38,7 +38,7 @@ class UnitLowerTriangleInverter(ABC):
         raise NotImplementedError("Implement this")
 
     @classmethod
-    def from_config(cls, config: UnitLowerTriangleInverterConfig) -> "UnitLowerTriangleInverterConfig":
+    def from_config(cls, config: UnitLowerTriangleInverterConfig) -> "UnitLowerTriangleInverter":
         module = importlib.import_module(__name__)
         class_name = "".join([config.approximate_inverse_method.value, cls.__name__])
         factorizer_class = getattr(module, class_name)
