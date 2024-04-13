@@ -22,7 +22,7 @@ from .utils import (
 )
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logging.basicConfig(level=logging.INFO)
 
 
 def _apply_icf_scaling(X: sp.csr_matrix) -> None:
