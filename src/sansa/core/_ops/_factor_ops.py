@@ -109,13 +109,17 @@ def _core_icf(
     b = np.zeros(n, np.bool_)  # b[i] indicates if the i-th element of column j is non-zero
     c = np.empty(n, np.int64)  # Row indices of non-zero elements in column j
     d = np.full(n, shift, np.float32)  # Diagonal elements of A
+
     for j in range(n):
+
         for idx in range(Ap[j], Ap[j + 1]):
             i = Ar[idx]
             if i == j:
                 d[j] += Av[idx]
                 t[j] = idx + 1
+
     for j in range(n):  # For each column j
+
         for idx in range(t[j], Ap[j + 1]):  # For each L_ij
             i = Ar[idx]
             L_ij = Av[idx]
@@ -125,6 +129,7 @@ def _core_icf(
                     b[i] = True  # Mark it as non-zero
                     c[c_n] = i  # Remember index for later deletion
                     c_n += 1
+
         k = l[j]  # Find index k of column with non-zero element in row j
         while k != -1:  # For each column of that type
             k0 = s[k]  # Start index of non-zero elements in column k
@@ -146,8 +151,10 @@ def _core_icf(
                         c[c_n] = i  # Remember index for later deletion
                         c_n += 1
             k = k2  # Advance to next column k
+
         if d[j] <= 0.0:
             return np.int64(-1)
+
         max_j_nnz = (max_nnz - nnz) // (n - j)  # Maximum num. of nnz elements in col j
         # keep only min(c_n, max_j_nnz) largest values in a
         if c_n > max_j_nnz:
@@ -156,11 +163,13 @@ def _core_icf(
             largest_indices = np.argpartition(aa, -max_j_nnz)[-max_j_nnz:]
             b[cc] = False
             b[cc[largest_indices]] = True
+
         d[j] = np.sqrt(d[j])  # Update diagonal element L_ii
         Lv[nnz] = d[j]  # Add diagonal element L_ii to L
         Lr[nnz] = j  # Add row index of L_ii to L
         nnz += 1
         s[j] = nnz  # Set first non-zero index of column j
+
         for i in np.sort(c[:c_n]):  # Sort row indices of column j for correct insertion order into L
             L_ij = a[i] / d[j]  # Get non-zero element from sparse column j
             d[i] -= L_ij * L_ij  # Update diagonal element L_ii
@@ -176,4 +185,5 @@ def _core_icf(
             i = Lr[Lp[j] + 1]  # Row index of first off-diagonal non-zero element
             l[j] = l[i]  # Remember old list i index in list j
             l[i] = j  # Insert index of non-zero element into list i
+
     return np.int64(nnz)
