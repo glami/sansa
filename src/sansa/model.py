@@ -22,18 +22,30 @@ from .utils import (
 )
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logging.basicConfig(level=logging.INFO)
 
 
-def _apply_icf_scaling(X: sp.csr_matrix) -> None:
-    """Inplace scale columns of X by square roots of column norms of X^TX."""
-    logger.info(f"Computing column norms of X^TX...")
-    da = np.sqrt(np.sqrt(get_squared_norms_along_compressed_axis(matmat(X.T, X))))
-    # Divide columns of X by the computed square roots of row norms of X^TX
-    da[da == 0] = 1  # ignore zero elements
-    logger.info(f"Scaling columns of X by computed norms...")
-    inplace_scale_along_uncompressed_axis(X, 1 / da)  # CSR column scaling
-    del da
+def _apply_icf_scaling(X: sp.csr_matrix, compute_gramian: bool) -> None:
+    if compute_gramian:
+        # Inplace scale columns of X by square roots of column norms of X^TX.
+        logger.info(f"Computing column norms of X^TX...")
+        da = np.sqrt(np.sqrt(get_squared_norms_along_compressed_axis(matmat(X.T, X))))
+        # Divide columns of X by the computed square roots of row norms of X^TX
+        da[da == 0] = 1  # ignore zero elements
+        logger.info(f"Scaling columns of X by computed norms...")
+        inplace_scale_along_uncompressed_axis(X, 1 / da)  # CSR column scaling
+        del da
+    else:
+        # Inplace scale rows and columns of X by square roots of row norms of X.
+        logger.info(f"Computing row norms of X...")
+        da = np.sqrt(np.sqrt(get_squared_norms_along_compressed_axis(X)))
+        # Divide rows and columns of X by the computed square roots of row norms of X
+        da[da == 0] = 1  # ignore zero elements
+        logger.info(f"Scaling rows and columns of X by computed norms...")
+        inplace_scale_along_uncompressed_axis(X, 1 / da)  # CSR column scaling
+        inplace_scale_along_compressed_axis(X, 1 / da)  # CSR row scaling
+        del da
+
 
 
 @dataclass
@@ -66,21 +78,28 @@ class SANSA:
         self.weights = weights
         return self
 
-    def fit(self, user_item_matrix: sp.csr_matrix) -> "SANSA":
+    def fit(self, training_matrix: sp.csr_matrix, compute_gramian=True) -> "SANSA":
         """
-        Fit SANSA model with user item matrix.
+        Fit SANSA model with user-item or item-item matrix.
         """
         # create a working copy of user_item_matrix
-        X = user_item_matrix.copy()
+        X = training_matrix.copy()
         X = X.astype(np.float32)
 
         if self.factorization_method == FactorizationMethod.ICF:
             # scale matrix X
-            _apply_icf_scaling(X)
+            _apply_icf_scaling(X, compute_gramian)
 
-        # Compute LDL^T decomposition of P(X^TX + self.l2 * I)P^T
+        # Compute LDL^T decomposition of
+        # - P(X^TX + self.l2 * I)P^T if compute_gramian=True
+        # - P(X + self.l2 * I)P^T if compute_gramian=False
         logger.info("Computing LDL^T decomposition of permuted item-item matrix...")
-        L, D, p = self.factorizer.approximate_ldlt(X, self.l2, self.weight_matrix_density)
+        L, D, p = self.factorizer.approximate_ldlt(
+            X,
+            self.l2,
+            self.weight_matrix_density,
+            compute_gramian=compute_gramian,
+        )
         del X
 
         # Compute approximate inverse of L using selected method
