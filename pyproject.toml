@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sansa"
-version = "1.0.0"
+version = "1.1.0"
 description = "Scalable collaborative filtering model based on sparse approximate inverse"
 dependencies = [
   "numba >= 0.57.0",
