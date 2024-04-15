@@ -119,6 +119,8 @@ model = SANSA(config)
 
 # Train model on the user-item matrix
 model.fit(X)
+# or on a precomputed symmetric item-item matrix
+model.fit(X, compute_gramian=False)
 ```
 Weights of a SANSA model can be accessed using the `weights` attribute:
 ```python
