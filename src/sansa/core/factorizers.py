@@ -94,7 +94,7 @@ class GramianFactorizer(ABC):
 
     @abstractmethod
     def approximate_cholesky(
-        self, X: sp.csr_matrix, l2: float, factor_density: float
+        self, X: sp.csr_matrix, l2: float, factor_density: float, compute_gramian: bool
     ) -> tuple[sp.csc_matrix, np.ndarray]:
         raise NotImplementedError("Implement this")
 
@@ -103,11 +103,14 @@ class GramianFactorizer(ABC):
         X: sp.csr_matrix,
         l2: float,
         factor_density: float,
+        compute_gramian: bool,
     ) -> tuple[sp.csc_matrix, sp.dia_matrix, np.ndarray]:
 
-        # 1. Compute incomplete Cholesky decomposition of P(X^TX + self.l2 * I)P^T
+        # 1. Compute incomplete Cholesky decomposition of
+        # - P(X^TX + self.l2 * I)P^T if compute_gramian=True
+        # - P(X + self.l2 * I)P^T if compute_gramian=False
         logger.info(f"Computing incomplete Cholesky decomposition of X^TX + {l2}*I...")
-        L, p = self.approximate_cholesky(X, l2, factor_density)
+        L, p = self.approximate_cholesky(X, l2, factor_density, compute_gramian)
 
         # 2. Compute LDL^T decomposition of A' from LL^T decomposition
         logger.info("Scaling columns and creating diagonal matrix D (LL^T -> L'DL'^T)...")
@@ -150,6 +153,7 @@ class CHOLMODGramianFactorizer(GramianFactorizer):
         X: sp.csr_matrix,
         l2: float,
         factor_density: float,
+        compute_gramian: bool,
     ) -> tuple[sp.csc_matrix, np.ndarray]:
 
         # 0. Clip density to a reasonable minimum
@@ -157,19 +161,33 @@ class CHOLMODGramianFactorizer(GramianFactorizer):
         factor_density = self._clip_density_to_lower_bound(factor_density, minimum_density)
         self._suggest_icf_if_desired_density_too_low(factor_density)
 
-        # 1. Compute symbolic Cholesky factorization of X^TX along with fill-in reducing ordering
+        # 1. Compute symbolic Cholesky factorization
+        # - of X^TX if compute_gramian=True
+        # - of X if compute_gramian=False
+        # along with fill-in reducing ordering
         logger.info(f"Finding a fill-in reducing ordering (method = {self.reordering_method.value})...")
-        factor = cholmod.analyze_AAt(
-            X.transpose(),
-            mode=self.reordering_mode.value,
-            use_long=self.reordering_use_long,
-            ordering_method=self.reordering_method.value,
-        )
+        if compute_gramian:
+            factor = cholmod.analyze_AAt(
+                X.transpose(),
+                mode=self.reordering_mode.value,
+                use_long=self.reordering_use_long,
+                ordering_method=self.reordering_method.value,
+            )
+        else:
+            factor = cholmod.analyze(
+                X.transpose(),
+                mode=self.reordering_mode.value,
+                use_long=self.reordering_use_long,
+                ordering_method=self.reordering_method.value,
+            )
         p = factor.P()
 
         # 2. Compute numerical factorization
         logger.info(f"Computing approximate Cholesky decomposition (method = {self.factorization_method.value})...")
-        factor.cholesky_AAt_inplace(X.transpose(), beta=l2)
+        if compute_gramian:
+            factor.cholesky_AAt_inplace(X.transpose(), beta=l2)
+        else:
+            factor.cholesky_inplace(X.transpose(), beta=l2)
         L = factor.L().tocsc()
         del factor
         gc.collect()
@@ -241,6 +259,7 @@ class ICFGramianFactorizer(GramianFactorizer):
         X: sp.csr_matrix,
         l2: float,
         factor_density: float,
+        compute_gramian: bool,
     ) -> tuple[sp.csc_matrix, np.ndarray]:
 
         # 0. Clip density to a reasonable minimum
@@ -250,30 +269,57 @@ class ICFGramianFactorizer(GramianFactorizer):
 
         # 1. Compute COLAMD permutation of A ( A' = [p, :]A[:, p]] )
         logger.info(f"Finding a fill-in reducing ordering (method = {self.reordering_method.value})...")
-        p = cholmod.analyze_AAt(
-            X.transpose(),
-            mode=self.reordering_mode.value,
-            use_long=self.reordering_use_long,
-            ordering_method=self.reordering_method.value,
-        ).P()
+        if compute_gramian:
+            p = cholmod.analyze_AAt(
+                X.transpose(),
+                mode=self.reordering_mode.value,
+                use_long=self.reordering_use_long,
+                ordering_method=self.reordering_method.value,
+            ).P()
+        else:
+            p = cholmod.analyze(
+                X.transpose(),
+                mode=self.reordering_mode.value,
+                use_long=self.reordering_use_long,
+                ordering_method=self.reordering_method.value,
+            ).P()
         gc.collect()
 
-        # 2. permute columns of X
-        X_P = X[:, p]
 
-        # 3. Compute A = P(X^TX)P^T
-        logger.info("Computing X^TX...")
-        A = matmat(X_P.transpose(), X_P)
-        logger.info(
-            f"""
-            X^TX info:
-                shape = {A.shape} 
-                nnz = {A.nnz} 
-                density = {A.nnz / (A.shape[0] ** 2):%} 
-                size = {(A.data.nbytes + A.indices.nbytes + A.indptr.nbytes) / 1e6:.1f} MB
-            """
-        )
-        self._suggest_cholmod_if_A_too_dense(A)
+        if compute_gramian:
+            # 2. permute columns of X
+            X_P = X[:, p]  # column permutation
+        else:
+            X_P = X[:, p]  # column permutation
+            # 2. permute row and columns of X
+            X_P = X_P[p, :]  # row permutation
+
+        if compute_gramian:
+            # 3. Compute A = P(X^TX)P^T
+            logger.info("Computing X^TX...")
+            A = matmat(X_P.transpose(), X_P)
+            logger.info(
+                f"""
+                X^TX info:
+                    shape = {A.shape} 
+                    nnz = {A.nnz} 
+                    density = {A.nnz / (A.shape[0] ** 2):%} 
+                    size = {(A.data.nbytes + A.indices.nbytes + A.indptr.nbytes) / 1e6:.1f} MB
+                """
+            )
+            self._suggest_cholmod_if_A_too_dense(A)
+        else:
+            A = X_P
+            logger.info(
+                f"""
+                X info:
+                    shape = {A.shape} 
+                    nnz = {A.nnz} 
+                    density = {A.nnz / (A.shape[0] * A.shape[1]):%} 
+                    size = {(A.data.nbytes + A.indices.nbytes + A.indptr.nbytes) / 1e6:.1f} MB
+                """
+            )
+        del X_P
 
         # 4. Prepare A for ICF algorithm
         logger.info("Sorting indices of A...")
