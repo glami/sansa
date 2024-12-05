@@ -49,6 +49,5 @@ Issues = "https://github.com/glami/sansa/issues"
 
 [project.optional-dependencies]
 mkl = ["sparse_dot_mkl"]
-dev = ["black", "isort"]
+dev = ["ruff", "pytest"]
 demo = ["jupyter", "matplotlib", "pandas", "pyarrow", "ipyplot", "scikit-learn"]
-
