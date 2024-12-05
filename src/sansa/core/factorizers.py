@@ -43,7 +43,6 @@ class GramianFactorizerConfig(ABC):
 
 @dataclass
 class CHOLMODGramianFactorizerConfig(GramianFactorizerConfig):
-
     def __post_init__(self) -> None:
         self.reordering_mode = ReorderingMode.SUPERNODAL
         self.factorization_method = FactorizationMethod.CHOLMOD
@@ -60,7 +59,6 @@ class ICFGramianFactorizerConfig(GramianFactorizerConfig):
 
 
 class GramianFactorizer(ABC):
-
     def __init__(self, config: GramianFactorizerConfig):
         self.reordering_mode = config.reordering_mode
         self.reordering_use_long = config.reordering_use_long
@@ -93,9 +91,7 @@ class GramianFactorizer(ABC):
         return factor_density
 
     @abstractmethod
-    def approximate_cholesky(
-        self, X: sp.csr_matrix, l2: float, factor_density: float, compute_gramian: bool
-    ) -> tuple[sp.csc_matrix, np.ndarray]:
+    def approximate_cholesky(self, X: sp.csr_matrix, l2: float, factor_density: float, compute_gramian: bool) -> tuple[sp.csc_matrix, np.ndarray]:
         raise NotImplementedError("Implement this")
 
     def approximate_ldlt(
@@ -105,7 +101,6 @@ class GramianFactorizer(ABC):
         factor_density: float,
         compute_gramian: bool,
     ) -> tuple[sp.csc_matrix, sp.dia_matrix, np.ndarray]:
-
         # 1. Compute incomplete Cholesky decomposition of
         # - P(X^TX + self.l2 * I)P^T if compute_gramian=True
         # - P(X + self.l2 * I)P^T if compute_gramian=False
@@ -125,7 +120,6 @@ class GramianFactorizer(ABC):
 
 
 class CHOLMODGramianFactorizer(GramianFactorizer):
-
     def __init__(self, config: CHOLMODGramianFactorizerConfig):
         super().__init__(config)
 
@@ -155,7 +149,6 @@ class CHOLMODGramianFactorizer(GramianFactorizer):
         factor_density: float,
         compute_gramian: bool,
     ) -> tuple[sp.csc_matrix, np.ndarray]:
-
         # 0. Clip density to a reasonable minimum
         minimum_density = 2 / X.shape[1]
         factor_density = self._clip_density_to_lower_bound(factor_density, minimum_density)
@@ -201,7 +194,6 @@ class CHOLMODGramianFactorizer(GramianFactorizer):
 
 
 class ICFGramianFactorizer(GramianFactorizer):
-
     def __init__(self, config: ICFGramianFactorizerConfig):
         super().__init__(config)
         self.factorization_shift_step = config.factorization_shift_step
@@ -261,7 +253,6 @@ class ICFGramianFactorizer(GramianFactorizer):
         factor_density: float,
         compute_gramian: bool,
     ) -> tuple[sp.csc_matrix, np.ndarray]:
-
         # 0. Clip density to a reasonable minimum
         minimum_density = 2 / X.shape[1]
         factor_density = self._clip_density_to_lower_bound(factor_density, minimum_density)
@@ -284,7 +275,6 @@ class ICFGramianFactorizer(GramianFactorizer):
                 ordering_method=self.reordering_method.value,
             ).P()
         gc.collect()
-
 
         if compute_gramian:
             # 2. permute columns of X

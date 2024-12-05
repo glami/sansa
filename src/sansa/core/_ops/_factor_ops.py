@@ -111,7 +111,6 @@ def _core_icf(
     d = np.full(n, shift, np.float32)  # Diagonal elements of A
 
     for j in range(n):
-
         for idx in range(Ap[j], Ap[j + 1]):
             i = Ar[idx]
             if i == j:
@@ -119,7 +118,6 @@ def _core_icf(
                 t[j] = idx + 1
 
     for j in range(n):  # For each column j
-
         for idx in range(t[j], Ap[j + 1]):  # For each L_ij
             i = Ar[idx]
             L_ij = Av[idx]

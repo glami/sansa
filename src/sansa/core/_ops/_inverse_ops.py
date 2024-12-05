@@ -401,9 +401,7 @@ def _substitute_columns(
         if i < len(sorted_col_ids) - 1:  # not last column to update
             next_col_id = sorted_col_ids[i + 1]
             # copy columns col_id+1 to col_indices[i+1] from M
-            new_indptr[col_id + 2 : next_col_id + 1] = (
-                A_indptr[col_id + 2 : next_col_id + 1] - A_indptr[col_id + 1] + new_indptr[col_id + 1]
-            )
+            new_indptr[col_id + 2 : next_col_id + 1] = A_indptr[col_id + 2 : next_col_id + 1] - A_indptr[col_id + 1] + new_indptr[col_id + 1]
             new_nnz = new_indptr[next_col_id]
             new_indices[nnz:new_nnz] = A_indices[A_indptr[col_id + 1] : A_indptr[next_col_id]]
             new_data[nnz:new_nnz] = A_data[A_indptr[col_id + 1] : A_indptr[next_col_id]]

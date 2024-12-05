@@ -20,7 +20,6 @@ class ApproximateInverseMethod(Enum):
 
 @dataclass
 class UnitLowerTriangleInverterConfig:
-
     @abstractmethod
     def __post_init__(self) -> None:
         self.approximate_inverse_method: ApproximateInverseMethod
@@ -28,7 +27,6 @@ class UnitLowerTriangleInverterConfig:
 
 
 class UnitLowerTriangleInverter(ABC):
-
     def __init__(self, config: UnitLowerTriangleInverterConfig):
         self.approximate_inverse_method = config.approximate_inverse_method
 

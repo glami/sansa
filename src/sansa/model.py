@@ -47,7 +47,6 @@ def _apply_icf_scaling(X: sp.csr_matrix, compute_gramian: bool) -> None:
         del da
 
 
-
 @dataclass
 class SANSAConfig:
     l2: float

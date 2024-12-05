@@ -24,9 +24,7 @@ class TestInplaceScaleAlongCompressedAxis(unittest.TestCase):
         copy = CSC.copy()
         inplace_scale_along_compressed_axis(copy, COLUMN_SCALE)
         actual = copy.toarray()
-        expected = np.array(
-            [[10, 100, 1000, 10000, 100000], [20, 200, 2000, 20000, 200000], [30, 300, 3000, 30000, 300000]]
-        )
+        expected = np.array([[10, 100, 1000, 10000, 100000], [20, 200, 2000, 20000, 200000], [30, 300, 3000, 30000, 300000]])
         np.testing.assert_array_equal(actual, expected)
 
 
@@ -35,9 +33,7 @@ class TestInplaceScaleAlongUncompressedAxis(unittest.TestCase):
         copy = CSR.copy()
         inplace_scale_along_uncompressed_axis(copy, COLUMN_SCALE)
         actual = copy.toarray()
-        expected = np.array(
-            [[10, 100, 1000, 10000, 100000], [20, 200, 2000, 20000, 200000], [30, 300, 3000, 30000, 300000]]
-        )
+        expected = np.array([[10, 100, 1000, 10000, 100000], [20, 200, 2000, 20000, 200000], [30, 300, 3000, 30000, 300000]])
         np.testing.assert_array_equal(actual, expected)
 
     def test_csc(self):
