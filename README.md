@@ -26,7 +26,8 @@ SANSA is a scalable modification of [EASE](https://arxiv.org/abs/1905.03375), a 
 - The model's density is prescribed via a hyperparameter. 
 - As a sparse neural network, SANSA offers *very fast inference* times.
 
-### Learn more in our [short paper](https://dl.acm.org/doi/10.1145/3604915.3608827), or check out the conference [poster](assets/poster.pdf).
+### Learn more in our RecSys 2023 [short paper](https://dl.acm.org/doi/10.1145/3604915.3608827), or check out the conference [poster](assets/poster.pdf).
+### Watch our Miton AI Times meetup [presentation & demo (YouTube)](https://www.youtube.com/watch?v=uAoDLXqOY-s).
 
 ## Installation
 ```bash
