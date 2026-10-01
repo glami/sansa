@@ -29,6 +29,42 @@ SANSA is a scalable modification of [EASE](https://arxiv.org/abs/1905.03375), a 
 ### Watch our Miton AI Times meetup [presentation & demo (YouTube)](https://www.youtube.com/watch?v=uAoDLXqOY-s).
 
 ## Installation
+This checkout targets Python **>=3.11**, NumPy >=2.0, SciPy >=1.14,
+Numba >=0.65.1 and scikit-sparse 0.5.x. Python 3.12 is the development default.
+SuiteSparse **>=7.4** is a native prerequisite, not a dependency managed by uv.
+On Windows, run training inside WSL.
+
+### Local development with uv
+
+```bash
+# In WSL/Linux, from this checkout. Uses system SuiteSparse by default.
+# For a custom build: export SUITESPARSE_DIR=/path/to/installed/suitesparse
+bash tools/uv.sh sync --locked --extra dev
+bash tools/uv.sh run --locked pytest tests
+```
+
+The wrapper sets build/runtime paths and checks SuiteSparse's version. It uses
+an isolated `.venv-wsl`. The lock covers Python
+dependencies; native SuiteSparse/CUDA/BLAS versions must still be supplied.
+For persistent local paths, copy `.native.env.example` to `.native.env` and
+uncomment the required values; this local file is not committed.
+`uv sync` installs only requested extras, not all packages present in the lock.
+For MKL: `bash tools/uv.sh sync --locked --extra dev --extra mkl`, then select
+`UMRUnitLowerTriangleInverterConfig(product_backend="mkl")`. There is no nested
+Python matmul pool around threaded MKL. Set `NUMBA_NUM_THREADS`,
+`MKL_NUM_THREADS`, `OMP_NUM_THREADS` and `OPENBLAS_NUM_THREADS` before Python
+starts (our tested CPU budget is 16).
+For bounded full-catalog scoring, use `model.forward(history_batch, dense=True)`;
+MKL writes the final product directly into dense scores. The default still
+returns a sparse matrix. Seen filtering and top-k remain the caller's policy.
+
+This checkout incorporates retained-only ICF sorting, panelized exact prescaling,
+parallel CSC kernels and fit-local post-prune residual reuse. To disable reuse,
+set `UMRUnitLowerTriangleInverterConfig(residual_cache=False)`.
+The actual factorization Gram and residual can still be large: these execution
+changes do not establish a million-item memory bound. See [runtime measurements](docs/runtime.md)
+and the [1.2.0 changelog](CHANGELOG.md).
+
 ```bash
 pip install sansa
 ```
@@ -46,13 +82,15 @@ Note that `brew` (and possibly other package managers) installs SuiteSparse obje
 the correct path to SuiteSparse by setting the following 2 environment variables:
 ```bash
 export SUITESPARSE_INCLUDE_DIR={PATH TO YOUR SUITESPARSE}/include/suitesparse
-export SUITESPARSE_LIBRARY_DIR={PATH TO YOUR SUITESPARSE}/lib
+export SUITESPARSE_LIB_DIR={PATH TO YOUR SUITESPARSE}/lib
+export SUITESPARSE_LIBRARY_DIR=$SUITESPARSE_LIB_DIR
 ```
 For `brew`, you can find `{PATH TO YOUR SUITESPARSE}` by running `brew info suite-sparse`. To streamline this process, you can run
 ```bash
 SUITESPARSE_DIR=$(brew info suitesparse | sed -n 4p | awk '{print $1}')  # path to brew-installed package is on the 4th line, 1st column
 export SUITESPARSE_INCLUDE_DIR=$SUITESPARSE_DIR/include/suitesparse
-export SUITESPARSE_LIBRARY_DIR=$SUITESPARSE_DIR/lib
+export SUITESPARSE_LIB_DIR=$SUITESPARSE_DIR/lib
+export SUITESPARSE_LIBRARY_DIR=$SUITESPARSE_LIB_DIR
 ```
 which should set the correct environment variables for you.
 

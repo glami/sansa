@@ -121,7 +121,12 @@ celerybeat.pid
 
 # Environments
 .env
+.native.env
 .venv
+.venv-wsl/
+.tools/
+*.nbc
+*.nbi
 env/
 venv/
 ENV/

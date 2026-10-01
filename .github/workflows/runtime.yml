@@ -1,0 +1,37 @@
+name: Runtime and package
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        python: ["3.11", "3.12"]
+    env:
+      NUMBA_NUM_THREADS: "2"
+      OMP_NUM_THREADS: "2"
+      OPENBLAS_NUM_THREADS: "2"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python }}
+          version: "0.9.2"
+      - name: Install native prerequisite
+        run: sudo apt-get update && sudo apt-get install -y libsuitesparse-dev
+      - name: Install locked Python dependencies
+        run: bash tools/uv.sh sync --locked --extra dev --python '${{ matrix.python }}'
+      - name: Test
+        run: bash tools/uv.sh run --locked pytest tests -q
+      - name: Build wheel and source distribution
+        run: uv build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sansa-dist-py${{ matrix.python }}
+          path: dist/*
