@@ -143,13 +143,17 @@ class SANSA:
 
         return self
 
-    def forward(self, X: sp.csr_matrix) -> sp.csr_matrix:
+    def forward(self, X: sp.csr_matrix, dense: bool = False) -> sp.csr_matrix | np.ndarray:
         """
-        Forward pass.
+        Forward pass; dense=True avoids a sparse final product with MKL.
+        Pass a bounded user batch: dense output has users * items entries.
         """
-        latent = X @ self.weights[0]
-        out = latent @ self.weights[1]
-        return out
+        product = getattr(self.inverter, "products", None) or matmat
+        if dense and getattr(self.inverter, "products", None) is not None:
+            return product.scores(X, self.weights)
+        latent = product(X, self.weights[0])
+        out = product(latent, self.weights[1])
+        return out.toarray() if dense else out
 
     def recommend(self, interactions: sp.csr_matrix, k: int, mask_input: bool) -> Tuple[np.ndarray, np.ndarray]:
         """

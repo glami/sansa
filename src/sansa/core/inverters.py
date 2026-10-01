@@ -54,8 +54,11 @@ class UMRUnitLowerTriangleInverterConfig(UnitLowerTriangleInverterConfig):
     finetune_steps: int = 10
     log_norm_threshold: float = -7  # log10 of the norm threshold
     residual_cache: bool = True
+    product_backend: str = "scipy"
 
     def __post_init__(self) -> None:
+        if self.product_backend not in ("scipy", "mkl"):
+            raise ValueError("product_backend must be scipy or mkl")
         self.approximate_inverse_method = ApproximateInverseMethod.UMR
 
 
@@ -66,7 +69,13 @@ class UMRUnitLowerTriangleInverter(UnitLowerTriangleInverter):
         self.finetune_steps = config.finetune_steps
         self.log_norm_threshold = config.log_norm_threshold
         self.residual_cache = config.residual_cache
+        self.product_backend = config.product_backend
+        self.products = None
         self.last_execution = {}
+        if self.product_backend == "mkl":
+            from ..utils._mkl import SparseProducts
+
+            self.products = SparseProducts()
 
     @property
     def config(self) -> UMRUnitLowerTriangleInverterConfig:
@@ -75,6 +84,7 @@ class UMRUnitLowerTriangleInverter(UnitLowerTriangleInverter):
             self.finetune_steps,
             self.log_norm_threshold,
             self.residual_cache,
+            self.product_backend,
         )
 
     def invert(self, L: sp.csc_matrix) -> sp.csc_matrix:
@@ -82,7 +92,7 @@ class UMRUnitLowerTriangleInverter(UnitLowerTriangleInverter):
         logger.info("Calculating initial guess using 1 step of Schultz method...")
         M_0 = s1(L)  # initial guess
         logger.info("Calculating approximate inverse using Uniform Minimal Residual algorithm...")
-        execution = UMRExecution(product=matmat, cache=self.residual_cache)
+        execution = UMRExecution(product=self.products or matmat, cache=self.residual_cache)
         try:
             return self._invert(L, M_0, density, execution)
         finally:
