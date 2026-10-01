@@ -14,6 +14,7 @@ jobs:
       matrix:
         python: ["3.11", "3.12"]
     env:
+      UV_PYTHON: ${{ matrix.python }}
       NUMBA_NUM_THREADS: "2"
       OMP_NUM_THREADS: "2"
       OPENBLAS_NUM_THREADS: "2"
