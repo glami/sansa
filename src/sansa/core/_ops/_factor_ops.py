@@ -10,7 +10,6 @@
 import logging
 
 import numpy as np
-import numpy.typing as npt
 import scipy.sparse as sp
 from numba import njit
 
@@ -51,7 +50,7 @@ def icf(
             Lr,
             Lp,
             max_nnz,
-            shift,
+            np.float32(shift),
         )
         # if shift is too small, increase it
         if nnz == -1:
@@ -68,120 +67,88 @@ def icf(
     return sp.csc_matrix((Lv, Lr, Lp), (n, n))
 
 
-# TODO delete signatures?
-@njit(
-    "int64(int64, float32[:], int64[:], int64[:], float32[:], int64[:], int64[:], int64, float32)",
-    cache=True,
-    nogil=True,
-)
-def _core_icf(
-    n: np.int64,
-    Av: npt.NDArray[np.float32],
-    Ar: npt.NDArray[np.int64],
-    Ap: npt.NDArray[np.int64],
-    Lv: npt.NDArray[np.float32],
-    Lr: npt.NDArray[np.int64],
-    Lp: npt.NDArray[np.int64],
-    max_nnz: np.int64,
-    shift: np.float32,
-) -> np.int64:
-    """
-    Incomplete Cholesky Factorization algorithm -- numba just-in-time compiled core function.
-    Computation is performed in-place in pre-allocated arrays Lv, Lr, Lp. Returns number of non-zero elements in L.
-    Input dtypes are critical and using the wrong dtypes will not work with compiled function!
-    :param n: number of rows/columns of A
-    :param Av: values of A -- A.data
-    :param Ar: row indices of A -- A.indices
-    :param Ap: start and end indices of columns of A -- A.indptr
-    :param Lv: values of L -- L.data
-    :param Lr: row indices of L -- L.indices
-    :param Lp: start and end indices of columns of L -- L.indptr
-    :param max_nnz: maximum number of non-zero elements in L
-    :param shift: parameter of diagonal shift (to ensure positive-definiteness)
-    :return: number of non-zero elements in L
-    """
+@njit(cache=True, nogil=True)
+def _core_icf(n, Av, Ar, Ap, Lv, Lr, Lp, max_nnz, shift):
     nnz = 0
     c_n = 0
-    s = np.zeros(n, np.int64)  # Next non-zero row index i in column j of L
-    t = np.zeros(n, np.int64)  # First subdiagonal index i in column j of A
-    l = np.zeros(n, np.int64) - 1  # Linked list of non-zero columns in row k of L
-    a = np.zeros(n, np.float32)  # Values of column j
-    b = np.zeros(n, np.bool_)  # b[i] indicates if the i-th element of column j is non-zero
-    c = np.empty(n, np.int64)  # Row indices of non-zero elements in column j
-    d = np.full(n, shift, np.float32)  # Diagonal elements of A
-
+    s = np.zeros(n, np.int64)
+    t = np.zeros(n, np.int64)
+    link = np.full(n, -1, np.int64)
+    a = np.zeros(n, np.float32)
+    marked = np.zeros(n, np.bool_)
+    candidates = np.empty(n, np.int64)
+    retained = np.empty(n, np.int64)
+    d = np.full(n, shift, np.float32)
     for j in range(n):
         for idx in range(Ap[j], Ap[j + 1]):
             i = Ar[idx]
             if i == j:
                 d[j] += Av[idx]
                 t[j] = idx + 1
-
-    for j in range(n):  # For each column j
-        for idx in range(t[j], Ap[j + 1]):  # For each L_ij
+    for j in range(n):
+        for idx in range(t[j], Ap[j + 1]):
             i = Ar[idx]
-            L_ij = Av[idx]
-            if L_ij != 0.0 and i > j:
-                a[i] += L_ij  # Assign non-zero value to L_ij in sparse column
-                if not b[i]:
-                    b[i] = True  # Mark it as non-zero
-                    c[c_n] = i  # Remember index for later deletion
+            value = Av[idx]
+            if value != 0.0 and i > j:
+                a[i] += value
+                if not marked[i]:
+                    marked[i] = True
+                    candidates[c_n] = i
                     c_n += 1
-
-        k = l[j]  # Find index k of column with non-zero element in row j
-        while k != -1:  # For each column of that type
-            k0 = s[k]  # Start index of non-zero elements in column k
-            k1 = Lp[k + 1]  # End index
-            k2 = l[k]  # Remember next column index before it is overwritten
-            L_jk = Lv[k0]  # Value of non-zero element at start of column
-            k0 += 1  # Advance to next non-zero element in column
-            if k0 < k1:  # If there is a next non-zero element
-                s[k] = k0  # Advance start index in column k to next non-zero element
-                i = Lr[k0]  # Row index of next non-zero element in column k
-                l[k] = l[i]  # Remember old list i index in list k
-                l[i] = k  # Insert index of non-zero element into list i
-                for idx in range(k0, k1):  # For each non-zero L_ik in column k
+        k = link[j]
+        while k != -1:
+            k0, k1 = s[k], Lp[k + 1]
+            k2 = link[k]
+            value_jk = Lv[k0]
+            k0 += 1
+            if k0 < k1:
+                s[k] = k0
+                i = Lr[k0]
+                link[k] = link[i]
+                link[i] = k
+                for idx in range(k0, k1):
                     i = Lr[idx]
-                    L_ik = Lv[idx]
-                    a[i] -= L_ik * L_jk  # Update element L_ij in sparse column
-                    if not b[i]:  # Check if sparse column element was zero
-                        b[i] = True  # Mark as non-zero in sparse column
-                        c[c_n] = i  # Remember index for later deletion
+                    a[i] -= Lv[idx] * value_jk
+                    if not marked[i]:
+                        marked[i] = True
+                        candidates[c_n] = i
                         c_n += 1
-            k = k2  # Advance to next column k
-
+            k = k2
         if d[j] <= 0.0:
             return np.int64(-1)
-
-        max_j_nnz = (max_nnz - nnz) // (n - j)  # Maximum num. of nnz elements in col j
-        # keep only min(c_n, max_j_nnz) largest values in a
-        if c_n > max_j_nnz:
-            cc = c[:c_n]
+        budget = (max_nnz - nnz) // (n - j)
+        if c_n > budget:
+            cc = candidates[:c_n]
             aa = np.abs(a[cc])
-            largest_indices = np.argpartition(aa, -max_j_nnz)[-max_j_nnz:]
-            b[cc] = False
-            b[cc[largest_indices]] = True
-
-        d[j] = np.sqrt(d[j])  # Update diagonal element L_ii
-        Lv[nnz] = d[j]  # Add diagonal element L_ii to L
-        Lr[nnz] = j  # Add row index of L_ii to L
+            largest = np.argpartition(aa, -budget)[-budget:]
+            marked[cc] = False
+            marked[cc[largest]] = True
+        d[j] = np.sqrt(d[j])
+        Lv[nnz], Lr[nnz] = d[j], j
         nnz += 1
-        s[j] = nnz  # Set first non-zero index of column j
-
-        for i in np.sort(c[:c_n]):  # Sort row indices of column j for correct insertion order into L
-            L_ij = a[i] / d[j]  # Get non-zero element from sparse column j
-            d[i] -= L_ij * L_ij  # Update diagonal element L_ii
-            if b[i]:  # If element is not discarded and sufficiently non-zero
-                Lv[nnz] = L_ij  # Add element L_ij to L
-                Lr[nnz] = i  # Add row index of L_ij
-                nnz += 1
-            a[i] = 0.0  # Set element i in column j to zero
-            b[i] = False  # Mark element as zero
-        c_n = 0  # Discard row indices of non-zero elements in column j.
-        Lp[j + 1] = nnz  # Update count of non-zero elements up to column j
-        if Lp[j] + 1 < Lp[j + 1]:  # If column j has a non-zero element below diagonal
-            i = Lr[Lp[j] + 1]  # Row index of first off-diagonal non-zero element
-            l[j] = l[i]  # Remember old list i index in list j
-            l[i] = j  # Insert index of non-zero element into list i
-
+        s[j] = nnz
+        kept = 0
+        # Each candidate row is unique. Preserve its diagonal update even if dropped.
+        for pos in range(c_n):
+            i = candidates[pos]
+            value = a[i] / d[j]
+            d[i] -= value * value
+            if marked[i]:
+                retained[kept] = i
+                kept += 1
+        retained[:kept].sort()
+        for pos in range(kept):
+            i = retained[pos]
+            Lv[nnz], Lr[nnz] = a[i] / d[j], i
+            nnz += 1
+        for pos in range(c_n):
+            i = candidates[pos]
+            a[i] = 0.0
+            marked[i] = False
+        c_n = 0
+        Lp[j + 1] = nnz
+        if Lp[j] + 1 < Lp[j + 1]:
+            i = Lr[Lp[j] + 1]
+            link[j] = link[i]
+            link[i] = j
     return np.int64(nnz)
