@@ -1,6 +1,8 @@
+import importlib
 import logging
 import warnings
 from dataclasses import dataclass
+from functools import partial
 from typing import Tuple
 
 import numpy as np
@@ -31,8 +33,9 @@ def _apply_icf_scaling(X: sp.csr_matrix, compute_gramian: bool) -> None:
         logger.info("Computing column norms of X^TX...")
         norms = np.empty(X.shape[1], dtype=np.float64)
         xt = X.T
-        for start in range(0, X.shape[1], 256):
-            stop = min(start + 256, X.shape[1])
+        panel_size = 256  # Limit the temporary Gram to this many columns.
+        for start in range(0, X.shape[1], panel_size):
+            stop = min(start + panel_size, X.shape[1])
             gram = matmat(xt, X[:, start:stop]).tocsc()
             # Same norm arithmetic, without running cyclic GC after each panel.
             squared = np.zeros(gram.nnz + 1, dtype=np.float64)
@@ -63,6 +66,11 @@ class SANSAConfig:
     weight_matrix_density: float
     gramian_factorizer_config: GramianFactorizerConfig
     lower_triangle_inverter_config: UnitLowerTriangleInverterConfig
+    backend: str = "scipy"
+
+    def __post_init__(self) -> None:
+        if self.backend not in ("scipy", "mkl"):
+            raise ValueError("backend must be scipy or mkl")
 
 
 class SANSA:
@@ -72,6 +80,12 @@ class SANSA:
         self.factorizer = GramianFactorizer.from_config(config.gramian_factorizer_config)
         self.factorization_method = config.gramian_factorizer_config.factorization_method
         self.inverter = UnitLowerTriangleInverter.from_config(config.lower_triangle_inverter_config)
+        self.backend = config.backend
+        self.matmat = partial(matmat, backend=self.backend)
+        if self.backend == "mkl":
+            # Fail at construction if the explicitly requested backend is unavailable.
+            importlib.import_module("sparse_dot_mkl")
+        self.inverter.matmat = self.matmat
         self.weights = (None, None)
 
     @property
@@ -81,6 +95,7 @@ class SANSA:
             self.weight_matrix_density,
             self.factorizer.config,
             self.inverter.config,
+            self.backend,
         )
 
     def load_weights(self, weights: Tuple[sp.csr_matrix, sp.csr_matrix]) -> "SANSA":
@@ -148,12 +163,12 @@ class SANSA:
         Forward pass; dense=True avoids a sparse final product with MKL.
         Pass a bounded user batch: dense output has users * items entries.
         """
-        product = getattr(self.inverter, "products", None) or matmat
-        if dense and getattr(self.inverter, "products", None) is not None:
-            return product.scores(X, self.weights)
-        latent = product(X, self.weights[0])
-        out = product(latent, self.weights[1])
-        return out.toarray() if dense else out
+        if any(weight is None for weight in self.weights):
+            raise RuntimeError("Call fit or load_weights before forward")
+        if X.shape[1] != self.weights[0].shape[0]:
+            raise ValueError("Input item dimension must match the model weights")
+        latent = self.matmat(X, self.weights[0])
+        return self.matmat(latent, self.weights[1], dense=dense)
 
     def recommend(self, interactions: sp.csr_matrix, k: int, mask_input: bool) -> Tuple[np.ndarray, np.ndarray]:
         """

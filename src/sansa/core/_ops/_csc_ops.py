@@ -6,7 +6,31 @@ from numba import njit, prange
 
 
 @njit(parallel=True, nogil=True, cache=True)
-def _copy_columns(a_ptr, a_rows, a_data, b_ptr, b_rows, b_data, source, out_ptr, out_rows, out_data):
+def _copy_columns(
+    a_ptr: np.ndarray,
+    a_rows: np.ndarray,
+    a_data: np.ndarray,
+    b_ptr: np.ndarray,
+    b_rows: np.ndarray,
+    b_data: np.ndarray,
+    source: np.ndarray,
+    out_ptr: np.ndarray,
+    out_rows: np.ndarray,
+    out_data: np.ndarray,
+) -> None:
+    """
+    Copy selected CSC columns into pre-allocated output arrays.
+    :param a_ptr: column offsets of the original matrix
+    :param a_rows: row indices of the original matrix
+    :param a_data: values of the original matrix
+    :param b_ptr: column offsets of the replacement matrix
+    :param b_rows: row indices of the replacement matrix
+    :param b_data: values of the replacement matrix
+    :param source: replacement column index, or -1 for an unchanged column
+    :param out_ptr: precomputed output column offsets
+    :param out_rows: output row indices
+    :param out_data: output values
+    """
     # Prefix sums give each worker a disjoint destination segment.
     for col in prange(len(source)):
         other = source[col]
@@ -23,26 +47,40 @@ def _copy_columns(a_ptr, a_rows, a_data, b_ptr, b_rows, b_data, source, out_ptr,
                 dst += 1
 
 
-def replace_columns(a, columns, b, dtype=np.float32):
-    """Preserve original order/zeros/float32 output; avoid whole-input casts."""
-    columns = np.asarray(columns)
-    if not sp.isspmatrix_csc(a) or not sp.isspmatrix_csc(b):
+def substitute_columns(
+    A: sp.csc_matrix,
+    sorted_col_ids: np.ndarray,
+    B: sp.csc_matrix,
+    dtype: np.dtype = np.float32,
+) -> sp.csc_matrix:
+    """
+    Substitute columns of A with columns of B, preserving row order and explicit zeros.
+    :param A: sparse matrix in CSC format
+    :param sorted_col_ids: sorted, unique column indices to be substituted
+    :param B: sparse matrix in CSC format with one replacement column per index
+    :param dtype: output value dtype; float32 for the inverse, unchanged dtype for cached residuals
+    :return: sparse matrix in CSC format with substituted columns
+    """
+    sorted_col_ids = np.asarray(sorted_col_ids)
+    if not sp.isspmatrix_csc(A) or not sp.isspmatrix_csc(B):
         raise TypeError("CSC matrices required")
-    if columns.ndim != 1 or columns.dtype.kind not in "iu":
+    if sorted_col_ids.ndim != 1 or sorted_col_ids.dtype.kind not in "iu":
         raise ValueError("integer column vector required")
-    if a.shape[0] != b.shape[0] or b.shape[1] != len(columns):
+    if A.shape[0] != B.shape[0] or B.shape[1] != len(sorted_col_ids):
         raise ValueError("replacement shape mismatch")
-    if len(columns) and (columns[0] < 0 or columns[-1] >= a.shape[1] or np.any(columns[1:] <= columns[:-1])):
+    if len(sorted_col_ids) and (
+        sorted_col_ids[0] < 0 or sorted_col_ids[-1] >= A.shape[1] or np.any(sorted_col_ids[1:] <= sorted_col_ids[:-1])
+    ):
         raise ValueError("columns must be sorted, unique and in range")
-    source = np.full(a.shape[1], -1, dtype=np.int64)
-    source[columns] = np.arange(len(columns), dtype=np.int64)
-    sizes = np.diff(a.indptr).astype(np.int64)
-    sizes[columns] = np.diff(b.indptr)
-    indptr = np.empty(a.shape[1] + 1, dtype=np.int64)
+    source = np.full(A.shape[1], -1, dtype=np.int64)
+    source[sorted_col_ids] = np.arange(len(sorted_col_ids), dtype=np.int64)
+    sizes = np.diff(A.indptr).astype(np.int64)
+    sizes[sorted_col_ids] = np.diff(B.indptr)
+    indptr = np.empty(A.shape[1] + 1, dtype=np.int64)
     indptr[0] = 0
     np.cumsum(sizes, dtype=np.int64, out=indptr[1:])
-    index_dtype = np.int32 if indptr[-1] <= np.iinfo(np.int32).max and max(a.shape) <= np.iinfo(np.int32).max else np.int64
+    index_dtype = np.int32 if indptr[-1] <= np.iinfo(np.int32).max and max(A.shape) <= np.iinfo(np.int32).max else np.int64
     rows = np.empty(int(indptr[-1]), dtype=index_dtype)
     data = np.empty(int(indptr[-1]), dtype=dtype)
-    _copy_columns(a.indptr, a.indices, a.data, b.indptr, b.indices, b.data, source, indptr, rows, data)
-    return sp.csc_matrix((data, rows, indptr), shape=a.shape)
+    _copy_columns(A.indptr, A.indices, A.data, B.indptr, B.indices, B.data, source, indptr, rows, data)
+    return sp.csc_matrix((data, rows, indptr), shape=A.shape)

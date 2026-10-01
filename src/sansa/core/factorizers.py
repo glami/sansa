@@ -118,7 +118,13 @@ class GramianFactorizer(ABC):
 
         return L, D, p
 
-    def _analyze(self, X, compute_gramian):
+    def _analyze(self, X: sp.csr_matrix, compute_gramian: bool) -> tuple[cholmod.CholeskyFactor, sp.csc_array]:
+        """
+        Compute symbolic factorization and retain its input for numerical factorization.
+        :param X: user-item matrix, or a symmetric item-item matrix
+        :param compute_gramian: factorize X^TX rather than X
+        :return: symbolic factor and its CSC input array
+        """
         matrix = sp.csc_array(X.transpose(), dtype=np.float64)
         if self.reordering_use_long:
             matrix.indices = matrix.indices.astype(np.int64)
@@ -203,15 +209,6 @@ class ICFGramianFactorizer(GramianFactorizer):
             reordering_use_long=self.reordering_use_long,
             reordering_method=self.reordering_method,
         )
-
-    @staticmethod
-    def _index_dtypes_to_int64(A: sp.csc_matrix):
-        if not A.indptr.dtype == np.int64:
-            logger.info("Casting indptr of A to int64...")
-            A.indptr = A.indptr.astype(np.int64)
-        if not A.indices.dtype == np.int64:
-            logger.info("Casting indices of A to int64...")
-            A.indices = A.indices.astype(np.int64)
 
     @staticmethod
     def _suggest_cholmod_if_A_too_dense(A: sp.csc_matrix) -> None:
@@ -299,7 +296,6 @@ class ICFGramianFactorizer(GramianFactorizer):
         # 4. Prepare A for ICF algorithm
         logger.info("Sorting indices of A...")
         A.sort_indices()
-        self._index_dtypes_to_int64(A)
         gc.collect()
 
         # 5. Compute incomplete Cholesky factorization of A

@@ -4,14 +4,20 @@
 #
 ########################################################################################################################
 import logging
+from typing import Callable
 
 import numpy as np
 import scipy.sparse as sp
 
-from ...utils import inplace_sparsify, matmat
-from ._column_ops import scale_columns as inplace_scale_along_compressed_axis
-from ._column_ops import squared_norms as get_squared_norms_along_compressed_axis
-from ._csc_ops import replace_columns
+from ...utils import (
+    inplace_sparsify,
+    matmat,
+)
+from ._column_ops import (
+    get_squared_norms_along_compressed_axis,
+    inplace_scale_along_compressed_axis,
+)
+from ._csc_ops import substitute_columns
 from ._residual_cache import ResidualCache
 
 logger = logging.getLogger(__name__)
@@ -36,7 +42,7 @@ def umr(
     num_scans: int,
     num_finetune_steps: int,
     log_norm_threshold: float,
-    execution=None,
+    execution: "UMRExecution | None" = None,
 ) -> sp.csc_matrix:
     """Run UMR with fit-local resources, released on success or failure."""
     owned = execution is None
@@ -48,7 +54,15 @@ def umr(
             execution.close()
 
 
-def _run_umr(A, M_0, target_density, num_scans, num_finetune_steps, log_norm_threshold, execution):
+def _run_umr(
+    A: sp.csc_matrix,
+    M_0: sp.csc_matrix,
+    target_density: float,
+    num_scans: int,
+    num_finetune_steps: int,
+    log_norm_threshold: float,
+    execution: "UMRExecution",
+) -> sp.csc_matrix:
     """
     Calculate approximate inverse of A from initial guess M_0 using Uniform Minimal Residual algorithm
     tailored for lower triangular matrices (_get_column_indices, linear partitioning can be used for general).
@@ -167,9 +181,6 @@ def s1(L: sp.csc_matrix) -> sp.csc_matrix:
     return -M
 
 
-substitute_columns = replace_columns
-
-
 def _umr_scan(
     A: sp.csc_matrix,
     M: sp.csc_matrix,
@@ -181,7 +192,7 @@ def _umr_scan(
     nblocks: int,
     counter: int,
     log_norm_threshold: float,
-    execution=None,
+    execution: "UMRExecution | None" = None,
 ) -> sp.csc_matrix:
     """
     One pass through all columns of A, updating M.
@@ -195,6 +206,7 @@ def _umr_scan(
     :param nblocks: number of column blocks
     :param counter: current scan number (earlier scans use coarser threshold)
     :param log_norm_threshold: logarithm of squared norm threshold for column selection
+    :param execution: fit-local operations, or uncached defaults
     :return: M = updated approximation of inverse of A
     """
     execution = execution or UMRExecution(cache=False)
@@ -241,7 +253,7 @@ def _umr_finetune_step(
     n: int,
     target_density: float,
     ncols: int,
-    execution=None,
+    execution: "UMRExecution | None" = None,
 ) -> sp.csc_matrix:
     """
     Finetune M by updating the worst columns
@@ -252,6 +264,7 @@ def _umr_finetune_step(
     :param n: number of rows/columns of A
     :param target_density: target density of M
     :param ncols: number of columns to be updated in one step
+    :param execution: fit-local operations, or uncached defaults
     :return: M = updated approximation of inverse of A
     """
     execution = execution or UMRExecution(cache=False)
@@ -266,8 +279,24 @@ def _umr_finetune_step(
     return _update_columns(A, M, R, col_indices, target_density, execution)
 
 
-def _update_columns(A, M, R, col_indices, target_density, execution):
-    """The same minimal-residual update and global pruning for scan and finetune."""
+def _update_columns(
+    A: sp.csc_matrix,
+    M: sp.csc_matrix,
+    R: sp.csc_matrix,
+    col_indices: np.ndarray,
+    target_density: float,
+    execution: "UMRExecution",
+) -> sp.csc_matrix:
+    """
+    Apply a minimal-residual update followed by global sparsification of M.
+    :param A: sparse lower triangular matrix in CSC format
+    :param M: current approximation of inverse of A
+    :param R: residual matrix, frozen for the current scan or finetune step
+    :param col_indices: sorted column indices to update
+    :param target_density: target density of M
+    :param execution: fit-local multiplication and residual operations
+    :return: updated approximation of inverse of A
+    """
     R_part = R[:, col_indices]
     M_part = M[:, col_indices]
 
@@ -301,7 +330,7 @@ def _update_columns(A, M, R, col_indices, target_density, execution):
 class UMRExecution:
     """One fit's operators; no process-global hooks or shared residual state."""
 
-    def __init__(self, product=matmat, cache=True):
+    def __init__(self, product: Callable = matmat, cache: bool = True):
         self.matmat = product
         self.substitute_columns = substitute_columns
         self.inplace_sparsify = inplace_sparsify
@@ -312,11 +341,11 @@ class UMRExecution:
             self.inplace_sparsify = self.cache.prune
             self.get_residual_matrix = self.cache.residual
 
-    def _residual(self, system, inverse):
+    def _residual(self, system: sp.csc_matrix, inverse: sp.csc_matrix) -> sp.csc_matrix:
         result = self.matmat(-system, inverse)
         result.setdiag(result.diagonal() + 1)
         return result
 
-    def close(self):
+    def close(self) -> None:
         if self.cache:
             self.cache.release()
