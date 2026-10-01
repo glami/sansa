@@ -4,19 +4,15 @@
 #
 ########################################################################################################################
 import logging
-import warnings
 
 import numpy as np
-import numpy.typing as npt
 import scipy.sparse as sp
-from numba import njit
 
-from ...utils import (
-    get_squared_norms_along_compressed_axis,
-    inplace_scale_along_compressed_axis,
-    inplace_sparsify,
-    matmat,
-)
+from ...utils import inplace_sparsify, matmat
+from ._column_ops import scale_columns as inplace_scale_along_compressed_axis
+from ._column_ops import squared_norms as get_squared_norms_along_compressed_axis
+from ._csc_ops import replace_columns
+from ._residual_cache import ResidualCache
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +36,19 @@ def umr(
     num_scans: int,
     num_finetune_steps: int,
     log_norm_threshold: float,
+    execution=None,
 ) -> sp.csc_matrix:
+    """Run UMR with fit-local resources, released on success or failure."""
+    owned = execution is None
+    execution = execution or UMRExecution()
+    try:
+        return _run_umr(A, M_0, target_density, num_scans, num_finetune_steps, log_norm_threshold, execution)
+    finally:
+        if owned:
+            execution.close()
+
+
+def _run_umr(A, M_0, target_density, num_scans, num_finetune_steps, log_norm_threshold, execution):
     """
     Calculate approximate inverse of A from initial guess M_0 using Uniform Minimal Residual algorithm
     tailored for lower triangular matrices (_get_column_indices, linear partitioning can be used for general).
@@ -50,18 +58,16 @@ def umr(
     19 (1998) 995–1023.
 
     Uniform:
-    - uniform memory overhead, fixed maximum in each step
+    - fixed stored inverse density after each update (products are not bounded)
     - uniform approximation quality = second part (finetune steps) minimize maximum column norms.
 
     Most important distinction: use global sparsifying.
     This allows for non-uniformity in the sparsity structure
     - some columns may be more sparse than others, but the overall density is fixed.
 
-    Global sparsifying is done after every update. This way, M.nnz <= 2 * target_density * n * n.
-    Moreover, A.nnz = target_density * n * n,
-    R_part.nnz <= target_density * n * n. Also P.nnz <= target_density * n * n, but it is discarded before
-    we add the updated columns to M, therefore at that point M.nnz = target_density * n * n.
-    To summarize, total memory overhead is bounded by 4 * target_density * n * n = 2 * final model size.
+    Global sparsifying is done after every update. This bounds the stored inverse,
+    not the products A @ M or A @ R_part: either product can become much denser.
+    Residual reuse reduces recomputation but still stores a full-shaped residual.
 
     R = I - A @ M is the residual matrix.
     Loss:
@@ -95,7 +101,7 @@ def umr(
     # Perform given number of scans
     for i in range(1, num_scans + 1):
         # Compute residual matrix
-        R = get_residual_matrix(A, M)
+        R = execution.get_residual_matrix(A, M)
         # Compute column norms of R
         sq_norm = get_squared_norms_along_compressed_axis(R)
         # Compute maximum residual and mean squared column norm for logging
@@ -118,12 +124,13 @@ def umr(
             nblocks=nblocks,
             counter=i,
             log_norm_threshold=log_norm_threshold,
+            execution=execution,
         )
 
     # Perform given number of finetune steps
     for i in range(1, num_finetune_steps + 1):
         # Compute residual matrix
-        R = get_residual_matrix(A, M)
+        R = execution.get_residual_matrix(A, M)
         # Compute column norms of R
         sq_norm = get_squared_norms_along_compressed_axis(R)
         # Compute maximum residual and mean squared column norm for logging
@@ -143,6 +150,7 @@ def umr(
             n=n,
             target_density=target_density,
             ncols=ncols,
+            execution=execution,
         )
 
     return M
@@ -159,41 +167,7 @@ def s1(L: sp.csc_matrix) -> sp.csc_matrix:
     return -M
 
 
-def substitute_columns(A: sp.csc_matrix, sorted_col_ids: np.ndarray, B: sp.csc_matrix) -> sp.csc_matrix:
-    """
-    Substitute columns of A with columns of B
-    :param A: sparse matrix in CSC format
-    :param sorted_col_ids: sorted array of column indices to be substituted
-    :param B: sparse matrix in CSC format
-    :return: sparse matrix in CSC format with substituted columns
-    """
-    # check that col_ids are unique
-    assert len(sorted_col_ids) == len(np.unique(sorted_col_ids))
-    # check that B has the same number of rows as A
-    assert A.shape[0] == B.shape[0]
-    # check that col_ids are in range
-    assert np.all(sorted_col_ids >= 0) and np.all(sorted_col_ids < A.shape[1])
-    # check that B has the same number of columns as col_ids
-    assert B.shape[1] == len(sorted_col_ids)
-
-    # create new matrix
-    new_indptr = np.zeros(A.shape[1] + 1, dtype=np.int64)
-    new_indices = np.zeros(len(A.indices) + len(B.indices), dtype=np.int64)
-    new_data = np.zeros(len(A.data) + len(B.data), dtype=np.float32)
-    nnz = _substitute_columns(
-        A.indptr.astype(np.int64),
-        A.indices.astype(np.int64),
-        A.data.astype(np.float32),
-        A.shape[1],
-        sorted_col_ids.astype(np.int64),
-        B.indptr.astype(np.int64),
-        B.indices.astype(np.int64),
-        B.data.astype(np.float32),
-        new_indptr,
-        new_indices,
-        new_data,
-    )
-    return sp.csc_matrix((new_data[:nnz], new_indices[:nnz], new_indptr), shape=A.shape)
+substitute_columns = replace_columns
 
 
 def _umr_scan(
@@ -207,6 +181,7 @@ def _umr_scan(
     nblocks: int,
     counter: int,
     log_norm_threshold: float,
+    execution=None,
 ) -> sp.csc_matrix:
     """
     One pass through all columns of A, updating M.
@@ -222,6 +197,7 @@ def _umr_scan(
     :param log_norm_threshold: logarithm of squared norm threshold for column selection
     :return: M = updated approximation of inverse of A
     """
+    execution = execution or UMRExecution(cache=False)
     # Safety: we must prevent division by zero in the upcoming scaling step
     # which happens iff norm of a column in P is very small
     # But: P is a linear combination of columns of A, which are assumed to be sufficiently large in 2-norm
@@ -252,33 +228,7 @@ def _umr_scan(
             # No columns to be updated in this step
             continue
 
-        R_part = R[:, col_indices]
-        M_part = M[:, col_indices]
-
-        # Compute projection matrix
-        P = matmat(A, R_part)
-
-        # scale columns of P by 1 / (norm of columns squared)
-        with np.errstate(divide="ignore"):  # can raise divide by zero warning with intel MKL numpy (endianness)
-            scale = 1 / get_squared_norms_along_compressed_axis(P)
-        inplace_scale_along_compressed_axis(P, scale)
-
-        # compute: alpha = diag(R_part^T @ P)
-        alpha = np.asarray(R_part.multiply(P).sum(axis=0))[0]
-        # garbage collection, since we don't need P anymore
-        del P
-
-        # scale columns of R_part by alpha
-        inplace_scale_along_compressed_axis(R_part, alpha)
-
-        # compute update
-        M_update = R_part + M_part
-
-        # update M
-        M = substitute_columns(M, col_indices, M_update)
-
-        # Sparsify matrix M globally to target density
-        inplace_sparsify(M, target_density)
+        M = _update_columns(A, M, R, col_indices, target_density, execution)
 
     return M
 
@@ -291,6 +241,7 @@ def _umr_finetune_step(
     n: int,
     target_density: float,
     ncols: int,
+    execution=None,
 ) -> sp.csc_matrix:
     """
     Finetune M by updating the worst columns
@@ -303,6 +254,7 @@ def _umr_finetune_step(
     :param ncols: number of columns to be updated in one step
     :return: M = updated approximation of inverse of A
     """
+    execution = execution or UMRExecution(cache=False)
     # Find columns with large length-normalized residuals (because L is lower triangular)
     # seems to converge faster than unnormalized residuals
     # for non-lower-triangular, no not normalize.
@@ -311,12 +263,16 @@ def _umr_finetune_step(
     # select ncols columns with largest residuals
     col_indices = np.argpartition(residuals, -ncols)[-ncols:]
     col_indices = np.sort(col_indices)
+    return _update_columns(A, M, R, col_indices, target_density, execution)
 
+
+def _update_columns(A, M, R, col_indices, target_density, execution):
+    """The same minimal-residual update and global pruning for scan and finetune."""
     R_part = R[:, col_indices]
     M_part = M[:, col_indices]
 
     # compute projection matrix
-    P = matmat(A, R_part)
+    P = execution.matmat(A, R_part)
 
     # scale columns of P by 1 / (norm of columns squared)
     with np.errstate(divide="ignore"):  # can raise divide by zero warning with intel MKL numpy (endianness)
@@ -331,87 +287,36 @@ def _umr_finetune_step(
     # scale columns of R by alpha
     inplace_scale_along_compressed_axis(R_part, alpha)
 
-    with warnings.catch_warnings():  # ignore warning about changing sparsity pattern
-        warnings.simplefilter("ignore")
-        M_update = R_part + M_part
+    M_update = R_part + M_part
 
     # update M
-    M = substitute_columns(M, col_indices, M_update)
+    M = execution.substitute_columns(M, col_indices, M_update)
 
     # Sparsify matrix M globally to target density
-    inplace_sparsify(M, target_density)
+    execution.inplace_sparsify(M, target_density)
 
     return M
 
 
-# TODO delete signatures?
-@njit(
-    "int64(int64[:], int64[:], float32[:], int64, int64[:], int64[:], int64[:], float32[:], int64[:], int64[:], float32[:])",
-    cache=True,
-    nogil=True,
-)
-def _substitute_columns(
-    A_indptr: npt.NDArray[np.int64],
-    A_indices: npt.NDArray[np.int64],
-    A_data: npt.NDArray[np.float32],
-    n: np.int64,
-    sorted_col_ids: npt.NDArray[np.int64],
-    B_indptr: npt.NDArray[np.int64],
-    B_indices: npt.NDArray[np.int64],
-    B_data: npt.NDArray[np.float32],
-    new_indptr: npt.NDArray[np.int64],
-    new_indices: npt.NDArray[np.int64],
-    new_data: npt.NDArray[np.float32],
-) -> np.int64:
-    """
-    Substitute columns of A with columns of B, numba just-in-time compiled core function.
-    Computation is performed in-place in pre-allocated arrays new_indptr, new_indices, new_data.
-    Returns number of non-zero elements in new matrix.
-    Input dtypes are critical and using the wrong dtypes will not work with compiled function!
-    :param A_indptr: start and end indices of columns of A -- A.indptr
-    :param A_indices: row indices of non-zero elements of A -- A.indices
-    :param A_data: values of non-zero elements of A -- A.data
-    :param n: number of rows/columns of A
-    :param sorted_col_ids: sorted column indices of columns to be substituted
-    :param B_indptr: start and end indices of columns of B -- B.indptr
-    :param B_indices: row indices of non-zero elements of B -- B.indices
-    :param B_data: values of non-zero elements of B -- B.data
-    :param new_indptr: start and end indices of columns of new matrix -- new.indptr
-    :param new_indices: row indices of non-zero elements of new matrix -- new.indices
-    :param new_data: values of non-zero elements of new matrix -- new.data
-    :return: number of non-zero elements in new matrix
-    """
-    # copy left part of M
-    left = min(sorted_col_ids)
-    new_indptr[: left + 1] = A_indptr[: left + 1]
-    nnz = A_indptr[left]
-    new_indices[:nnz] = A_indices[:nnz]
-    new_data[:nnz] = A_data[:nnz]
-    # insert new column and unmodified columns from M
-    for i in range(len(sorted_col_ids)):
-        col_id = sorted_col_ids[i]
-        # copy new column from B
-        new_indptr[col_id + 1] = new_indptr[col_id] + B_indptr[i + 1] - B_indptr[i]
-        new_nnz = new_indptr[col_id + 1]
-        new_indices[nnz:new_nnz] = B_indices[B_indptr[i] : B_indptr[i + 1]]
-        new_data[nnz:new_nnz] = B_data[B_indptr[i] : B_indptr[i + 1]]
-        nnz = new_nnz
-        if col_id == n - 1:  # last column
-            break
-        if i < len(sorted_col_ids) - 1:  # not last column to update
-            next_col_id = sorted_col_ids[i + 1]
-            # copy columns col_id+1 to col_indices[i+1] from M
-            new_indptr[col_id + 2 : next_col_id + 1] = A_indptr[col_id + 2 : next_col_id + 1] - A_indptr[col_id + 1] + new_indptr[col_id + 1]
-            new_nnz = new_indptr[next_col_id]
-            new_indices[nnz:new_nnz] = A_indices[A_indptr[col_id + 1] : A_indptr[next_col_id]]
-            new_data[nnz:new_nnz] = A_data[A_indptr[col_id + 1] : A_indptr[next_col_id]]
-            nnz = new_nnz
-        else:  # last column to update
-            # copy columns col_id+1 to n-1 from M
-            new_indptr[col_id + 2 :] = A_indptr[col_id + 2 :] - A_indptr[col_id + 1] + new_indptr[col_id + 1]
-            new_nnz = new_indptr[-1]
-            new_indices[nnz:new_nnz] = A_indices[A_indptr[col_id + 1] :]
-            new_data[nnz:new_nnz] = A_data[A_indptr[col_id + 1] :]
-            nnz = new_nnz
+class UMRExecution:
+    """One fit's operators; no process-global hooks or shared residual state."""
 
-    return np.int64(nnz)
+    def __init__(self, product=matmat, cache=True):
+        self.matmat = product
+        self.substitute_columns = substitute_columns
+        self.inplace_sparsify = inplace_sparsify
+        self.get_residual_matrix = self._residual
+        self.cache = ResidualCache(self) if cache else None
+        if self.cache:
+            self.substitute_columns = self.cache.substitute
+            self.inplace_sparsify = self.cache.prune
+            self.get_residual_matrix = self.cache.residual
+
+    def _residual(self, system, inverse):
+        result = self.matmat(-system, inverse)
+        result.setdiag(result.diagonal() + 1)
+        return result
+
+    def close(self):
+        if self.cache:
+            self.cache.release()
