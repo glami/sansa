@@ -1,6 +1,0 @@
-include LICENSE NOTICE README.md pyproject.toml uv.lock .python-version ruff.toml .native.env.example CHANGELOG.md
-recursive-include tools *.sh
-recursive-include tests *.py
-include docs/runtime.md
-recursive-include src/sansa *.py
-global-exclude *.nbc *.nbi *.pyc
