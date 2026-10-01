@@ -118,6 +118,18 @@ class GramianFactorizer(ABC):
 
         return L, D, p
 
+    def _analyze(self, X, compute_gramian):
+        matrix = sp.csc_array(X.transpose(), dtype=np.float64)
+        if self.reordering_use_long:
+            matrix.indices = matrix.indices.astype(np.int64)
+            matrix.indptr = matrix.indptr.astype(np.int64)
+        return cholmod.CholeskyFactor(
+            matrix,
+            sym_kind="row" if compute_gramian else "sym",
+            supernodal_mode=self.reordering_mode.value,
+            order=self.reordering_method.value,
+        ), matrix
+
 
 class CHOLMODGramianFactorizer(GramianFactorizer):
     def __init__(self, config: CHOLMODGramianFactorizerConfig):
@@ -159,30 +171,14 @@ class CHOLMODGramianFactorizer(GramianFactorizer):
         # - of X if compute_gramian=False
         # along with fill-in reducing ordering
         logger.info(f"Finding a fill-in reducing ordering (method = {self.reordering_method.value})...")
-        if compute_gramian:
-            factor = cholmod.analyze_AAt(
-                X.transpose(),
-                mode=self.reordering_mode.value,
-                use_long=self.reordering_use_long,
-                ordering_method=self.reordering_method.value,
-            )
-        else:
-            factor = cholmod.analyze(
-                X.transpose(),
-                mode=self.reordering_mode.value,
-                use_long=self.reordering_use_long,
-                ordering_method=self.reordering_method.value,
-            )
-        p = factor.P()
+        factor, matrix = self._analyze(X, compute_gramian)
+        p = factor.get_perm()
 
         # 2. Compute numerical factorization
         logger.info(f"Computing approximate Cholesky decomposition (method = {self.factorization_method.value})...")
-        if compute_gramian:
-            factor.cholesky_AAt_inplace(X.transpose(), beta=l2)
-        else:
-            factor.cholesky_inplace(X.transpose(), beta=l2)
-        L = factor.L().tocsc()
-        del factor
+        factor.factorize(matrix, beta=l2)
+        L = sp.csc_matrix(factor.get_factor(kind="LL", lower=True), copy=True)
+        del factor, matrix
         gc.collect()
 
         # 3. Drop small values from L
@@ -260,20 +256,9 @@ class ICFGramianFactorizer(GramianFactorizer):
 
         # 1. Compute COLAMD permutation of A ( A' = [p, :]A[:, p]] )
         logger.info(f"Finding a fill-in reducing ordering (method = {self.reordering_method.value})...")
-        if compute_gramian:
-            p = cholmod.analyze_AAt(
-                X.transpose(),
-                mode=self.reordering_mode.value,
-                use_long=self.reordering_use_long,
-                ordering_method=self.reordering_method.value,
-            ).P()
-        else:
-            p = cholmod.analyze(
-                X.transpose(),
-                mode=self.reordering_mode.value,
-                use_long=self.reordering_use_long,
-                ordering_method=self.reordering_method.value,
-            ).P()
+        factor, matrix = self._analyze(X, compute_gramian)
+        p = factor.get_perm()
+        del factor, matrix
         gc.collect()
 
         if compute_gramian:
