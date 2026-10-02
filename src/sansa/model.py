@@ -170,20 +170,13 @@ class SANSA:
     def recommend(self, interactions: sp.csr_matrix, k: int, mask_input: bool) -> Tuple[np.ndarray, np.ndarray]:
         """
         Recommend top k items for a batch of users given as a CSR matrix.
-        Fails with "kth out of bounds" error if for some user the model can't recommend k items (=model is too sparse).
+        If fewer than k stored predictions are available, pad with item -1 and score -inf.
+        Input masking retains its existing zero-score behavior.
         """
-        n_users = interactions.shape[0]
         predictions = self.forward(interactions)
         if mask_input:
             with warnings.catch_warnings():  # ignore warning about changing sparsity pattern
                 warnings.simplefilter("ignore")
                 predictions[interactions.nonzero()] = 0
 
-        # Get indices of top k items for each user and corresponding scores
-        top_k_ids, top_k_scores = top_k_along_compressed_axis(predictions, k)
-        # sort top_k_idx matrix and top_k_scores matrix
-        sorting = np.argsort(-top_k_scores, axis=1)
-        top_k_ids = top_k_ids[np.arange(n_users)[:, np.newaxis], sorting]
-        top_k_scores = top_k_scores[np.arange(n_users)[:, np.newaxis], sorting]
-
-        return top_k_ids, top_k_scores
+        return top_k_along_compressed_axis(predictions, k)
