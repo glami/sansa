@@ -10,12 +10,10 @@ import numpy as np
 import scipy.sparse as sp
 
 from ...utils import (
-    inplace_sparsify,
-    matmat,
-)
-from ._column_ops import (
     get_squared_norms_along_compressed_axis,
     inplace_scale_along_compressed_axis,
+    inplace_sparsify,
+    matmat,
 )
 from ._csc_ops import substitute_columns
 from ._residual_cache import ResidualCache

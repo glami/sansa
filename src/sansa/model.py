@@ -37,11 +37,8 @@ def _apply_icf_scaling(X: sp.csr_matrix, compute_gramian: bool) -> None:
         for start in range(0, X.shape[1], panel_size):
             stop = min(start + panel_size, X.shape[1])
             gram = matmat(xt, X[:, start:stop]).tocsc()
-            # Same norm arithmetic, without running cyclic GC after each panel.
-            squared = np.zeros(gram.nnz + 1, dtype=np.float64)
-            squared[:-1] = gram.data**2
-            norms[start:stop] = np.add.reduceat(squared, gram.indptr[:-1]) * (np.diff(gram.indptr) > 0)
-            del gram, squared
+            norms[start:stop] = get_squared_norms_along_compressed_axis(gram)
+            del gram
         da = np.sqrt(np.sqrt(norms))
         # Divide columns of X by the computed square roots of row norms of X^TX
         da[da == 0] = 1  # ignore zero elements
