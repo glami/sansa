@@ -1,0 +1,61 @@
+name: Tests
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: Python ${{ matrix.python }} / ${{ matrix.stack }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python: "3.10"
+            stack: minimum
+            pins: "numpy==2.0.2 scipy==1.14.1 numba==0.65.1"
+            mkl: false
+          - python: "3.12"
+            stack: current
+            pins: ""
+            mkl: false
+          - python: "3.12"
+            stack: MKL
+            pins: ""
+            mkl: true
+    env:
+      NUMBA_NUM_THREADS: "2"
+      OPENBLAS_NUM_THREADS: "2"
+      OMP_NUM_THREADS: "2"
+      MKL_NUM_THREADS: "2"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install SuiteSparse
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libsuitesparse-dev
+      - name: Install package and test dependencies
+        run: python -m pip install -e ".[dev]" ${{ matrix.pins }}
+      - name: Install MKL
+        if: matrix.mkl
+        run: |
+          python -m pip install sparse_dot_mkl mkl
+          runtime=$(find "$pythonLocation/lib" -name 'libmkl_rt.so*' -print -quit)
+          test -n "$runtime"
+          echo "MKL_RT=$runtime" >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$(dirname "$runtime")" >> "$GITHUB_ENV"
+      - name: Verify selected runtime
+        run: |
+          python -c "import sys, numpy, scipy, numba; print(sys.version); print(numpy.__version__, scipy.__version__, numba.__version__)"
+          if [ "${{ matrix.mkl }}" = "true" ]; then
+            python -c "import sparse_dot_mkl; print(sparse_dot_mkl.mkl_interface_integer_dtype())"
+          else
+            python -c "import importlib.util; assert importlib.util.find_spec('sparse_dot_mkl') is None"
+          fi
+      - name: Run tests
+        run: python -m pytest tests -q
