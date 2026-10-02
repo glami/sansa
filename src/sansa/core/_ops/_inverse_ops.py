@@ -65,7 +65,7 @@ def _run_umr(
     Calculate approximate inverse of A from initial guess M_0 using Uniform Minimal Residual algorithm
     tailored for lower triangular matrices (_get_column_indices, linear partitioning can be used for general).
 
-    Based on Minimal Residual algorith; heavily modified.
+    Based on Minimal Residual algorithm; heavily modified.
     E. Chow and Y. Saad. Approximate inverse preconditioners via sparse-sparse iterations, SIAM J. Sci. Comput.
     19 (1998) 995–1023.
 
@@ -268,7 +268,7 @@ def _umr_finetune_step(
     execution = execution or UMRExecution(cache=False)
     # Find columns with large length-normalized residuals (because L is lower triangular)
     # seems to converge faster than unnormalized residuals
-    # for non-lower-triangular, no not normalize.
+    # For non-lower-triangular matrices, do not normalize.
     residuals = residuals / np.sqrt(np.arange(1, n + 1)[::-1])
 
     # select ncols columns with largest residuals

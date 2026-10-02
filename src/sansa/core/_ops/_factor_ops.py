@@ -72,8 +72,8 @@ def icf(
 def _core_icf(
     n: np.int64,
     Av: npt.NDArray[np.float32],
-    Ar: npt.NDArray[np.int64],
-    Ap: npt.NDArray[np.int64],
+    Ar: npt.NDArray[np.int32 | np.int64],
+    Ap: npt.NDArray[np.int32 | np.int64],
     Lv: npt.NDArray[np.float32],
     Lr: npt.NDArray[np.int64],
     Lp: npt.NDArray[np.int64],
@@ -86,8 +86,8 @@ def _core_icf(
     Working values and output buffers use float32; row indices and column offsets use integer arrays.
     :param n: number of rows/columns of A
     :param Av: values of A -- A.data
-    :param Ar: row indices of A -- A.indices
-    :param Ap: start and end indices of columns of A -- A.indptr
+    :param Ar: row indices of A -- A.indices, int32 or int64
+    :param Ap: start and end indices of columns of A -- A.indptr, int32 or int64
     :param Lv: values of L -- L.data
     :param Lr: row indices of L -- L.indices
     :param Lp: start and end indices of columns of L -- L.indptr

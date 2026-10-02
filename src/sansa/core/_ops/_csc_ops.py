@@ -55,10 +55,12 @@ def substitute_columns(
 ) -> sp.csc_matrix:
     """
     Substitute columns of A with columns of B, preserving row order and explicit zeros.
+    Values are cast to float32 by default to preserve the original UMR arithmetic,
+    even for float64 inputs. Pass dtype explicitly to preserve input precision.
     :param A: sparse matrix in CSC format
     :param sorted_col_ids: sorted, unique column indices to be substituted
     :param B: sparse matrix in CSC format with one replacement column per index
-    :param dtype: output value dtype; float32 for the inverse, unchanged dtype for cached residuals
+    :param dtype: output value dtype, not inferred from A or B; cached residuals pass their own dtype
     :return: sparse matrix in CSC format with substituted columns
     """
     sorted_col_ids = np.asarray(sorted_col_ids)

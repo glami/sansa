@@ -153,7 +153,7 @@ class CHOLMODGramianFactorizer(GramianFactorizer):
         if desired_density <= 0.05:
             logger.warning(
                 f"""
-                For low desired desired ({desired_density:%}), computing exact factorization (CHOLMOD) 
+                For low desired density ({desired_density:%}), computing exact factorization (CHOLMOD)
                 followed by sparsification may be inefficient.
                 You may want to try {ICFGramianFactorizer.__name__} instead of {CHOLMODGramianFactorizer.__name__} 
                 (requires less memory and may be faster).
