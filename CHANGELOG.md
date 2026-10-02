@@ -4,7 +4,7 @@
 
 ### Compatibility
 
-- Python >=3.12, NumPy >=2.0.2, SciPy >=1.14.1, Numba >=0.65.1.
+- Python >=3.10, NumPy >=2.0.2, SciPy >=1.14.1, Numba >=0.65.1.
 - scikit-sparse 0.5.x / SuiteSparse >=7.4: migrate symbolic analysis,
   permutation retrieval, factorization and LL export to the modern API.
 - Return owned CSC matrices and retain explicit long-index ordering control.
@@ -18,6 +18,8 @@
   The factorizer already enforces this minimum; normal model fits are unchanged.
 - Parallel compressed-axis norms/scaling and CSC replacement avoid serial copying
   and whole-input casts; offsets are accumulated in int64.
+- Model, factorizer and UMR share the same compressed-axis utilities; floating
+  norms/scaling avoid nnz-sized temporary buffers.
 - A fit-local residual cache recomputes columns changed by substitution or global
   pruning. `residual_cache=False` disables it. Global pruning still runs after
   every update; cached residual values are recomputed, not delta-accumulated.
@@ -26,6 +28,10 @@
   the optional MKL backend with mixed-dtype handling and integer overflow checks.
 - `forward(batch, dense=True)` uses MKL's direct dense final product; the default
   `forward(batch)` remains sparse. Seen filtering/top-k policy is unchanged.
+- Sparse top-k uses a parallel bounded-heap kernel for float32/float64 predictions,
+  returning sorted results directly. NumPy handles tied/nonfinite rows to retain
+  the existing recommendation ordering.
+  Short rows return available entries with `-1`/`-inf` padding instead of raising.
 
 ### Installation
 

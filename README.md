@@ -29,7 +29,7 @@ SANSA is a scalable modification of [EASE](https://arxiv.org/abs/1905.03375), a 
 ### Watch our Miton AI Times meetup [presentation & demo (YouTube)](https://www.youtube.com/watch?v=uAoDLXqOY-s).
 
 ## Installation
-SANSA requires Python **>=3.12**, NumPy >=2.0.2, SciPy >=1.14.1,
+SANSA requires Python **>=3.10**, NumPy >=2.0.2, SciPy >=1.14.1,
 Numba >=0.65.1, scikit-sparse 0.5.x and native SuiteSparse **>=7.4**.
 See [prerequisites](#prerequisites) before installing.
 
@@ -124,6 +124,9 @@ recomputation. Products use SciPy unless the model config selects MKL.
 `model.forward(history_batch, dense=True)` returns dense scores, with a direct
 final MKL product when enabled. The default remains sparse. Choose batch size
 to fit memory; the training Gram, factor fill and residual can still be large.
+`recommend()` retains sparse candidates and the existing zero-score seen mask.
+Top-k uses a parallel bounded heap, with NumPy tie handling; short rows are padded
+with item `-1` and score `-inf`. The utility now returns sorted scores directly.
 
 ### Training
 ```python
@@ -159,6 +162,8 @@ X = ...  # input interactions -- scipy.sparse.csr_matrix (rows=users, columns=it
 # if mask_input=True, input items get score=0
 top_k_indices, top_k_scores = model.recommend(X, k=10, mask_input=True)  # np.ndarrays of shape (X.shape[0], k)
 ```
+Rows with fewer than `k` stored predictions are padded with item `-1` and score
+`-inf`; ignore these missing entries rather than indexing the catalog with them.
 #### 2. Low-level inference: forward pass
 ```python
 X = ...  # input interactions -- scipy.sparse.csr_matrix (rows=users, columns=items)
